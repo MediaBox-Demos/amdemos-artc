@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">QuickStart</string>
+    <string name="token_verify">Token Generation</string>
+    <string name="multiple_parameters_join">Multiple parameters for joining</string>
+    <string name="signle_parameters_join">Single parameter joining</string>
+    <string name="parameters_could_null">This parameter can be NULL</string>
+    <string name="leave_channel">Leave</string>
+
+    <string name="video_chat">Video Chat</string>
+    <string name="video_chat_channel_desc">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+    <string name="video_chat_join_room">Join Room</string>
+    <string name="video_chat_local_view">Local View</string>
+    <string name="video_chat_connection_failed">Connection failed, please check the network</string>
+
+    <string name="voice_chat_room">Voice Chat Room</string>
+    <string name="voice_chat_room_anchor">Anchor</string>
+    <string name="voice_chat_room_audience">Audience</string>
+    <string name="voice_chat_room_audience_accept_mic">Switch to anchor</string>
+    <string name="voice_chat_room_audience_off_mic">Switch to audience</string>
+    <string name="voice_chat_room_channel_desc">If you want to join the same voice chat room with other users, you need to join the same channel, that is, ensure that the ChannelID of both parties is the same</string>
+
+</resources>

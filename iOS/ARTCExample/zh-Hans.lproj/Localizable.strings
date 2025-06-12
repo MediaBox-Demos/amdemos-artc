@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  ARTCExample
+
+  Created by Bingo on 2025/5/22.
+  
+*/
+
+"QUICK START" = "快速开始";
+"BASIC(Not Implemented)" = "基础功能（未实现）";
+"ADVANCED(Not Implemented)" = "进阶功能（未实现）";
+
+"Token Generate" = "Token生成及入会";
+"Video Call" = "实现音视频通话";
+"Voice Chat" = "实现语聊房";
+
+
+"Publishing" = "推流";
+"Playing" = "拉流";
+
+"Custom Audio Capture" = "自定义音频采集";
+"Custom Video Capture" = "自定义视频采集";

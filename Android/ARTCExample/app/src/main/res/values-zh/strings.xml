@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ARTCExample</string>
+    <string name="action_settings">设置</string>
+    <string name="action_settings_confirm">确定</string>
+    <string name="action_settings_cancel">取消</string>
+
+    <string name="quick_start">快速开始</string>
+    <string name="token_verify">Token生成及入会</string>
+    <string name="common_use">实现流程</string>
+    <string name="video_chat">实现视频通话</string>
+    <string name="voice_chat_room">实现语聊房</string>
+
+    <string name="basic_features">基础功能(未实现)</string>
+    <string name="publishing">推流</string>
+    <string name="playing">拉流</string>
+
+    <string name="advance_features">进阶功能(未实现)</string>
+    <string name="custom_audio_capture">自定义音频采集</string>
+    <string name="custom_video_capture">自定义视频采集</string>
+
+</resources>

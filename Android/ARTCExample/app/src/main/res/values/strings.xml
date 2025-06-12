@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ARTCExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_settings_confirm">Confirm</string>
+    <string name="action_settings_cancel">Cancel</string>
+
+    <string name="quick_start">Quick Start</string>
+    <string name="token_verify">Token Generation</string>
+    <string name="common_use">Common Use</string>
+    <string name="video_chat">Video Call</string>
+    <string name="voice_chat_room">Voice Chat Room</string>
+
+    <string name="basic_features">Basic Features(Not implemented)</string>
+    <string name="publishing">Publishing</string>
+    <string name="playing">Playing</string>
+
+    <string name="advance_features">Advance Features(Not implemented)</string>
+    <string name="custom_audio_capture">Custom Audio Capture</string>
+    <string name="custom_video_capture">Custom Video Capture</string>
+
+</resources>

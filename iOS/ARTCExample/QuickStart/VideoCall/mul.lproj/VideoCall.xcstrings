@@ -1,0 +1,54 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "dDp-AC-JSq.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"Join Channel\"; ObjectID = \"dDp-AC-JSq\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Join Channel"
+          }
+        }
+      }
+    },
+    "dDp-AC-JSq.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"dDp-AC-JSq\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "hsw-sC-eyI.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.\"; ObjectID = \"hsw-sC-eyI\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."
+          }
+        }
+      }
+    },
+    "Rl8-SR-0nR.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Channel Id\"; ObjectID = \"Rl8-SR-0nR\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Channel Id"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
