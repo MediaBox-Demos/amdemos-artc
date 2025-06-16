@@ -133,8 +133,7 @@ class VideoCallMainVC: UIViewController {
         if let joinToken = self.joinToken {
             let msg =  "JoinWithToken: \(joinToken)"
             
-            let param = AliRtcChannelParam()
-            let ret = self.rtcEngine?.joinChannel(joinToken, channelParam: param) { [weak self] errCode, channelId, userId, elapsed in
+            let ret = self.rtcEngine?.joinChannel(joinToken, channelId: nil, userId: nil, name: nil) { [weak self] errCode, channelId, userId, elapsed in
                 if errCode == 0 {
                     // success
 
@@ -177,6 +176,7 @@ class VideoCallMainVC: UIViewController {
         self.rtcEngine = nil
     }
     
+    // 创建一个视频通话渲染视图，并加入到contentScrollView中
     func createVideoView(uid: String) -> VideoView {
         let view = VideoView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         view.uidLabel.text = uid
@@ -187,6 +187,7 @@ class VideoCallMainVC: UIViewController {
         return view
     }
     
+    // 从contentScrollView移除一个视频通话渲染视图
     func removeVideoView(uid: String) {
         let videoView = self.videoViewList.first { $0.uidLabel.text == uid }
         if let videoView = videoView {
@@ -196,6 +197,7 @@ class VideoCallMainVC: UIViewController {
         }
     }
     
+    // 刷新contentScrollView的子视图布局
     func updateVideoViewsLayout() {
         let margin = 24.0
         let width = (self.contentScrollView.bounds.width - margin * 3.0) / 2.0
@@ -279,6 +281,12 @@ extension VideoCallMainVC: AliRtcEngineDelegate {
         "onAuthInfoWillExpire".printLog()
         
         /* TODO: 务必处理；Token即将过期，需要业务触发重新获取当前channel，user的鉴权信息，然后设置refreshAuthInfo即可 */
+    }
+    
+    func onAuthInfoExpired() {
+        "onAuthInfoExpired".printLog()
+        
+        /* TODO: 务必处理；提示Token失效，并执行离会与释放引擎 */
     }
     
     func onBye(_ code: Int32) {

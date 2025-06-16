@@ -151,8 +151,7 @@ class VoiceChatMainVC: UIViewController {
         if let joinToken = self.joinToken {
             let msg =  "JoinWithToken: \(joinToken)"
             
-            let param = AliRtcChannelParam()
-            let ret = self.rtcEngine?.joinChannel(joinToken, channelParam: param) { [weak self] errCode, channelId, userId, elapsed in
+            let ret = self.rtcEngine?.joinChannel(joinToken, channelId: nil, userId: nil, name: nil) { [weak self] errCode, channelId, userId, elapsed in
                 if errCode == 0 {
                     // success
 

@@ -563,7 +563,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = ARTCExample;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要使用摄像头进行视频聊天";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要使用麦克风进行语音聊天";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要使用相册选择图片发送给给智能体";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -608,7 +607,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = ARTCExample;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要使用摄像头进行视频聊天";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要使用麦克风进行语音聊天";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要使用相册选择图片发送给给智能体";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
