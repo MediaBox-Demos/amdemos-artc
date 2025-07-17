@@ -1,0 +1,28 @@
+
+/* Class = "UILabel"; text = "Monitor (Please plug in headphones before using the monitor function)"; ObjectID = "1Yb-ri-aJy"; */
+"1Yb-ri-aJy.text" = "Monitor (Please plug in headphones before using the monitor function)";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "JCk-Hu-Mxu"; */
+"JCk-Hu-Mxu.configuration.title" = "Join Channel";
+
+/* Class = "UILabel"; text = "Audio Route"; ObjectID = "MaY-S8-sh7"; */
+"MaY-S8-sh7.text" = "Audio Route";
+
+/* Class = "UIButton"; configuration.title = "Disable Mic"; ObjectID = "gnQ-Cu-El1"; */
+"gnQ-Cu-El1.configuration.title" = "Disable Mic";
+
+
+/* Class = "UILabel"; text = "Audio Scenario"; ObjectID = "iS8-sJ-xV5"; */
+"iS8-sJ-xV5.text" = "Audio Scenario";
+
+/* Class = "UILabel"; text = "Audio Profile"; ObjectID = "nvc-dT-nah"; */
+"nvc-dT-nah.text" = "Audio Profile";
+
+/* Class = "UIButton"; configuration.title = "Mute"; ObjectID = "o7D-yy-4Sh"; */
+"o7D-yy-4Sh.configuration.title" = "Mute";
+
+/* Class = "UILabel"; text = "Monitor Volume"; ObjectID = "tey-eI-Qte"; */
+"tey-eI-Qte.text" = "Monitor Volume";
+
+/* Class = "UILabel"; text = "ChannelID"; ObjectID = "yeC-pB-lAW"; */
+"yeC-pB-lAW.text" = "ChannelID";

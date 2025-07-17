@@ -36,8 +36,10 @@ class MainViewController: UIViewController {
         ]),
         
         GroupItem(name: "BASIC(Not Implemented)".localized, actions: [
-            ActionItem(name: "Publishing".localized, detail: "".localized),
-            ActionItem(name: "Playing".localized, detail: "".localized),
+            ActionItem(name: "Audio Basic Usage".localized, detail: "".localized, sbName: "AudioBasicUsage"),
+            ActionItem(name: "Video Basic Usage".localized, detail: "".localized, sbName: "VideoBasicUsage", sbId: "MainVC"),
+            ActionItem(name: "Camera Common Control".localized, detail: "", sbName:"CameraCommonControl"),
+            ActionItem(name: "SEI Sending and Receiving".localized, detail: "".localized, sbName: "SEIUsage"),
         ]),
         
         GroupItem(name: "ADVANCED(Not Implemented)".localized, actions: [

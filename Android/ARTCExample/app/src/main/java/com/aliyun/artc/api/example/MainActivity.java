@@ -28,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alivc.rtc.AliRtcEngine;
 import com.aliyun.aio.aio_env.AlivcEnv;
+import com.aliyun.artc.api.basicusage.CameraCommonControl.CameraActivity;
+import com.aliyun.artc.api.basicusage.VideoBasicUsage.VideoBasicUsageActivity;
 import com.aliyun.artc.api.example.adapter.APIExampleListAdapter;
 import com.aliyun.artc.api.example.bean.ApiModuleInfo;
 import com.aliyun.artc.api.keycenter.ARTCTokenHelper;
@@ -38,10 +40,13 @@ import com.aliyun.artc.api.example.utils.PermissionUtils;
 import com.aliyun.artc.api.quickstart.TokenGenerate.TokenGenerateActivity;
 import com.aliyun.artc.api.quickstart.VideoCall.VideoCallActivity;
 import com.aliyun.artc.api.quickstart.VoiceChat.VoiceChatActivity;
+import com.aliyun.artc.api.basicusage.AudioBasicUsage.AudioBasicUsageActivity;
 import com.aliyun.common.AlivcBase;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.aliyun.artc.api.seiusage.SEIActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
                     VideoCallActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.voice_chat_room))){
                     VoiceChatActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.audio_basic_usage))) {
+                    AudioBasicUsageActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.video_basic_usage))) {
+                    VideoBasicUsageActivity.startActionActivity(MainActivity.this);
+
+                }else if(moduleInfo.getModule().equals(getString(R.string.send_text))) {
+                    SEIActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.caemra_common_control))) {
+                    CameraActivity.startActionActivity(MainActivity.this);
                 }
 
             } else {
@@ -94,11 +108,16 @@ public class MainActivity extends AppCompatActivity {
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.video_chat)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.voice_chat_room)));
 
-        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.publishing)).titleName(getString(R.string.basic_features)));
-        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.playing)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.audio_basic_usage)).titleName(getString(R.string.basic_features)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.video_basic_usage)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.caemra_common_control)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.send_text)));
+
 
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.custom_audio_capture)).titleName(getString(R.string.advance_features)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.custom_video_capture)));
+
+
 
     }
 

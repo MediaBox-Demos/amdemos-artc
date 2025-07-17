@@ -70,6 +70,12 @@ class VideoCallMainVC: UIViewController {
         self.joinChannel()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.updateSeatViewsLayout()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -77,7 +83,7 @@ class VideoCallMainVC: UIViewController {
     }
     
     @IBOutlet weak var contentScrollView: UIScrollView!
-    var videoViewList: [VideoView] = []
+    var seatViewList: [SeatView] = []
     
     var channelId: String = ""
     var userId: String = ""
@@ -134,17 +140,11 @@ class VideoCallMainVC: UIViewController {
             let msg =  "JoinWithToken: \(joinToken)"
             
             let ret = self.rtcEngine?.joinChannel(joinToken, channelId: nil, userId: nil, name: nil) { [weak self] errCode, channelId, userId, elapsed in
-                if errCode == 0 {
-                    // success
-
-                }
-                else {
-                    // failed
-                }
-                
                 let resultMsg = "\(msg) \n CallbackErrorCode: \(errCode)"
                 resultMsg.printLog()
-                UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self!)
+                if errCode != 0 {
+                    UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self!)
+                }
             }
             
             let resultMsg = "\(msg) \n ReturnErrorCode: \(ret ?? 0)"
@@ -157,10 +157,10 @@ class VideoCallMainVC: UIViewController {
     }
     
     func startPreview() {
-        let videoView = self.createVideoView(uid: self.userId)
+        let seatView = self.createSeatView(uid: self.userId)
         
         let canvas = AliVideoCanvas()
-        canvas.view = videoView.canvasView
+        canvas.view = seatView.canvasView
         canvas.renderMode = .auto
         canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
         canvas.rotationMode = ._0
@@ -177,39 +177,39 @@ class VideoCallMainVC: UIViewController {
     }
     
     // 创建一个视频通话渲染视图，并加入到contentScrollView中
-    func createVideoView(uid: String) -> VideoView {
-        let view = VideoView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    func createSeatView(uid: String) -> SeatView {
+        let view = SeatView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         view.uidLabel.text = uid
         
         self.contentScrollView.addSubview(view)
-        self.videoViewList.append(view)
-        self.updateVideoViewsLayout()
+        self.seatViewList.append(view)
+        self.updateSeatViewsLayout()
         return view
     }
     
     // 从contentScrollView移除一个视频通话渲染视图
-    func removeVideoView(uid: String) {
-        let videoView = self.videoViewList.first { $0.uidLabel.text == uid }
-        if let videoView = videoView {
-            videoView.removeFromSuperview()
-            self.videoViewList.removeAll(where: { $0 == videoView})
-            self.updateVideoViewsLayout()
+    func removeSeatView(uid: String) {
+        let seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+        if let seatView = seatView {
+            seatView.removeFromSuperview()
+            self.seatViewList.removeAll(where: { $0 == seatView})
+            self.updateSeatViewsLayout()
         }
     }
     
     // 刷新contentScrollView的子视图布局
-    func updateVideoViewsLayout() {
+    func updateSeatViewsLayout() {
+        let count: Int = 2
         let margin = 24.0
-        let width = (self.contentScrollView.bounds.width - margin * 3.0) / 2.0
-        let height = width // width * 16.0 / 9.0
-        let count = 2
-        for i in 0..<self.videoViewList.count {
-            let view = self.videoViewList[i]
+        let width = (self.contentScrollView.bounds.width - margin * Double(count + 1)) / Double(count)
+        let height = width
+        for i in 0..<self.seatViewList.count {
+            let view = self.seatViewList[i]
             let x = Double(i % count) * (width + margin) + margin
             let y = Double(i / count) * (height + margin) + margin
             view.frame = CGRect(x: x, y: y, width: width, height: height)
         }
-        self.contentScrollView.contentSize = CGSize(width: self.contentScrollView.bounds.width, height: margin + Double(self.videoViewList.count / count + 1) * height + margin)
+        self.contentScrollView.contentSize = CGSize(width: self.contentScrollView.bounds.width, height: margin + ceil(Double(self.seatViewList.count) / Double(count)) * height + margin)
     }
     
     /*
@@ -249,19 +249,19 @@ extension VideoCallMainVC: AliRtcEngineDelegate {
         "onRemoteTrackAvailableNotify uid: \(uid) audioTrack: \(audioTrack)  videoTrack: \(videoTrack)".printLog()
         // 远端用户的流状态
         if audioTrack != .no {
-            let videoView = self.videoViewList.first { $0.uidLabel.text == uid }
-            if videoView == nil {
-                _ = self.createVideoView(uid: uid)
+            let seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+            if seatView == nil {
+                _ = self.createSeatView(uid: uid)
             }
         }
         if videoTrack != .no {
-            var videoView = self.videoViewList.first { $0.uidLabel.text == uid }
-            if videoView == nil {
-                videoView = self.createVideoView(uid: uid)
+            var seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+            if seatView == nil {
+                seatView = self.createSeatView(uid: uid)
             }
             
             let canvas = AliVideoCanvas()
-            canvas.view = videoView!.canvasView
+            canvas.view = seatView!.canvasView
             canvas.renderMode = .auto
             canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
             canvas.rotationMode = ._0
@@ -272,7 +272,7 @@ extension VideoCallMainVC: AliRtcEngineDelegate {
         }
         
         if audioTrack == .no && videoTrack == .no {
-            self.removeVideoView(uid: uid)
+            self.removeSeatView(uid: uid)
             self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: AliRtcVideoTrack.camera)
         }
     }

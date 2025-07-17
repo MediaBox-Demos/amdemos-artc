@@ -9,7 +9,7 @@
 "Qgo-oA-OPz.normalTitle" = "观众";
 
 /* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "Xn4-2T-7cQ"; */
-"Xn4-2T-7cQ.placeholder" = "请输入频道Id";
+"Xn4-2T-7cQ.placeholder" = "频道Id";
 
 /* Class = "UIButton"; configuration.title = "Anchor"; ObjectID = "vQZ-a1-FUT"; */
 "vQZ-a1-FUT.configuration.title" = "主播";

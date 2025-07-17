@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="audio_route" >
+        <item>@string/audio_route_speakerphone</item>
+        <item>@string/audio_route_earpiece</item>
+    </string-array>
+    <string-array name="audio_scenario">
+        <item>DEFAULT</item>
+        <item>MUSIC</item>
+    </string-array>
+    <string-array name="audio_profile">
+        <item>LowQualityMode</item>
+        <item>BasicQualityMode</item>
+        <item>HighQualityMode</item>
+        <item>StereoHighQualityMode</item>
+        <item>SuperHighQualityMode</item>
+        <item>StereoSuperHighQualityMode</item>
+    </string-array>
+    <string-array name="cameraSelection">
+        <item>@string/front_camera</item>
+        <item>@string/rear_camera</item>
+    </string-array>
+    <string-array name="flashMode">
+        <item>@string/OFF</item>
+        <item>@string/ON</item>
+    </string-array>
+</resources>

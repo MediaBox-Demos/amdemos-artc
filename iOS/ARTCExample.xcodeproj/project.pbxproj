@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		150326E52E1649FC00B8CEC6 /* AudioBasicUsage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 150326E42E1649FC00B8CEC6 /* AudioBasicUsage.storyboard */; };
+		150326F92E169B4000B8CEC6 /* VideoBasicUsageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150326F82E169B4000B8CEC6 /* VideoBasicUsageVC.swift */; };
+		1503270A2E1BD10E00B8CEC6 /* VideoBasicUsage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 150327092E1BD10E00B8CEC6 /* VideoBasicUsage.storyboard */; };
+		150327102E1BE28400B8CEC6 /* SEIUsageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1503270F2E1BE28400B8CEC6 /* SEIUsageVC.swift */; };
+		150327162E1BF98200B8CEC6 /* SEIUsage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 150327152E1BF98200B8CEC6 /* SEIUsage.storyboard */; };
+		150327242E1CC7B500B8CEC6 /* CameraCommonControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150327232E1CC7B500B8CEC6 /* CameraCommonControlVC.swift */; };
+		150327272E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 150327262E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard */; };
+		1528711C2DF9638900CC87C7 /* AudioBasicUsageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528711B2DF9638900CC87C7 /* AudioBasicUsageVC.swift */; };
 		20F87B4F7663B2F82CB6C5A3 /* libPods-ARTCExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9056BD1D1808F72A200DDEA6 /* libPods-ARTCExample.a */; };
 		410B2B912DDF5E0B00E274D1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 410B2B8F2DDF5E0B00E274D1 /* Localizable.strings */; };
 		410B2BA42DE3F56D00E274D1 /* ARTCTokenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BA32DE3F56D00E274D1 /* ARTCTokenHelper.swift */; };
@@ -14,8 +22,8 @@
 		410B2BA82DE40D3B00E274D1 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BA72DE40D3B00E274D1 /* Extension.swift */; };
 		410B2BBE2DE5B7F900E274D1 /* TokenGenerate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 410B2BBB2DE5B7F900E274D1 /* TokenGenerate.storyboard */; };
 		410B2BBF2DE5B7F900E274D1 /* TokenGenerateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BBC2DE5B7F900E274D1 /* TokenGenerateVC.swift */; };
-		410B2BC32DE5B85F00E274D1 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BC02DE5B85F00E274D1 /* VideoView.swift */; };
-		410B2BC42DE5B85F00E274D1 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 410B2BC12DE5B85F00E274D1 /* VideoView.xib */; };
+		410B2BC32DE5B85F00E274D1 /* SeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BC02DE5B85F00E274D1 /* SeatView.swift */; };
+		410B2BC42DE5B85F00E274D1 /* SeatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 410B2BC12DE5B85F00E274D1 /* SeatView.xib */; };
 		410B2BCA2DE5B86A00E274D1 /* Setting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 410B2BC72DE5B86A00E274D1 /* Setting.storyboard */; };
 		410B2BCB2DE5B86A00E274D1 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410B2BC82DE5B86A00E274D1 /* SettingViewController.swift */; };
 		418D33EC2B4EA199003A5959 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418D33EB2B4EA199003A5959 /* AppDelegate.swift */; };
@@ -44,6 +52,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		150326E32E1649FC00B8CEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioBasicUsage.storyboard; sourceTree = "<group>"; };
+		150326E72E164A0500B8CEC6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioBasicUsage.strings"; sourceTree = "<group>"; };
+		150326F82E169B4000B8CEC6 /* VideoBasicUsageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBasicUsageVC.swift; sourceTree = "<group>"; };
+		150327082E1BD10E00B8CEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoBasicUsage.storyboard; sourceTree = "<group>"; };
+		1503270D2E1BD13500B8CEC6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoBasicUsage.strings"; sourceTree = "<group>"; };
+		1503270F2E1BE28400B8CEC6 /* SEIUsageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEIUsageVC.swift; sourceTree = "<group>"; };
+		150327132E1BE46700B8CEC6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		150327142E1BF98200B8CEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SEIUsage.storyboard; sourceTree = "<group>"; };
+		150327182E1BF98500B8CEC6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SEIUsage.strings"; sourceTree = "<group>"; };
+		150327232E1CC7B500B8CEC6 /* CameraCommonControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCommonControlVC.swift; sourceTree = "<group>"; };
+		150327252E1D1E5F00B8CEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CameraCommonControl.storyboard; sourceTree = "<group>"; };
+		1503272B2E1D43A400B8CEC6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CameraCommonControl.strings"; sourceTree = "<group>"; };
+		1528711B2DF9638900CC87C7 /* AudioBasicUsageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioBasicUsageVC.swift; sourceTree = "<group>"; };
 		410B2B902DDF5E0B00E274D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		410B2B922DDF5E1700E274D1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		410B2BA32DE3F56D00E274D1 /* ARTCTokenHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARTCTokenHelper.swift; sourceTree = "<group>"; };
@@ -51,8 +72,8 @@
 		410B2BA72DE40D3B00E274D1 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		410B2BB92DE5B7F900E274D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TokenGenerate.storyboard; sourceTree = "<group>"; };
 		410B2BBC2DE5B7F900E274D1 /* TokenGenerateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerateVC.swift; sourceTree = "<group>"; };
-		410B2BC02DE5B85F00E274D1 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
-		410B2BC12DE5B85F00E274D1 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		410B2BC02DE5B85F00E274D1 /* SeatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeatView.swift; sourceTree = "<group>"; };
+		410B2BC12DE5B85F00E274D1 /* SeatView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SeatView.xib; sourceTree = "<group>"; };
 		410B2BC52DE5B86A00E274D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Setting.storyboard; sourceTree = "<group>"; };
 		410B2BC62DE5B86A00E274D1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Setting.strings"; sourceTree = "<group>"; };
 		410B2BC82DE5B86A00E274D1 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +110,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		150326F52E169B0E00B8CEC6 /* VideoBasicUsage */ = {
+			isa = PBXGroup;
+			children = (
+				150326F82E169B4000B8CEC6 /* VideoBasicUsageVC.swift */,
+				150327092E1BD10E00B8CEC6 /* VideoBasicUsage.storyboard */,
+			);
+			path = VideoBasicUsage;
+			sourceTree = "<group>";
+		};
+		1503270E2E1BE27000B8CEC6 /* SEIUsage */ = {
+			isa = PBXGroup;
+			children = (
+				1503270F2E1BE28400B8CEC6 /* SEIUsageVC.swift */,
+				150327152E1BF98200B8CEC6 /* SEIUsage.storyboard */,
+			);
+			path = SEIUsage;
+			sourceTree = "<group>";
+		};
+		150327202E1CB73300B8CEC6 /* CameraCommonSetting */ = {
+			isa = PBXGroup;
+			children = (
+				150327262E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard */,
+				150327232E1CC7B500B8CEC6 /* CameraCommonControlVC.swift */,
+			);
+			path = CameraCommonSetting;
+			sourceTree = "<group>";
+		};
+		152871152DF9617E00CC87C7 /* BasicUsage */ = {
+			isa = PBXGroup;
+			children = (
+				150327202E1CB73300B8CEC6 /* CameraCommonSetting */,
+				1503270E2E1BE27000B8CEC6 /* SEIUsage */,
+				150326F52E169B0E00B8CEC6 /* VideoBasicUsage */,
+				152871162DF9619100CC87C7 /* AudioBasicUsage */,
+			);
+			path = BasicUsage;
+			sourceTree = "<group>";
+		};
+		152871162DF9619100CC87C7 /* AudioBasicUsage */ = {
+			isa = PBXGroup;
+			children = (
+				1528711B2DF9638900CC87C7 /* AudioBasicUsageVC.swift */,
+				150326E42E1649FC00B8CEC6 /* AudioBasicUsage.storyboard */,
+			);
+			path = AudioBasicUsage;
+			sourceTree = "<group>";
+		};
 		193D020EC6E0BA465D8C118E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,13 +174,13 @@
 			path = TokenGenerate;
 			sourceTree = "<group>";
 		};
-		410B2BC22DE5B85F00E274D1 /* VideoView */ = {
+		410B2BC22DE5B85F00E274D1 /* SeatView */ = {
 			isa = PBXGroup;
 			children = (
-				410B2BC02DE5B85F00E274D1 /* VideoView.swift */,
-				410B2BC12DE5B85F00E274D1 /* VideoView.xib */,
+				410B2BC02DE5B85F00E274D1 /* SeatView.swift */,
+				410B2BC12DE5B85F00E274D1 /* SeatView.xib */,
 			);
-			path = VideoView;
+			path = SeatView;
 			sourceTree = "<group>";
 		};
 		410B2BC92DE5B86A00E274D1 /* Setting */ = {
@@ -154,6 +222,7 @@
 		418D33EA2B4EA199003A5959 /* ARTCExample */ = {
 			isa = PBXGroup;
 			children = (
+				152871152DF9617E00CC87C7 /* BasicUsage */,
 				41DC22442DF31BF00054CCEC /* Common */,
 				410B2BC92DE5B86A00E274D1 /* Setting */,
 				41DC22432DF31B750054CCEC /* QuickStart */,
@@ -194,7 +263,7 @@
 				410B2BA32DE3F56D00E274D1 /* ARTCTokenHelper.swift */,
 				410B2BA52DE3F98200E274D1 /* GlobalConfig.swift */,
 				410B2BA72DE40D3B00E274D1 /* Extension.swift */,
-				410B2BC22DE5B85F00E274D1 /* VideoView */,
+				410B2BC22DE5B85F00E274D1 /* SeatView */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -275,10 +344,14 @@
 				418D33F82B4EA19B003A5959 /* LaunchScreen.storyboard in Resources */,
 				410B2BCA2DE5B86A00E274D1 /* Setting.storyboard in Resources */,
 				41DC22402DF315920054CCEC /* VoiceChat.storyboard in Resources */,
-				410B2BC42DE5B85F00E274D1 /* VideoView.xib in Resources */,
+				150327162E1BF98200B8CEC6 /* SEIUsage.storyboard in Resources */,
+				410B2BC42DE5B85F00E274D1 /* SeatView.xib in Resources */,
 				410B2B912DDF5E0B00E274D1 /* Localizable.strings in Resources */,
 				418D33F52B4EA19B003A5959 /* Assets.xcassets in Resources */,
+				150327272E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard in Resources */,
 				418D33F32B4EA199003A5959 /* Main.storyboard in Resources */,
+				150326E52E1649FC00B8CEC6 /* AudioBasicUsage.storyboard in Resources */,
+				1503270A2E1BD10E00B8CEC6 /* VideoBasicUsage.storyboard in Resources */,
 				41DC22382DF2F2A90054CCEC /* VideoCall.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,11 +413,16 @@
 				418D33F02B4EA199003A5959 /* MainViewController.swift in Sources */,
 				410B2BA82DE40D3B00E274D1 /* Extension.swift in Sources */,
 				410B2BA62DE3F98200E274D1 /* GlobalConfig.swift in Sources */,
-				410B2BC32DE5B85F00E274D1 /* VideoView.swift in Sources */,
+				1528711C2DF9638900CC87C7 /* AudioBasicUsageVC.swift in Sources */,
+				1528711C2DF9638900CC87C7 /* AudioBasicUsageVC.swift in Sources */,
+				150327242E1CC7B500B8CEC6 /* CameraCommonControlVC.swift in Sources */,
+				410B2BC32DE5B85F00E274D1 /* SeatView.swift in Sources */,
 				41DC22112DE7F0090054CCEC /* VideoCallVC.swift in Sources */,
 				410B2BCB2DE5B86A00E274D1 /* SettingViewController.swift in Sources */,
 				41DC22142DE803BD0054CCEC /* VoiceChatVC.swift in Sources */,
+				150327102E1BE28400B8CEC6 /* SEIUsageVC.swift in Sources */,
 				418D33EC2B4EA199003A5959 /* AppDelegate.swift in Sources */,
+				150326F92E169B4000B8CEC6 /* VideoBasicUsageVC.swift in Sources */,
 				418D33EE2B4EA199003A5959 /* SceneDelegate.swift in Sources */,
 				410B2BBF2DE5B7F900E274D1 /* TokenGenerateVC.swift in Sources */,
 			);
@@ -353,6 +431,42 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		150326E42E1649FC00B8CEC6 /* AudioBasicUsage.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				150326E32E1649FC00B8CEC6 /* Base */,
+				150326E72E164A0500B8CEC6 /* zh-Hans */,
+			);
+			name = AudioBasicUsage.storyboard;
+			sourceTree = "<group>";
+		};
+		150327092E1BD10E00B8CEC6 /* VideoBasicUsage.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				150327082E1BD10E00B8CEC6 /* Base */,
+				1503270D2E1BD13500B8CEC6 /* zh-Hans */,
+			);
+			name = VideoBasicUsage.storyboard;
+			sourceTree = "<group>";
+		};
+		150327152E1BF98200B8CEC6 /* SEIUsage.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				150327142E1BF98200B8CEC6 /* Base */,
+				150327182E1BF98500B8CEC6 /* zh-Hans */,
+			);
+			name = SEIUsage.storyboard;
+			sourceTree = "<group>";
+		};
+		150327262E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				150327252E1D1E5F00B8CEC6 /* Base */,
+				1503272B2E1D43A400B8CEC6 /* zh-Hans */,
+			);
+			name = CameraCommonControl.storyboard;
+			sourceTree = "<group>";
+		};
 		410B2B8F2DDF5E0B00E274D1 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -384,6 +498,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				418D33F22B4EA199003A5959 /* Base */,
+				150327132E1BE46700B8CEC6 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

@@ -1,0 +1,18 @@
+
+/* Class = "UIButton"; configuration.title = "发送"; ObjectID = "WMb-0s-piO"; */
+"WMb-0s-piO.configuration.title" = "发送";
+
+/* Class = "UIButton"; normalTitle = "发送"; ObjectID = "WMb-0s-piO"; */
+"WMb-0s-piO.normalTitle" = "发送";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "YKI-tz-v8E"; */
+"YKI-tz-v8E.placeholder" = "频道Id";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "NYt-ho-ZAE"; */
+"NYt-ho-ZAE.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Join Channel"; ObjectID = "NYt-ho-ZAE"; */
+"NYt-ho-ZAE.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "CXQ-oi-u3U"; */
+"CXQ-oi-u3U.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";

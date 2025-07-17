@@ -30,9 +30,9 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dDp-AC-JSq">
-                                <rect key="frame" x="144.66666666666666" y="329.33333333333331" width="104" height="35"/>
+                                <rect key="frame" x="135.33333333333334" y="329.33333333333331" width="122.33333333333334" height="35"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Join Room"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
                                 <connections>
                                     <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="QAl-4S-a4Z"/>
                                 </connections>

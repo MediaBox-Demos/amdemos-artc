@@ -11,8 +11,10 @@
     <string name="voice_chat_room">Voice Chat Room</string>
 
     <string name="basic_features">Basic Features(Not implemented)</string>
-    <string name="publishing">Publishing</string>
-    <string name="playing">Playing</string>
+    <string name="audio_basic_usage">Audio Common Usage And Config</string>
+    <string name="video_basic_usage">Video Common Usage And Config</string>
+    <string name="caemra_common_control">Video Common Control</string>
+    <string name="send_text">SEI send and receive</string>
 
     <string name="advance_features">Advance Features(Not implemented)</string>
     <string name="custom_audio_capture">Custom Audio Capture</string>

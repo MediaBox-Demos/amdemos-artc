@@ -1,0 +1,57 @@
+
+/* Class = "UITextField"; placeholder = "y"; ObjectID = "4MV-KT-ION"; */
+"4MV-KT-ION.placeholder" = "y";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "KnF-lY-mGV"; */
+"KnF-lY-mGV.text" = "Label";
+
+/* Class = "UILabel"; text = "Camera Zoom"; ObjectID = "Rb4-Hi-jTr"; */
+"Rb4-Hi-jTr.text" = "摄像头变焦";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "Rl8-SR-0nR"; */
+"Rl8-SR-0nR.placeholder" = "频道Id";
+
+/* Class = "UITextField"; placeholder = "x"; ObjectID = "T36-ZB-I4c"; */
+"T36-ZB-I4c.placeholder" = "x";
+
+/* Class = "UITextField"; placeholder = "x"; ObjectID = "TU6-Qn-JJq"; */
+"TU6-Qn-JJq.placeholder" = "x";
+
+/* Class = "UILabel"; text = "Camera Exposure Point"; ObjectID = "UOp-On-NSK"; */
+"UOp-On-NSK.text" = "单击屏幕位置设置摄像头曝光点";
+
+/* Class = "UILabel"; text = "Camera Auto Focus Face Mode"; ObjectID = "Uyr-Hz-fPs"; */
+"Uyr-Hz-fPs.text" = "摄像头人脸自动聚焦";
+
+/* Class = "UILabel"; text = "Camera Direction"; ObjectID = "Xc1-YC-lPc"; */
+"Xc1-YC-lPc.text" = "摄像头方向";
+
+/* Class = "UILabel"; text = "Camera Flash"; ObjectID = "c57-Qk-nX2"; */
+"c57-Qk-nX2.text" = "闪光灯";
+
+/* Class = "UILabel"; text = "Camera Focus Point"; ObjectID = "cEI-iZ-L4q"; */
+"cEI-iZ-L4q.text" = "双击屏幕位置设置摄像头聚焦点";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "dDp-AC-JSq"; */
+"dDp-AC-JSq.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "dDp-AC-JSq"; */
+"dDp-AC-JSq.normalTitle" = "加入频道";
+
+/* Class = "UISegmentedControl"; fXI-Yo-GdJ.segmentTitles[0] = "Front"; ObjectID = "fXI-Yo-GdJ"; */
+"fXI-Yo-GdJ.segmentTitles[0]" = "前置";
+
+/* Class = "UISegmentedControl"; fXI-Yo-GdJ.segmentTitles[1] = "Back"; ObjectID = "fXI-Yo-GdJ"; */
+"fXI-Yo-GdJ.segmentTitles[1]" = "后置";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "hsw-sC-eyI"; */
+"hsw-sC-eyI.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "klb-bh-7xH"; */
+"klb-bh-7xH.text" = "Label";
+
+/* Class = "UILabel"; text = "Camera Exposure"; ObjectID = "xcf-3x-EW1"; */
+"xcf-3x-EW1.text" = "摄像头曝光";
+
+/* Class = "UITextField"; placeholder = "y"; ObjectID = "xoM-dI-qQx"; */
+"xoM-dI-qQx.placeholder" = "y";

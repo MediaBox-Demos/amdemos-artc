@@ -10,12 +10,13 @@
     <string name="video_chat">实现视频通话</string>
     <string name="voice_chat_room">实现语聊房</string>
 
-    <string name="basic_features">基础功能(未实现)</string>
-    <string name="publishing">推流</string>
-    <string name="playing">拉流</string>
+    <string name="basic_features">基础功能</string>
+    <string name="audio_basic_usage">音频常用操作和配置</string>
+    <string name="video_basic_usage">视频常用操作和配置</string>
+    <string name="caemra_common_control">摄像头常规控制</string>
+    <string name="send_text">SEI发送和接收</string>
 
     <string name="advance_features">进阶功能(未实现)</string>
     <string name="custom_audio_capture">自定义音频采集</string>
     <string name="custom_video_capture">自定义视频采集</string>
-
 </resources>

@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VideoView" customModule="ARTCExample" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SeatView" customModule="ARTCExample" customModuleProvider="target">
             <connections>
                 <outlet property="canvasView" destination="Ied-KK-ss7" id="1Dt-Od-mPN"/>
                 <outlet property="uidLabel" destination="bWA-NV-6jL" id="F7A-ke-xB8"/>

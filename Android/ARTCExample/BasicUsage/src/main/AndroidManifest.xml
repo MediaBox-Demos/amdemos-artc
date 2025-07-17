@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aliyun.artc.api.basicusage">
+    <application>
+        <activity
+            android:name=".AudioBasicUsage.AudioBasicUsageActivity"
+            android:label="@string/audio_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".VideoBasicUsage.VideoBasicUsageActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".CameraCommonControl.CameraActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name="com.aliyun.artc.api.seiusage.SEIActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+    </application>
+
+</manifest>
