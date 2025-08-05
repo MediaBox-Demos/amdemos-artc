@@ -1,0 +1,39 @@
+
+/* Class = "UILabel"; text = "AppKey:"; ObjectID = "8YC-VN-u7j"; */
+"8YC-VN-u7j.text" = "AppKey:";
+
+/* Class = "UIButton"; configuration.title = "JoinWithAuthInfo"; ObjectID = "KG0-mF-vvd"; */
+"KG0-mF-vvd.configuration.title" = "多参数入会";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "KG0-mF-vvd"; */
+"KG0-mF-vvd.normalTitle" = "多参数入会";
+
+/* Class = "UILabel"; text = "ChannelId:"; ObjectID = "MiB-fm-ZkF"; */
+"MiB-fm-ZkF.text" = "ChannelId:";
+
+/* Class = "UILabel"; text = "UserId:"; ObjectID = "OvA-l0-ExL"; */
+"OvA-l0-ExL.text" = "UserId:";
+
+/* Class = "UILabel"; text = "Timestamp:"; ObjectID = "R8k-0v-Pxw"; */
+"R8k-0v-Pxw.text" = "Timestamp:";
+
+/* Class = "UILabel"; text = "Nonce:"; ObjectID = "bxj-Nf-2g7"; */
+"bxj-Nf-2g7.text" = "Nonce:";
+
+/* Class = "UILabel"; text = "AppId:"; ObjectID = "mLD-z0-5T6"; */
+"mLD-z0-5T6.text" = "AppId:";
+
+/* Class = "UIButton"; configuration.title = "JoinWithToken"; ObjectID = "x3V-a4-8FG"; */
+"x3V-a4-8FG.configuration.title" = "单参数入会";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "x3V-a4-8FG"; */
+"x3V-a4-8FG.normalTitle" = "单参数入会";
+
+/* Class = "UITextField"; placeholder = "This parameter can be nil"; ObjectID = "o4Z-PP-q1x"; */
+"o4Z-PP-q1x.placeholder" = "该参数可为空";
+
+/* Class = "UITextField"; placeholder = "This parameter can not be nil"; ObjectID = "qV1-8m-6r1"; */
+"qV1-8m-6r1.placeholder" = "该参数不能为空";
+
+/* Class = "UITextField"; placeholder = "This parameter can not be nil"; ObjectID = "wzJ-bw-3px"; */
+"wzJ-bw-3px.placeholder" = "该参数不能为空";

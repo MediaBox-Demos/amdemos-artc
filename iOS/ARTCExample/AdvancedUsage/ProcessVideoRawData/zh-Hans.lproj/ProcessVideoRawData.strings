@@ -1,0 +1,33 @@
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "97F-e5-9wy"; */
+"97F-e5-9wy.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "9Bi-4i-Chi"; */
+"9Bi-4i-Chi.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9Bi-4i-Chi"; */
+"9Bi-4i-Chi.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "PreEncode Video Frame"; ObjectID = "BuO-oi-zrU"; */
+"BuO-oi-zrU.text" = "编码前数据";
+
+/* Class = "UILabel"; text = "Remote Video Frame"; ObjectID = "DXo-7f-Mtb"; */
+"DXo-7f-Mtb.text" = "远端用户数据";
+
+/* Class = "UILabel"; text = "Video Format"; ObjectID = "E6c-M7-HVC"; */
+"E6c-M7-HVC.text" = "视频格式";
+
+/* Class = "UILabel"; text = "Capture Video Frame"; ObjectID = "E87-NA-vkm"; */
+"E87-NA-vkm.text" = "摄像头采集数据";
+
+/* Class = "UILabel"; text = "Mirror Mode"; ObjectID = "cJp-fg-2XH"; */
+"cJp-fg-2XH.text" = "镜像";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "eOV-Xr-l2g"; */
+"eOV-Xr-l2g.placeholder" = "频道 Id";
+
+/* Class = "UILabel"; text = "WriteBackSDK"; ObjectID = "uVE-G7-BhM"; */
+"uVE-G7-BhM.text" = "写回SDK";
+
+/* Class = "UILabel"; text = "Video Alignment"; ObjectID = "vgi-HM-opw"; */
+"vgi-HM-opw.text" = "视频对齐";

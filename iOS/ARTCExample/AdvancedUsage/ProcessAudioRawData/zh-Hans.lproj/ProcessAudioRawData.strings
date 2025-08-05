@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "3pQ-5S-eyO"; */
+"3pQ-5S-eyO.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UILabel"; text = "Capture Audio Frame"; ObjectID = "4xV-XW-AsS"; */
+"4xV-XW-AsS.text" = "采集音频数据";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "IMw-nZ-wzY"; */
+"IMw-nZ-wzY.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "IMw-nZ-wzY"; */
+"IMw-nZ-wzY.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "IqN-kB-oTM"; */
+"IqN-kB-oTM.placeholder" = "频道 Id";
+
+/* Class = "UILabel"; text = "Playback Audio Frame"; ObjectID = "Rgt-Nv-pQH"; */
+"Rgt-Nv-pQH.text" = "播放前音频数据";
+
+/* Class = "UILabel"; text = "Publish Audio Frame"; ObjectID = "XNK-iI-laG"; */
+"XNK-iI-laG.text" = "推流音频数据";
+
+/* Class = "UILabel"; text = "Remote User Audio Frame"; ObjectID = "bot-Tu-TEn"; */
+"bot-Tu-TEn.text" = "远端用户音频数据";
+
+/* Class = "UILabel"; text = "3A Process Audio Frame"; ObjectID = "qrL-u7-icY"; */
+"qrL-u7-icY.text" = "3A后音频数据";

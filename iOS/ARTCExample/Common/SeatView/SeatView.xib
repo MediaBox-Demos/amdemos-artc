@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SeatView" customModule="ARTCExample" customModuleProvider="target">
+            <connections>
+                <outlet property="canvasView" destination="Ied-KK-ss7" id="1Dt-Od-mPN"/>
+                <outlet property="streamTypeLabel" destination="pqg-C0-iuh" id="lSV-N8-Xri"/>
+                <outlet property="uidLabel" destination="bWA-NV-6jL" id="F7A-ke-xB8"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ied-KK-ss7">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UID：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bD-Mo-irR">
+                    <rect key="frame" x="4" y="824.66666666666663" width="35" height="19.333333333333371"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqg-C0-iuh">
+                    <rect key="frame" x="4" y="820.66666666666663" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWA-NV-6jL">
+                    <rect key="frame" x="47" y="834.33333333333337" width="346" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Ied-KK-ss7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6Ab-SX-eKr"/>
+                <constraint firstItem="Ied-KK-ss7" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="9wo-xP-4AZ"/>
+                <constraint firstItem="bWA-NV-6jL" firstAttribute="leading" secondItem="7bD-Mo-irR" secondAttribute="trailing" constant="8" id="EUK-NJ-GzJ"/>
+                <constraint firstAttribute="bottom" secondItem="Ied-KK-ss7" secondAttribute="bottom" id="Glf-eG-wuI"/>
+                <constraint firstItem="7bD-Mo-irR" firstAttribute="top" secondItem="pqg-C0-iuh" secondAttribute="bottom" constant="4" id="HMx-Op-sWt"/>
+                <constraint firstItem="bWA-NV-6jL" firstAttribute="centerY" secondItem="7bD-Mo-irR" secondAttribute="centerY" id="M4a-QD-KUh"/>
+                <constraint firstAttribute="trailing" secondItem="Ied-KK-ss7" secondAttribute="trailing" id="QKc-GV-Pwu"/>
+                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="bWA-NV-6jL" secondAttribute="trailing" id="hto-20-H70"/>
+                <constraint firstAttribute="bottom" secondItem="7bD-Mo-irR" secondAttribute="bottom" constant="8" id="irc-Oq-uuk"/>
+                <constraint firstItem="pqg-C0-iuh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="noR-s4-R1M"/>
+                <constraint firstItem="7bD-Mo-irR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="zoM-iu-ZVk"/>
+            </constraints>
+            <point key="canvasLocation" x="-27" y="-11"/>
+        </view>
+    </objects>
+</document>

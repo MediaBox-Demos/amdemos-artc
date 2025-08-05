@@ -1,0 +1,18 @@
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "6em-r9-xS7"; */
+"6em-r9-xS7.placeholder" = "频道 Id";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "87g-tx-koP"; */
+"87g-tx-koP.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "87g-tx-koP"; */
+"87g-tx-koP.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; configuration.title = "Send"; ObjectID = "SZQ-KD-B4m"; */
+"SZQ-KD-B4m.configuration.title" = "发送";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "SZQ-KD-B4m"; */
+"SZQ-KD-B4m.normalTitle" = "发送";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "bhx-v1-P42"; */
+"bhx-v1-P42.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";

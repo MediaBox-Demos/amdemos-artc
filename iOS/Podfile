@@ -1,0 +1,16 @@
+# Uncomment the next line to define a global platform for your project
+ platform :ios, '11.0'
+
+target 'ARTCExample' do
+
+  # Pods for ARTCExample
+  
+  pod 'AliVCSDK_ARTC', '~> 7.5.0'
+
+end
+
+target 'ScreenShareExtension' do
+
+  # Pods for ScreenShareExtension
+  pod "AliScreenShare", '7.5.0'
+end

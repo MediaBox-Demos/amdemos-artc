@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="grey">#E3E3E3</color>
+    <color name="little_dark_grey">#BFBFBF</color>
+    <color name="dark_grey">#8A8A8A</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="layout_base_background">#1C1D22</color>
+    <color name="layout_base_white_default">#FCFCFD</color>
+    <color name="layout_base_gray">#747A8C</color>
+    <color name="layout_base_light_gray">#80868686</color>
+    <color name="layout_base_dialog_background">#23262F</color>
+    <color name="layout_base_iv_border">#3A3D48</color>
+    <color name="layout_base_iv_border_half">#2E313B</color>
+    <color name="layout_base_divider">#23262F</color>
+    <color name="layout_base_default_background">#661C1D22</color>
+    <color name="layout_base_msg_author_color">#80DEEA</color>
+    <color name="layout_base_black_alpha_50">#80000000</color>
+    <color name="layout_base_white_alpha30">#4DFFFFFF</color>
+    <color name="layout_base_toast_background">#141416</color>
+    <color name="layout_base_light_blue">#4DCFE1</color>
+    <color name="layout_base_light_white">#B2B7C4</color>
+    <color name="layout_base_red">#F53F3F</color>
+    <color name="layout_base_chat_inut_background">#19191E</color>
+    <color name="layout_blank_color">#000000</color>
+    <color name="layout_base_white_alpha70">#B2FFFFFF</color>
+    <color name="layout_base_blue">#3295FB</color>
+    <color name="layout_chatbot_red">#F95353</color>
+</resources>

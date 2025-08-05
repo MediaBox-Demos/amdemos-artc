@@ -1,0 +1,79 @@
+/* 
+  Localizable.strings
+  ARTCExample
+
+  Created by Bingo on 2025/5/22.
+  
+*/
+
+"QUICK START" = "快速开始";
+"BASIC(Not Implemented)" = "基础功能";
+"ADVANCED(Not Implemented)" = "进阶功能（未实现）";
+
+"Token Generate" = "Token生成及入会";
+"Video Call" = "实现音视频通话";
+"Voice Chat" = "实现语聊房";
+
+
+"Publishing" = "推流";
+"Playing" = "拉流";
+"Audio Basic Usage" = "音频常用操作和配置";
+"Video Basic Usage" = "视频常用操作和配置";
+"Camera Common Control" = "摄像头常规控制";
+"SEI Sending and Receiving" = "SEI发送和接收";
+"Common Message Sending And Receiving" = "自定义消息发送和接收";
+"Screen Share" = "屏幕共享";
+"Stream Monitoring" = "通话中推拉流质量监测";
+
+"Process Audio Raw Data" = "原始音频数据";
+"Process Video Raw Data" = "原始视频数据";
+"Custom Audio Capture" = "自定义音频采集";
+"Custom Video Capture" = "自定义视频采集";
+
+
+// 音频常用操作
+"Speaker" = "扬声器";
+"Earpiece" = "听筒";
+"Stop Mic Capture" = "停止麦克风采集";
+"Start Mic Capture" = "开始麦克风采集";
+"Cancel Mute Mic" = "取消麦克风静音";
+"Mute Mic" = "静音麦克风";
+"Enable EarBack" = "开启耳返";
+"Disable EarBack" = "关闭耳返";
+"Set EarBack Volume" = "设置耳返音量";
+"Cancel Mute All Remote User" = "取消静音所有远端用户";
+"Mute All Remote User" = "静音所有远端用户";
+"Cancel Mute Play" = "取消播放静音";
+"Mute Play" = "播放静音";
+"Set Play Volume" = "设置播放音量";
+
+
+"Mute" = "静音";
+"Unmute" = "取消静音";
+"Join Channel" = "加入频道";
+"Leave Channel" = "离开频道";
+"Disable Mic" = "关闭麦克风";
+"Enable Mic" = "开启麦克风";
+
+"Join Channel" = "加入频道";
+"Hangup" = "挂断";
+
+"Please enter a valid integer" = "请输入有效整数";
+"Follow Capture" = "跟随采集";
+"Fixed Landscape" = "固定横屏";
+"Fixed Portrait" = "固定竖屏";
+"Software Encoding" = "软件编码";
+"Hardware Encoding" = "硬件编码";
+"Hardware Texture Encoding" = "硬件纹理编码";
+"Both Mirroring Enable" = "均开启镜像";
+"Both Mirroring Disabled" = "均关闭镜像";
+"Preview Mirroring Only" = "仅预览镜像";
+"Encoding Mirroring Only" = "仅编码镜像";
+
+"Cancel" = "取消";
+"Confirm" = "确定";
+
+// 原始音频数据
+"Read Write Mode" = "读写模式";
+"Channel Num" = "声道数";
+"SampleRate" = "采样率";

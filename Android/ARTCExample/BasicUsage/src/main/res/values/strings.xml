@@ -1,0 +1,134 @@
+<resources>
+    <string name="basic_usage">Basic Usage</string>
+    <string name="audio_basic_usage">Audio Common Usage And Config</string>
+    <string name="video_basic_usage">Video Common Usage And Config</string>
+    <string name="camera_common_control">Camera Common Control</string>
+    <string name="sei_message_send_and_receive">SEI send and receive</string>
+    <string name="screen_share">Screen Share</string>
+    <string name="custom_msg_Title">Custom message sending and receiving</string>
+
+
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="mute_microphone">mute Microphone</string>
+    <string name="unmute_microphone">unmute Microphone</string>
+    <string name="close_microphone">Close Microphone</string>
+    <string name="open_microphone">Open Microphone</string>
+    <string name="video_chat_join_room">Join Room</string>
+    <string name="audio_inear_monitor">InEar Monitor(please insert the earphones before experiencing the ear return function)</string>
+    <string name="audio_inear_volume">InEar Monitor Vol</string>
+    <string name="audio_play_volume">Play Volume</string>
+    <string name="mute_All_remote_user">Mute All Remote User</string>
+    <string name="playout_volume_prompt_message">Click on the remote user\'s mic seat below for more options.</string>
+    <string name="playout_volume_user_prompt_message">The user currently operating:</string>
+    <string name="set_playout_volume">Set Playout Volume</string>
+    <string name="mute_user">Mute User</string>
+    <string name="unmute_user">Unmute User</string>
+    <string name="leave_channel">Leave</string>
+    <string name="connection_failed">Connection failed, please check the network</string>
+    <string name="please_enter_text">Please enter the message to send.</string>
+    <string name="video_chat_channel_desc">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+
+    <string name="zoom_factor">zoom factor</string>
+    <string name="Exposure_compensation">Exposure compensation</string>
+    <string name="Switch_camera">Switch Camera</string>
+    <string name="camera_auto_focus">Camera Auto Face Focus</string>
+    <string name="flash">Camera Flash</string>
+    <string name="Manual">Manually focus and expo</string>
+    <string name="camera_exposure_point_label">Click the preview area to set the camera exposure point</string>
+    <string name="camera_focus_point_label">Double-click the preview area to set the camera focus point</string>
+
+    <string name="front_camera">front camera</string>
+    <string name="rear_camera">rear camera</string>
+
+    <string name="OFF">OFF</string>
+    <string name="ON">ON</string>
+
+    <!-- CameraActivity新增字符串资源 -->
+    <string name="touch_outside_video_area">Touch position is outside video area</string>
+    <string name="not_in_room">Not in room</string>
+    <string name="current_rear_camera">Current is rear camera</string>
+    <string name="current_front_camera">Current is front camera</string>
+    <string name="device_supports_face_autofocus">This device supports face auto focus</string>
+    <string name="device_not_support_face_autofocus">This device does not support face auto focus</string>
+    <string name="device_not_support_manual_exposure">This device does not support manual exposure setting</string>
+    <string name="device_not_support_manual_focus">This device does not support manual focus point setting</string>
+    <string name="please_touch_video_for_focus">Please touch the video to set focus point</string>
+    <string name="not_in_room_cannot_set_zoom">Not in room, cannot set zoom</string>
+    <string name="not_in_room_cannot_set_exposure">Not in room, cannot set exposure</string>
+    <string name="leave_channel_msg">Leave Channel</string>
+
+    <!-- 布局文件新增字符串资源 -->
+    <string name="channel_id_label">ChannelID:</string>
+    <string name="message_input_hint">Please enter message content</string>
+    <string name="send_button">Send</string>
+
+    <string name="start_preview">Start Preview</string>
+    <string name="stop_preview">Stop Preview</string>
+    <string name="switch_camera_direction">Switch Camera</string>
+    <string name="btn_setting">Setting</string>
+    <string name="camera_on">Open Camera</string>
+    <string name="camera_off">Close Camera</string>
+    <string name="stop_pub_video">Stop Publish Video</string>
+    <string name="resume_pub_video">Resume Publish Video</string>
+    <string name="mirror_set">Mirror</string>
+    <string name="rotation_set">Rotation</string>
+
+
+    <string name="video_configuration_title">Video Configuration</string>
+
+    <string name="camera_capture_config">Camera Capture Configuration (Camera Setup Before Activation)</string>
+    <string name="camera_capture_preference">Camera Capture Preference</string>
+    <string name="camera_capture_direction">Camera Direction</string>
+    <string name="camera_capture_front_camera">Front</string>
+    <string name="camera_capture_back_camera">Back</string>
+    <string name="camera_capture_frame_rate">Frame Rate</string>
+    <string name="camera_capture_resolution">Resolution</string>
+    <string name="camera_capture_disable_video_capture_reverse">Disable video frame capture reverse aspect setting</string>
+    <string name="camera_capture_observer_raw_frame">Callback Original Video Frame</string>
+    <string name="camera_capture_texture_Encode">Enable Texture Encoding</string>
+    <string name="camera_capture_texture_capture">Camera Texture Capture</string>
+
+    <string name="video_encoder_config">Video Encoder Configuration</string>
+    <string name="video_encoder_resolution_width">Width</string>
+    <string name="video_encoder_resolution_height">Height</string>
+    <string name="video_encoder_frame_rate">Frame Rate</string>
+    <string name="video_encoder_bitrate">Bitrate(kbps)</string>
+    <string name="video_encoder_min_bitrate">Minimum Bitrate(kbps)</string>
+    <string name="video_encoder_keyframe_interval">Keyframe Interval(ms)</string>
+    <string name="video_encoder_force_strict_keyframe_interval">Force Strict Keyframe Interval</string>
+    <string name="video_encoder_mirror_mode">Encode Mirror</string>
+    <string name="video_encoder_orientation_mode">Video Output Direction</string>
+    <string name="video_encoder_orientation_adaptive">Follow Capture</string>
+    <string name="video_encoder_orientation_landscape">Fixed Landscape</string>
+    <string name="video_encoder_orientation_portrait">Fixed Portrait</string>
+    <string name="video_encoder_rotation_mode">Rotation Mode</string>
+    <string name="video_encoder_encode_codec_type">Encode Codec Type</string>
+    <string name="video_encoder_codec_type">Codec Mode</string>
+    <string name="video_encoder_software_encode">Software Encoding</string>
+    <string name="video_encoder_hardware_encode">Hardware Encoding</string>
+    <string name="video_encoder_hardware_texture_encode">Hardware Texture Encoding</string>
+    <string name="video_encoder_sei_force_front_I_frame">SEI Force I-frame</string>
+    <string name="video_encoder_enable_dynamic_encode">Enable Dynamic Encoding</string>
+    <string name="video_encoder_disable_dipense_resolution_change">Disable Downscale Before Encoding</string>
+    <string name="video_encoder_enable_downgrade">Enable Resolution/Bitrate Downgrade</string>
+    <string name="video_encoder_enable_H264_B_frame">Enable H264 B-frame</string>
+    <string name="video_encoder_enable_H265_B_frame">Enable H265 B-frame</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="mirror_mode_both_on">Both Mirroring Enable</string>
+    <string name="mirror_mode_both_off">Both Mirroring Disabled</string>
+    <string name="mirror_mode_only_preview">Preview Mirroring Only</string>
+    <string name="mirror_mode_only_encode">Encoding Mirroring Only</string>
+
+    <string name="sei_message_input_Prompt">Please input SEI message</string>
+    <string name="sei_message_send">Send</string>
+    <string name="sei_message_channel_id_input_hint">Please input channel id</string>
+
+    <string name="quality_monitor">Call quality monitoring</string>
+    <string name="video_chat_connection_failed">Connection failed, please check the network</string>
+
+
+</resources>

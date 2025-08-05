@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".TokenGenerate.TokenGenerateActivity"
+            android:label="@string/token_verify"
+            android:exported="true"/>
+        <activity
+            android:name=".VideoCall.VideoCallActivity"
+            android:label="@string/video_chat"
+            android:exported="true"/>
+        <activity
+            android:name=".VoiceChat.VoiceChatActivity"
+            android:label="@string/voice_chat_room"
+            android:exported="true"/>
+
+    </application>
+</manifest>

@@ -1,0 +1,54 @@
+
+/* Class = "UILabel"; text = "FrameRate"; ObjectID = "Ab6-W4-PD3"; */
+"Ab6-W4-PD3.text" = "帧率";
+
+/* Class = "UILabel"; text = "Channel"; ObjectID = "IXM-BA-2sK"; */
+"IXM-BA-2sK.text" = "频道";
+
+/* Class = "UILabel"; text = "Height"; ObjectID = "QPd-qV-H0x"; */
+"QPd-qV-H0x.text" = "高度";
+
+/* Class = "UILabel"; text = "Share Audio Volume"; ObjectID = "TdC-zE-K8w"; */
+"TdC-zE-K8w.text" = "共享音频音量";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "YZo-sv-bon"; */
+"YZo-sv-bon.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "YZo-sv-bon"; */
+"YZo-sv-bon.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "ZoO-uN-NZ5"; */
+"ZoO-uN-NZ5.placeholder" = "频道 Id";
+
+/* Class = "UIButton"; configuration.title = "StartShare"; ObjectID = "bCo-Ml-4ew"; */
+"bCo-Ml-4ew.configuration.title" = "开始共享";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "bCo-Ml-4ew"; */
+"bCo-Ml-4ew.normalTitle" = "开始共享";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "gqq-dk-Z8y"; */
+"gqq-dk-Z8y.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UILabel"; text = "Share Mode"; ObjectID = "o4w-BC-O2m"; */
+"o4w-BC-O2m.text" = "共享模式";
+
+/* Class = "UILabel"; text = "Bitrate"; ObjectID = "ojc-s6-ieB"; */
+"ojc-s6-ieB.text" = "比特率";
+
+/* Class = "UIButton"; configuration.title = "Update"; ObjectID = "ulW-8j-eQU"; */
+"ulW-8j-eQU.configuration.title" = "更新";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ulW-8j-eQU"; */
+"ulW-8j-eQU.normalTitle" = "更新";
+
+/* Class = "UILabel"; text = "GOP"; ObjectID = "wqu-mx-J8x"; */
+"wqu-mx-J8x.text" = "GOP";
+
+/* Class = "UILabel"; text = "Width"; ObjectID = "wrX-8g-x9Y"; */
+"wrX-8g-x9Y.text" = "宽度";
+
+/* Class = "UIButton"; configuration.title = "StopShare"; ObjectID = "yek-Hc-xv1"; */
+"yek-Hc-xv1.configuration.title" = "停止共享";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "yek-Hc-xv1"; */
+"yek-Hc-xv1.normalTitle" = "停止共享";

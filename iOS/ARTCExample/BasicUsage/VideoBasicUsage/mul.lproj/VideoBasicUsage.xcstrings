@@ -1,0 +1,594 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "1zx-Bv-r5b.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"码率\"; ObjectID = \"1zx-Bv-r5b\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "码率"
+          }
+        }
+      }
+    },
+    "2kP-Mc-qSB.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"最小码率\"; ObjectID = \"2kP-Mc-qSB\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "最小码率"
+          }
+        }
+      }
+    },
+    "6j7-Jo-BIa.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"纹理编码\"; ObjectID = \"6j7-Jo-BIa\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "纹理编码"
+          }
+        }
+      }
+    },
+    "6pc-oY-Gvd.segmentTitles[0]" : {
+      "comment" : "Class = \"UISegmentedControl\"; 6pc-oY-Gvd.segmentTitles[0] = \"前置\"; ObjectID = \"6pc-oY-Gvd\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "前置"
+          }
+        }
+      }
+    },
+    "6pc-oY-Gvd.segmentTitles[1]" : {
+      "comment" : "Class = \"UISegmentedControl\"; 6pc-oY-Gvd.segmentTitles[1] = \"后置\"; ObjectID = \"6pc-oY-Gvd\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "后置"
+          }
+        }
+      }
+    },
+    "97K-g1-0Vw.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"1280\"; ObjectID = \"97K-g1-0Vw\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "1280"
+          }
+        }
+      }
+    },
+    "Ato-Zu-ELq.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"摄像头采集偏好\"; ObjectID = \"Ato-Zu-ELq\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "摄像头采集偏好"
+          }
+        }
+      }
+    },
+    "D6U-pr-axI.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"镜像模式\"; ObjectID = \"D6U-pr-axI\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "镜像模式"
+          }
+        }
+      }
+    },
+    "d8G-yo-g89.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"0\"; ObjectID = \"d8G-yo-g89\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "0"
+          }
+        }
+      }
+    },
+    "dDZ-5R-DqA.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"SEI是否强制B帧\"; ObjectID = \"dDZ-5R-DqA\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "SEI是否强制B帧"
+          }
+        }
+      }
+    },
+    "dhy-PK-mwV.segmentTitles[0]" : {
+      "comment" : "Class = \"UISegmentedControl\"; dhy-PK-mwV.segmentTitles[0] = \"前置\"; ObjectID = \"dhy-PK-mwV\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "前置"
+          }
+        }
+      }
+    },
+    "dhy-PK-mwV.segmentTitles[1]" : {
+      "comment" : "Class = \"UISegmentedControl\"; dhy-PK-mwV.segmentTitles[1] = \"后置\"; ObjectID = \"dhy-PK-mwV\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "后置"
+          }
+        }
+      }
+    },
+    "Duh-EM-ZbE.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"应用配置\"; ObjectID = \"Duh-EM-ZbE\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "应用配置"
+          }
+        }
+      }
+    },
+    "Duh-EM-ZbE.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"Duh-EM-ZbE\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "EtW-NB-5GZ.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"帧率\"; ObjectID = \"EtW-NB-5GZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "帧率"
+          }
+        }
+      }
+    },
+    "euK-NL-Xbp.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"高度\"; ObjectID = \"euK-NL-Xbp\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "高度"
+          }
+        }
+      }
+    },
+    "exK-L8-Yci.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"15\"; ObjectID = \"exK-L8-Yci\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "15"
+          }
+        }
+      }
+    },
+    "fhG-uJ-9sy.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"摄像头采集配置（开启摄像头前配置）\"; ObjectID = \"fhG-uJ-9sy\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "摄像头采集配置（开启摄像头前配置）"
+          }
+        }
+      }
+    },
+    "gJn-es-CUX.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"允许H265 B帧\"; ObjectID = \"gJn-es-CUX\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "允许H265 B帧"
+          }
+        }
+      }
+    },
+    "gnb-9r-ppY.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"预览\"; ObjectID = \"gnb-9r-ppY\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "预览"
+          }
+        }
+      }
+    },
+    "HBy-J5-bKs.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"是否强制关键帧间隔\"; ObjectID = \"HBy-J5-bKs\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "是否强制关键帧间隔"
+          }
+        }
+      }
+    },
+    "HF3-Of-yB8.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"允许分辨率降级\"; ObjectID = \"HF3-Of-yB8\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "允许分辨率降级"
+          }
+        }
+      }
+    },
+    "hND-rN-DPP.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"默认摄像头方向\"; ObjectID = \"hND-rN-DPP\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "默认摄像头方向"
+          }
+        }
+      }
+    },
+    "jHs-eo-DQX.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"帧率\"; ObjectID = \"jHs-eo-DQX\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "帧率"
+          }
+        }
+      }
+    },
+    "LU4-kV-9Zi.segmentTitles[0]" : {
+      "comment" : "Class = \"UISegmentedControl\"; LU4-kV-9Zi.segmentTitles[0] = \"Default\"; ObjectID = \"LU4-kV-9Zi\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Default"
+          }
+        }
+      }
+    },
+    "LU4-kV-9Zi.segmentTitles[1]" : {
+      "comment" : "Class = \"UISegmentedControl\"; LU4-kV-9Zi.segmentTitles[1] = \"1080p\"; ObjectID = \"LU4-kV-9Zi\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "1080p"
+          }
+        }
+      }
+    },
+    "lWL-OU-JMj.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"回调原始视频帧\"; ObjectID = \"lWL-OU-JMj\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "回调原始视频帧"
+          }
+        }
+      }
+    },
+    "nHr-Vu-DSO.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"JoinChannel\"; ObjectID = \"nHr-Vu-DSO\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "JoinChannel"
+          }
+        }
+      }
+    },
+    "nHr-Vu-DSO.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"nHr-Vu-DSO\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "noA-2K-rLS.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"摄像头开关\"; ObjectID = \"noA-2K-rLS\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "摄像头开关"
+          }
+        }
+      }
+    },
+    "pSi-JE-yUR.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"关键帧间隔\"; ObjectID = \"pSi-JE-yUR\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "关键帧间隔"
+          }
+        }
+      }
+    },
+    "puE-kB-aOZ.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"15\"; ObjectID = \"puE-kB-aOZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "15"
+          }
+        }
+      }
+    },
+    "Pyv-lt-k5E.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"允许H264 B帧\"; ObjectID = \"Pyv-lt-k5E\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "允许H264 B帧"
+          }
+        }
+      }
+    },
+    "pzI-iP-gDA.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"编码类型\"; ObjectID = \"pzI-iP-gDA\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "编码类型"
+          }
+        }
+      }
+    },
+    "qdG-US-p0b.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"宽度\"; ObjectID = \"qdG-US-p0b\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "宽度"
+          }
+        }
+      }
+    },
+    "qFm-jL-bLX.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"旋转模式\"; ObjectID = \"qFm-jL-bLX\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "旋转模式"
+          }
+        }
+      }
+    },
+    "qwh-eh-ltQ.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"分辨率\"; ObjectID = \"qwh-eh-ltQ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "分辨率"
+          }
+        }
+      }
+    },
+    "qy7-Aj-eSM.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"ChannelID：\"; ObjectID = \"qy7-Aj-eSM\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ChannelID："
+          }
+        }
+      }
+    },
+    "S4Q-pj-l5S.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"编码模式\"; ObjectID = \"S4Q-pj-l5S\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "编码模式"
+          }
+        }
+      }
+    },
+    "tMN-ax-Fys.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"不根据纵横比设置翻转\"; ObjectID = \"tMN-ax-Fys\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "不根据纵横比设置翻转"
+          }
+        }
+      }
+    },
+    "trT-mf-d0d.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"720\"; ObjectID = \"trT-mf-d0d\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "720"
+          }
+        }
+      }
+    },
+    "UR3-vR-Ld3.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"数据发送\"; ObjectID = \"UR3-vR-Ld3\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "数据发送"
+          }
+        }
+      }
+    },
+    "VUy-X7-PVw.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"0\"; ObjectID = \"VUy-X7-PVw\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "0"
+          }
+        }
+      }
+    },
+    "vxB-UW-vPF.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"摄像头方向\"; ObjectID = \"vxB-UW-vPF\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "摄像头方向"
+          }
+        }
+      }
+    },
+    "woH-1c-bDn.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"纹理采集\"; ObjectID = \"woH-1c-bDn\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "纹理采集"
+          }
+        }
+      }
+    },
+    "wxO-7A-sOt.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"禁止编码前缩放\"; ObjectID = \"wxO-7A-sOt\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "禁止编码前缩放"
+          }
+        }
+      }
+    },
+    "wyi-Dy-K6N.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"视频输出方向\"; ObjectID = \"wyi-Dy-K6N\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "视频输出方向"
+          }
+        }
+      }
+    },
+    "YWr-6A-jMR.text" : {
+      "comment" : "Class = \"UITextField\"; text = \"0\"; ObjectID = \"YWr-6A-jMR\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "0"
+          }
+        }
+      }
+    },
+    "z4x-lh-lln.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"视频编码配置\"; ObjectID = \"z4x-lh-lln\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "视频编码配置"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

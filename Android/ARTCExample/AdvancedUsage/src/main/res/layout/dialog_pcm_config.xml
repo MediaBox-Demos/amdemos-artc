@@ -1,0 +1,25 @@
+<!-- dialog_pcm_config.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_sample_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="采样率" />
+
+    <Spinner
+        android:id="@+id/spinner_channels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_select_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择文件" />
+
+</LinearLayout>

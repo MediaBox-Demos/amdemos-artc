@@ -1,0 +1,131 @@
+<resources>
+    <string name="basic_usage">基础功能</string>
+    <string name="audio_basic_usage">音频常用操作和配置</string>
+    <string name="video_basic_usage">视频常用操作和配置</string>
+    <string name="camera_common_control">相机常规控制</string>
+    <string name="sei_message_send_and_receive">SEI发送和接收</string>
+    <string name="screen_share">屏幕共享</string>
+    <string name="custom_msg_Title">自定义消息发送和接收</string>
+
+    <string name="video_chat_channel_desc">如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="mute_microphone">静音麦克风</string>
+    <string name="unmute_microphone">取消静音</string>
+    <string name="close_microphone">关闭麦克风采集</string>
+    <string name="open_microphone">打开麦克风采集</string>
+    <string name="video_chat_join_room">加入频道</string>
+    <string name="audio_inear_monitor">耳返(请插入耳机后再体验耳返功能)</string>
+    <string name="audio_inear_volume">耳返音量</string>
+    <string name="audio_play_volume">播放音量</string>
+    <string name="mute_All_remote_user">静音所有远端用户</string>
+    <string name="playout_volume_prompt_message">点击下方远端用户麦位进行更多操作</string>
+    <string name="playout_volume_user_prompt_message">操作用户：</string>
+    <string name="set_playout_volume">设置播放音量</string>
+    <string name="mute_user">静音用户</string>
+    <string name="unmute_user">取消静音用户</string>
+    <string name="leave_channel">挂断</string>
+    <string name="connection_failed">连接失败，请检查网络</string>
+    <string name="please_enter_text">请输入发送内容</string>
+
+    <string name="zoom_factor">变焦倍数</string>
+    <string name="Exposure_compensation">曝光补偿</string>
+    <string name="Switch_camera">切换摄像头</string>
+    <string name="flash">闪光灯</string>
+    <string name="camera_auto_focus">摄像头自动人脸聚焦</string>
+    <string name="Manual">手动设置对焦和曝光</string>
+    <string name="camera_exposure_point_label">单击预览画面区域设置摄像头曝光点</string>
+    <string name="camera_focus_point_label">双击预览画面区域设置摄像头对焦点</string>
+
+    <string name="front_camera">前置摄像头</string>
+
+    <string name="rear_camera">后置摄像头</string>
+
+    <string name="OFF">关闭</string>
+    <string name="ON">开启</string>
+
+    <!-- CameraActivity新增字符串资源 -->
+    <string name="touch_outside_video_area">点击位置超出视频区域</string>
+    <string name="not_in_room">未进入房间</string>
+    <string name="current_rear_camera">当前为后置摄像头</string>
+    <string name="current_front_camera">当前为前置摄像头</string>
+    <string name="device_supports_face_autofocus">该设备支持人脸自动对焦</string>
+    <string name="device_not_support_face_autofocus">该设备不支持人脸自动对焦</string>
+    <string name="device_not_support_manual_exposure">该设备不支持手动设置曝光</string>
+    <string name="device_not_support_manual_focus">该设备不支持手动设置对焦点</string>
+    <string name="please_touch_video_for_focus">请点击视频画面设置对焦点</string>
+    <string name="not_in_room_cannot_set_zoom">未加入房间，无法设置zoom</string>
+    <string name="not_in_room_cannot_set_exposure">未加入房间，无法设置exposure</string>
+    <string name="leave_channel_msg">离开频道</string>
+    
+    <!-- 布局文件新增字符串资源 -->
+    <string name="channel_id_label">ChannelID:</string>
+    <string name="message_input_hint">请输入消息内容</string>
+    <string name="send_button">发送</string>
+
+    <string name="start_preview">开启预览</string>
+    <string name="stop_preview">停止预览</string>
+    <string name="switch_camera_direction">切换摄像头</string>
+    <string name="btn_setting">设置</string>
+    <string name="camera_on">开启摄像头</string>
+    <string name="camera_off">关闭摄像头</string>
+    <string name="stop_pub_video">停止视频发送</string>
+    <string name="resume_pub_video">恢复视频发送</string>
+    <string name="mirror_set">镜像</string>
+    <string name="rotation_set">旋转</string>
+
+    <string name="video_configuration_title">视频配置</string>
+
+    <string name="camera_capture_config">摄像头采集配置(开启摄像头前设置)</string>
+    <string name="camera_capture_preference">摄像头采集偏好</string>
+    <string name="camera_capture_direction">摄像头方向</string>
+    <string name="camera_capture_front_camera">前置</string>
+    <string name="camera_capture_back_camera">后置</string>
+    <string name="camera_capture_frame_rate">帧率</string>
+    <string name="camera_capture_resolution">分辨率</string>
+    <string name="camera_capture_disable_video_capture_reverse">不根据纵横比设置翻转采集视频帧设置</string>
+    <string name="camera_capture_observer_raw_frame">是否回调原始视频帧</string>
+    <string name="camera_capture_texture_Encode">是否启用纹理编码</string>
+    <string name="camera_capture_texture_capture">摄像头纹理采集</string>
+
+    <string name="video_encoder_config">视频编码配置</string>
+    <string name="video_encoder_resolution_width">宽度</string>
+    <string name="video_encoder_resolution_height">高度</string>
+    <string name="video_encoder_frame_rate">帧率</string>
+    <string name="video_encoder_bitrate">码率(kbps)</string>
+    <string name="video_encoder_min_bitrate">最小码率（kbps）</string>
+    <string name="video_encoder_keyframe_interval">关键帧间隔（毫秒）</string>
+    <string name="video_encoder_force_strict_keyframe_interval">是否强制关键帧间隔</string>
+    <string name="video_encoder_mirror_mode">编码镜像</string>
+    <string name="video_encoder_orientation_mode">视频输出方向</string>
+    <string name="video_encoder_orientation_adaptive">跟随采集</string>
+    <string name="video_encoder_orientation_landscape">固定横屏</string>
+    <string name="video_encoder_orientation_portrait">固定竖屏</string>
+    <string name="video_encoder_rotation_mode">旋转模式</string>
+    <string name="video_encoder_encode_codec_type">编码类型</string>
+    <string name="video_encoder_codec_type">编码模式</string>
+    <string name="video_encoder_software_encode">软件编码</string>
+    <string name="video_encoder_hardware_encode">硬件编码</string>
+    <string name="video_encoder_hardware_texture_encode">硬件纹理编码</string>
+    <string name="video_encoder_sei_force_front_I_frame">SEI是否强制I帧</string>
+    <string name="video_encoder_enable_dynamic_encode">动态编码</string>
+    <string name="video_encoder_disable_dipense_resolution_change">禁止编码前缩放</string>
+    <string name="video_encoder_enable_downgrade">允许分辨率/码流降级</string>
+    <string name="video_encoder_enable_H264_B_frame">允许H264 B帧</string>
+    <string name="video_encoder_enable_H265_B_frame">允许H265 B帧</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+
+    <string name="mirror_mode_both_on">均开启镜像</string>
+    <string name="mirror_mode_both_off">均关闭镜像</string>
+    <string name="mirror_mode_only_preview">仅预览镜像</string>
+    <string name="mirror_mode_only_encode">仅编码镜像</string>
+
+    <string name="sei_message_input_Prompt">请输入SEI消息</string>
+    <string name="sei_message_send">发送</string>
+    <string name="sei_message_channel_id_input_hint">请输入频道ID</string>
+    <string name="quality_monitor">通话质量监测</string>
+    <string name="video_chat_connection_failed">连接失败，请检查网络</string>
+
+</resources>

@@ -1,0 +1,24 @@
+
+/* Class = "UILabel"; text = "If you want to join the same voice chat room with other users, you need to join the same channel, that is, ensure that the ChannelID of both parties is the same"; ObjectID = "Ig1-u2-NmY"; */
+"Ig1-u2-NmY.text" = "如果要和其他用户加入同一个语聊房，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UIButton"; configuration.title = "Audience"; ObjectID = "Qgo-oA-OPz"; */
+"Qgo-oA-OPz.configuration.title" = "观众";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Qgo-oA-OPz"; */
+"Qgo-oA-OPz.normalTitle" = "观众";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "Xn4-2T-7cQ"; */
+"Xn4-2T-7cQ.placeholder" = "频道Id";
+
+/* Class = "UIButton"; configuration.title = "Anchor"; ObjectID = "vQZ-a1-FUT"; */
+"vQZ-a1-FUT.configuration.title" = "主播";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "vQZ-a1-FUT"; */
+"vQZ-a1-FUT.normalTitle" = "主播";
+
+/* Class = "UIButton"; normalTitle = "Switch to Anchor"; ObjectID = "qed-YI-DB4"; */
+"qed-YI-DB4.normalTitle" = "切换为主播";
+
+/* Class = "UIButton"; selectedTitle = "Switch to Audience"; ObjectID = "qed-YI-DB4"; */
+"qed-YI-DB4.selectedTitle" = "切换为观众";

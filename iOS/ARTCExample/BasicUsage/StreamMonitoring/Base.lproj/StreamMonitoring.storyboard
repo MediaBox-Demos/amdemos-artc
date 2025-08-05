@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Stream Monitoring Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="StreamMonitoringSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xl1-Dc-qoS">
+                                <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PQo-6J-Hhl">
+                                <rect key="frame" x="24" y="164.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NYi-Cn-sGA">
+                                <rect key="frame" x="135.33333333333334" y="246.33333333333337" width="122.33333333333334" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="VJG-EO-0Sn"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Xl1-Dc-qoS" secondAttribute="trailing" constant="24" id="06W-Qu-Rop"/>
+                            <constraint firstItem="NYi-Cn-sGA" firstAttribute="top" secondItem="PQo-6J-Hhl" secondAttribute="bottom" constant="48" id="DdJ-IH-dSc"/>
+                            <constraint firstItem="NYi-Cn-sGA" firstAttribute="centerX" secondItem="PQo-6J-Hhl" secondAttribute="centerX" id="F0d-1q-G9b"/>
+                            <constraint firstItem="PQo-6J-Hhl" firstAttribute="top" secondItem="Xl1-Dc-qoS" secondAttribute="bottom" constant="24" id="FMS-YU-AZz"/>
+                            <constraint firstItem="Xl1-Dc-qoS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="oRB-nE-JlK"/>
+                            <constraint firstItem="PQo-6J-Hhl" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="qUt-39-FGo"/>
+                            <constraint firstItem="Xl1-Dc-qoS" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="quq-Fd-3rM"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PQo-6J-Hhl" secondAttribute="trailing" constant="24" id="rw4-i2-7S6"/>
+                            <constraint firstItem="PQo-6J-Hhl" firstAttribute="top" secondItem="Xl1-Dc-qoS" secondAttribute="bottom" constant="24" id="uAP-ac-cah"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="PQo-6J-Hhl" id="xSF-pB-vKA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="105" y="-34"/>
+        </scene>
+        <!--Stream Monitoring MainVC-->
+        <scene sceneID="nyf-Gj-rGz">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="Mp8-6a-huY" customClass="StreamMonitoringMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vms-sa-kjV">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCX-8M-h2O">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ghy-7D-RBh"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="BCX-8M-h2O" firstAttribute="top" secondItem="ghy-7D-RBh" secondAttribute="top" id="93A-dK-CcL"/>
+                            <constraint firstItem="BCX-8M-h2O" firstAttribute="trailing" secondItem="ghy-7D-RBh" secondAttribute="trailing" id="EOm-oK-R2N"/>
+                            <constraint firstItem="ghy-7D-RBh" firstAttribute="bottom" secondItem="BCX-8M-h2O" secondAttribute="bottom" id="RTw-5m-YIY"/>
+                            <constraint firstItem="BCX-8M-h2O" firstAttribute="leading" secondItem="ghy-7D-RBh" secondAttribute="leading" id="lXq-dh-KBZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="BCX-8M-h2O" id="yBI-cb-sAu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zl6-dQ-aJR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="740" y="-35"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

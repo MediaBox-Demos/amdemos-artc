@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Group"; ObjectID = "BcF-kw-J8G"; */
+"BcF-kw-J8G.text" = "Group";
+
+/* Class = "UIBarButtonItem"; title = "Setting"; ObjectID = "Mh4-Z3-Os8"; */
+"Mh4-Z3-Os8.title" = "Setting";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "bDm-d6-FIx"; */
+"bDm-d6-FIx.text" = "Detail";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "cfJ-5L-VP6"; */
+"cfJ-5L-VP6.text" = "Name";
+
+/* Class = "UINavigationItem"; title = "ARTC API Example"; ObjectID = "sH0-ML-XEH"; */
+"sH0-ML-XEH.title" = "ARTC API Example";

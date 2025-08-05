@@ -1,0 +1,66 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+def keystoreProperties = new Properties()
+def keystoreFile = rootProject.file('key.properties')
+if (keystoreFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystoreFile))
+}
+
+android {
+    namespace 'com.aliyun.artc.api.example'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.aliyun.artc.api.example"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            // 配置签名
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // 配置签名
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation('com.orhanobut:dialogplus:1.11@aar')
+    implementation project(path: ':QuickStart')
+    implementation project(path: ':KeyCenter')
+    implementation project(path: ':BasicUsage')
+    implementation project(path: ':AdvancedUsage')
+    implementation libs.alivcsdk.artc
+}

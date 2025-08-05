@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <application>
+        <activity
+            android:name=".AudioBasicUsage.AudioBasicUsageActivity"
+            android:label="@string/audio_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".VideoBasicUsage.VideoBasicUsageActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".CameraCommonControl.CameraActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".SEIUsage.SEIActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".DataChannelMessage.DataChannelMessageActivity"
+            android:label="@string/video_basic_usage"
+            android:exported="true"/>
+
+        <activity
+            android:name="com.aliyun.artc.api.basicusage.ScreenShare.ScreenShareActivity"
+            android:label="@string/audio_basic_usage"
+            android:exported="true"/>
+        <activity
+            android:name="com.aliyun.artc.api.basicusage.StreamMonitoring.StreamMonitoringActivity"
+            android:label="@string/audio_basic_usage"
+            android:exported="true"/>
+
+        <service android:name="com.alivc.rtc.share.ForegroundService"
+            android:enabled="true" />
+
+    </application>
+
+</manifest>

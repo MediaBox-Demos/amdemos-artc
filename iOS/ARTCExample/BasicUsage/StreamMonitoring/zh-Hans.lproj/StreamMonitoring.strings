@@ -1,0 +1,12 @@
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "NYi-Cn-sGA"; */
+"NYi-Cn-sGA.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "NYi-Cn-sGA"; */
+"NYi-Cn-sGA.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "PQo-6J-Hhl"; */
+"PQo-6J-Hhl.placeholder" = "频道 Id";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "Xl1-Dc-qoS"; */
+"Xl1-Dc-qoS.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";

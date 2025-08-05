@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Data Channel Message Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="DataChannelMessageSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhx-v1-P42">
+                                <rect key="frame" x="24" y="83" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87g-tx-koP">
+                                <rect key="frame" x="135.33333333333334" y="270.33333333333331" width="122.33333333333334" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MkL-tP-VG5"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6em-r9-xS7">
+                                <rect key="frame" x="24" y="188.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6em-r9-xS7" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="5EB-Yr-nYF"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="6em-r9-xS7" secondAttribute="trailing" constant="24" id="Loo-ym-gPW"/>
+                            <constraint firstItem="6em-r9-xS7" firstAttribute="top" secondItem="bhx-v1-P42" secondAttribute="bottom" constant="24" id="TKC-m3-kN7"/>
+                            <constraint firstItem="bhx-v1-P42" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="24" id="YEp-sO-5nJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="bhx-v1-P42" secondAttribute="trailing" constant="24" id="aYa-qc-86L"/>
+                            <constraint firstItem="87g-tx-koP" firstAttribute="centerX" secondItem="6em-r9-xS7" secondAttribute="centerX" id="bmX-fC-Ccs"/>
+                            <constraint firstItem="bhx-v1-P42" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="ifO-y3-wsM"/>
+                            <constraint firstItem="87g-tx-koP" firstAttribute="top" secondItem="6em-r9-xS7" secondAttribute="bottom" constant="48" id="mtE-vN-gP0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="6em-r9-xS7" id="rb0-TL-Zgy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="-34"/>
+        </scene>
+        <!--Data Channel Message MainVC-->
+        <scene sceneID="41B-3A-Gzi">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="bPm-HD-FQF" customClass="DataChannelMessageMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Rf5-tO-q63">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tgr-sV-gLz">
+                                <rect key="frame" x="24" y="83" width="257.66666666666669" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZQ-KD-B4m">
+                                <rect key="frame" x="305.66666666666669" y="83" width="63.333333333333314" height="34.333333333333343"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Send"/>
+                                <connections>
+                                    <action selector="onCommonMsgSendButtonClicked:" destination="bPm-HD-FQF" eventType="touchUpInside" id="7if-3F-J1b"/>
+                                </connections>
+                            </button>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VjB-9x-9jU">
+                                <rect key="frame" x="0.0" y="117.33333333333331" width="393" height="700.66666666666674"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3Om-sy-kje"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SZQ-KD-B4m" firstAttribute="leading" secondItem="tgr-sV-gLz" secondAttribute="trailing" constant="24" id="49h-CN-puz"/>
+                            <constraint firstItem="tgr-sV-gLz" firstAttribute="centerY" secondItem="SZQ-KD-B4m" secondAttribute="centerY" id="D8P-gU-oV9"/>
+                            <constraint firstItem="tgr-sV-gLz" firstAttribute="leading" secondItem="3Om-sy-kje" secondAttribute="leading" constant="24" id="GAq-eb-3ME"/>
+                            <constraint firstItem="VjB-9x-9jU" firstAttribute="top" secondItem="SZQ-KD-B4m" secondAttribute="bottom" id="Gzj-S6-hZl"/>
+                            <constraint firstItem="3Om-sy-kje" firstAttribute="bottom" secondItem="VjB-9x-9jU" secondAttribute="bottom" id="H7C-VE-0MD"/>
+                            <constraint firstItem="tgr-sV-gLz" firstAttribute="top" secondItem="3Om-sy-kje" secondAttribute="top" constant="24" id="P3R-36-9E4"/>
+                            <constraint firstItem="VjB-9x-9jU" firstAttribute="trailing" secondItem="3Om-sy-kje" secondAttribute="trailing" id="bY3-Fs-qfA"/>
+                            <constraint firstItem="VjB-9x-9jU" firstAttribute="leading" secondItem="3Om-sy-kje" secondAttribute="leading" id="bbo-8I-fZe"/>
+                            <constraint firstItem="3Om-sy-kje" firstAttribute="trailing" secondItem="SZQ-KD-B4m" secondAttribute="trailing" constant="24" id="x5r-eT-mkK"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="commonMsgInputTextField" destination="tgr-sV-gLz" id="W7C-tP-lsV"/>
+                        <outlet property="contentScrollView" destination="VjB-9x-9jU" id="BSi-Wk-e6K"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ih1-Lr-kKt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="886" y="-37"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

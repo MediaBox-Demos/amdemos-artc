@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ARTCExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_settings_confirm">Confirm</string>
+    <string name="action_settings_cancel">Cancel</string>
+
+    <string name="quick_start">Quick Start</string>
+    <string name="token_verify">Token Generation</string>
+    <string name="common_use">Common Use</string>
+    <string name="video_chat">Video Call</string>
+    <string name="voice_chat_room">Voice Chat Room</string>
+
+    <string name="basic_features">Basic Features</string>
+    <string name="audio_basic_usage">Audio Common Usage And Config</string>
+    <string name="video_basic_usage">Video Common Usage And Config</string>
+    <string name="caemra_common_control">Video Common Control</string>
+    <string name="sei_send_and_receive">SEI Sending and Receiving</string>
+    <string name="data_channel_msg_basic_usage">Custom Message Sending and Receiving</string>
+    <string name="screen_share">Screen Share</string>
+
+    <string name="advance_features">Advance Features</string>
+    <string name="raw_audio_capture">Raw Audio Data</string>
+    <string name="raw_video_capture">Raw Video Data</string>
+    <string name="call_quality">Call-Stream Quality Monitor</string>
+
+</resources>

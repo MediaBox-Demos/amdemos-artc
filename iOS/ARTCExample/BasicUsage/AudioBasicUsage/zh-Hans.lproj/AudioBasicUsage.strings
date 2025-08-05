@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "耳返(请插入耳机后再体验耳返功能）"; ObjectID = "1Yb-ri-aJy"; */
+"1Yb-ri-aJy.text" = "耳返(请插入耳机后再体验耳返功能）";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "JCk-Hu-Mxu"; */
+"JCk-Hu-Mxu.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Join Channel"; ObjectID = "JCk-Hu-Mxu"; */
+"JCk-Hu-Mxu.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Audio Route"; ObjectID = "MaY-S8-sh7"; */
+"MaY-S8-sh7.text" = "音频路由";
+
+/* Class = "UILabel"; text = "Audio Scenario"; ObjectID = "iS8-sJ-xV5"; */
+"iS8-sJ-xV5.text" = "音频场景";
+
+/* Class = "UILabel"; text = "Audio Profile"; ObjectID = "nvc-dT-nah"; */
+"nvc-dT-nah.text" = "音频模式";
+
+/* Class = "UILabel"; text = "Mute Local Mic"; ObjectID = "cNg-k5-xr6"; */
+"cNg-k5-xr6.text" = "静音麦克风";
+
+/* Class = "UILabel"; text = "耳返音量"; ObjectID = "tey-eI-Qte"; */
+"tey-eI-Qte.text" = "耳返音量";
+
+/* Class = "UILabel"; text = "ChannelID"; ObjectID = "yeC-pB-lAW"; */
+"yeC-pB-lAW.text" = "频道Id";
+
+/* Class = "UIButton"; configuration.title = "Actions"; ObjectID = "ZOg-JG-ut3"; */
+"ZOg-JG-ut3.configuration.title" = "操作";
+
+/* Class = "UIButton"; normalTitle = "Actions"; ObjectID = "ZOg-JG-ut3"; */
+"ZOg-JG-ut3.normalTitle" = "操作";
+
+/* Class = "UILabel"; text = "Tap the seat view to see more"; ObjectID = "OZM-HR-QCY"; */
+"OZM-HR-QCY.text" = "点击下面的麦位进行更多操作";

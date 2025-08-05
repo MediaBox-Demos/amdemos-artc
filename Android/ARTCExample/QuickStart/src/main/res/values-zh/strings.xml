@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ARTCExample</string>
+    <string name="token_verify">Token生成及入会</string>
+    <string name="multiple_parameters_join">多参数入会</string>
+    <string name="signle_parameters_join">单参数入会</string>
+    <string name="parameters_could_null">该参数可为空</string>
+    <string name="leave_channel">挂断</string>
+
+    <string name="video_chat">实现视频通话</string>
+    <string name="video_chat_channel_desc">如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
+    <string name="video_chat_join_room">加入房间</string>
+    <string name="video_chat_local_view">本地画面</string>
+    <string name="video_chat_connection_failed">连接失败，请检查网络</string>
+
+    <string name="voice_chat_room">实现语聊房</string>
+    <string name="voice_chat_room_anchor">主播</string>
+    <string name="voice_chat_room_audience">观众</string>
+    <string name="voice_chat_room_audience_accept_mic">切换为主播</string>
+    <string name="voice_chat_room_audience_off_mic">切换为观众</string>
+    <string name="voice_chat_room_channel_desc">如果要和其他用户加入同一个语聊房，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
+
+
+
+</resources>

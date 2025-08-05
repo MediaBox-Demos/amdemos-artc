@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ARTCExample</string>
+    <string name="token_verify">Token生成及入会</string>
+    <string name="multiple_parameters_join">多参数入会</string>
+    <string name="signle_parameters_join">单参数入会</string>
+    <string name="parameters_could_null">该参数可为空</string>
+    <string name="leave_channel">挂断</string>
+
+    <string name="advanced_usage">进阶用法</string>
+
+    <string name="audio_raw">获取原始音频数据</string>
+    <string name="video_raw">获取原始视频和纹理数据</string>
+    <string name="audio_external">自定义外部音频数据采集</string>
+    <string name="quality_monitor">通话质量监测</string>
+
+
+    <string name="video_chat_channel_desc">如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
+    <string name="video_chat_join_room">加入房间</string>
+    <string name="video_chat_local_view">本地画面</string>
+    <string name="video_chat_connection_failed">连接失败，请检查网络</string>
+
+    <string name="voice_chat_room">实现语聊房</string>
+    <string name="voice_chat_room_anchor">主播</string>
+    <string name="voice_chat_room_audience">观众</string>
+    <string name="voice_chat_room_audience_accept_mic">切换为主播</string>
+    <string name="voice_chat_room_audience_off_mic">切换为观众</string>
+    <string name="voice_chat_room_channel_desc">如果要和其他用户加入同一个语聊房，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
+
+    <string name="rtc_engine_init_required">请先初始化 RTC 引擎</string>
+    <string name="start_raw_data_callback">开始回调获取原始数据, 需要用户自定义</string>
+    <string name="get_raw_data_failed">获取失败</string>
+    <string name="stop_raw_data_callback">关闭获取原始数据</string>
+    <string name="stop_raw_data_failed">关闭失败</string>
+    <string name="enable_audio_writeback">开启，aliRTC引擎回调获取原始数据后会继续写会SDK</string>
+    <string name="disable_audio_writeback">关闭，aliRTC引擎回调获取原始数据后不会写回SDK</string>
+
+</resources>

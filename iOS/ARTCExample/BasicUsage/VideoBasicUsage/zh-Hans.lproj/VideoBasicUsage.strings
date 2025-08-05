@@ -1,0 +1,144 @@
+
+/* Class = "UILabel"; text = "码率"; ObjectID = "1zx-Bv-r5b"; */
+"1zx-Bv-r5b.text" = "码率";
+
+/* Class = "UILabel"; text = "最小码率"; ObjectID = "2kP-Mc-qSB"; */
+"2kP-Mc-qSB.text" = "最小码率";
+
+/* Class = "UILabel"; text = "纹理编码"; ObjectID = "6j7-Jo-BIa"; */
+"6j7-Jo-BIa.text" = "纹理编码";
+
+/* Class = "UISegmentedControl"; 6pc-oY-Gvd.segmentTitles[0] = "前置"; ObjectID = "6pc-oY-Gvd"; */
+"6pc-oY-Gvd.segmentTitles[0]" = "前置";
+
+/* Class = "UISegmentedControl"; 6pc-oY-Gvd.segmentTitles[1] = "后置"; ObjectID = "6pc-oY-Gvd"; */
+"6pc-oY-Gvd.segmentTitles[1]" = "后置";
+
+/* Class = "UITextField"; text = "1280"; ObjectID = "97K-g1-0Vw"; */
+"97K-g1-0Vw.text" = "1280";
+
+/* Class = "UILabel"; text = "摄像头采集偏好"; ObjectID = "Ato-Zu-ELq"; */
+"Ato-Zu-ELq.text" = "摄像头采集偏好";
+
+/* Class = "UILabel"; text = "镜像模式"; ObjectID = "D6U-pr-axI"; */
+"D6U-pr-axI.text" = "镜像模式";
+
+/* Class = "UIButton"; configuration.title = "应用配置"; ObjectID = "Duh-EM-ZbE"; */
+"Duh-EM-ZbE.configuration.title" = "应用配置";
+
+/* Class = "UILabel"; text = "帧率"; ObjectID = "EtW-NB-5GZ"; */
+"EtW-NB-5GZ.text" = "采集帧率";
+
+/* Class = "UILabel"; text = "是否强制关键帧间隔"; ObjectID = "HBy-J5-bKs"; */
+"HBy-J5-bKs.text" = "是否强制关键帧间隔";
+
+/* Class = "UILabel"; text = "允许分辨率降级"; ObjectID = "HF3-Of-yB8"; */
+"HF3-Of-yB8.text" = "允许分辨率降级";
+
+/* Class = "UISegmentedControl"; LU4-kV-9Zi.segmentTitles[0] = "Default"; ObjectID = "LU4-kV-9Zi"; */
+"LU4-kV-9Zi.segmentTitles[0]" = "Default";
+
+/* Class = "UISegmentedControl"; LU4-kV-9Zi.segmentTitles[1] = "1080p"; ObjectID = "LU4-kV-9Zi"; */
+"LU4-kV-9Zi.segmentTitles[1]" = "1080p";
+
+/* Class = "UILabel"; text = "允许H264 B帧"; ObjectID = "Pyv-lt-k5E"; */
+"Pyv-lt-k5E.text" = "允许H264 B帧";
+
+/* Class = "UILabel"; text = "编码模式"; ObjectID = "S4Q-pj-l5S"; */
+"S4Q-pj-l5S.text" = "编码模式";
+
+/* Class = "UILabel"; text = "数据发送"; ObjectID = "UR3-vR-Ld3"; */
+"UR3-vR-Ld3.text" = "数据发送";
+
+/* Class = "UITextField"; text = "0"; ObjectID = "VUy-X7-PVw"; */
+"VUy-X7-PVw.text" = "0";
+
+/* Class = "UITextField"; text = "0"; ObjectID = "YWr-6A-jMR"; */
+"YWr-6A-jMR.text" = "0";
+
+/* Class = "UITextField"; text = "0"; ObjectID = "d8G-yo-g89"; */
+"d8G-yo-g89.text" = "0";
+
+/* Class = "UILabel"; text = "SEI是否强制B帧"; ObjectID = "dDZ-5R-DqA"; */
+"dDZ-5R-DqA.text" = "SEI是否强制B帧";
+
+/* Class = "UISegmentedControl"; dhy-PK-mwV.segmentTitles[0] = "前置"; ObjectID = "dhy-PK-mwV"; */
+"dhy-PK-mwV.segmentTitles[0]" = "前置";
+
+/* Class = "UISegmentedControl"; dhy-PK-mwV.segmentTitles[1] = "后置"; ObjectID = "dhy-PK-mwV"; */
+"dhy-PK-mwV.segmentTitles[1]" = "后置";
+
+/* Class = "UILabel"; text = "高度"; ObjectID = "euK-NL-Xbp"; */
+"euK-NL-Xbp.text" = "高度";
+
+/* Class = "UITextField"; text = "15"; ObjectID = "exK-L8-Yci"; */
+"exK-L8-Yci.text" = "15";
+
+/* Class = "UILabel"; text = "摄像头采集配置（开启摄像头前配置）"; ObjectID = "fhG-uJ-9sy"; */
+"fhG-uJ-9sy.text" = "摄像头采集常用配置（开启摄像头前配置）";
+
+/* Class = "UILabel"; text = "允许H265 B帧"; ObjectID = "gJn-es-CUX"; */
+"gJn-es-CUX.text" = "允许H265 B帧";
+
+/* Class = "UILabel"; text = "预览"; ObjectID = "gnb-9r-ppY"; */
+"gnb-9r-ppY.text" = "预览";
+
+/* Class = "UILabel"; text = "默认摄像头方向"; ObjectID = "hND-rN-DPP"; */
+"hND-rN-DPP.text" = "默认摄像头方向";
+
+/* Class = "UILabel"; text = "帧率"; ObjectID = "jHs-eo-DQX"; */
+"jHs-eo-DQX.text" = "编码帧率";
+
+/* Class = "UILabel"; text = "回调原始视频帧"; ObjectID = "lWL-OU-JMj"; */
+"lWL-OU-JMj.text" = "回调原始视频帧";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "nHr-Vu-DSO"; */
+"nHr-Vu-DSO.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "nHr-Vu-DSO"; */
+"nHr-Vu-DSO.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "摄像头"; ObjectID = "noA-2K-rLS"; */
+"noA-2K-rLS.text" = "摄像头";
+
+/* Class = "UILabel"; text = "关键帧间隔"; ObjectID = "pSi-JE-yUR"; */
+"pSi-JE-yUR.text" = "关键帧间隔";
+
+/* Class = "UITextField"; text = "15"; ObjectID = "puE-kB-aOZ"; */
+"puE-kB-aOZ.text" = "15";
+
+/* Class = "UILabel"; text = "编码类型"; ObjectID = "pzI-iP-gDA"; */
+"pzI-iP-gDA.text" = "编码类型";
+
+/* Class = "UILabel"; text = "旋转模式"; ObjectID = "qFm-jL-bLX"; */
+"qFm-jL-bLX.text" = "旋转模式";
+
+/* Class = "UILabel"; text = "宽度"; ObjectID = "qdG-US-p0b"; */
+"qdG-US-p0b.text" = "宽度";
+
+/* Class = "UILabel"; text = "分辨率"; ObjectID = "qwh-eh-ltQ"; */
+"qwh-eh-ltQ.text" = "分辨率";
+
+/* Class = "UILabel"; text = "Channel Id："; ObjectID = "qy7-Aj-eSM"; */
+"qy7-Aj-eSM.text" = "频道Id：";
+
+/* Class = "UILabel"; text = "不根据纵横比设置翻转"; ObjectID = "tMN-ax-Fys"; */
+"tMN-ax-Fys.text" = "不根据纵横比设置翻转";
+
+/* Class = "UITextField"; text = "720"; ObjectID = "trT-mf-d0d"; */
+"trT-mf-d0d.text" = "720";
+
+/* Class = "UILabel"; text = "摄像头方向"; ObjectID = "vxB-UW-vPF"; */
+"vxB-UW-vPF.text" = "摄像头方向";
+
+/* Class = "UILabel"; text = "纹理采集"; ObjectID = "woH-1c-bDn"; */
+"woH-1c-bDn.text" = "纹理采集";
+
+/* Class = "UILabel"; text = "禁止编码前缩放"; ObjectID = "wxO-7A-sOt"; */
+"wxO-7A-sOt.text" = "禁止编码前缩放";
+
+/* Class = "UILabel"; text = "视频输出方向"; ObjectID = "wyi-Dy-K6N"; */
+"wyi-Dy-K6N.text" = "视频输出方向";
+
+/* Class = "UILabel"; text = "视频编码配置"; ObjectID = "z4x-lh-lln"; */
+"z4x-lh-lln.text" = "视频编码常用配置";
