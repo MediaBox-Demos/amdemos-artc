@@ -29,10 +29,14 @@ Download [address](https://github.com/MediaBox-Demos/amdemos-artc/tree/main/Andr
 │           |—— SEIUsage         // SEI Message Sending and Receiving
             |—— ScreenShareUsage  // Screen Sharing
             |—— StreamMonitoring // Call-in Quality Monitoring
+            |—— PlayAudioFiles    // Play Audio Accompany and Audio Effects
         |—— AdvancedUsage // Advanced Function Module
-            |—— ExternalAudio // External Audio Capture and External Audio Playback
             |—— ProcessAudioRawData // Process Audio Raw Data
             |—— ProcessVideoRawData // Process Video Raw Data
+            |—— CustomAudioCaptureAndRender // Custom Audio Capture and Render
+            |—— CustomVideoCaptureAndRender // Custom Video Capture and Render
+            |—— PreJoinChannelTest // Network and device check before joining the meeting
+            |—— PictureInPicture // Picture In Picture
 │       ├── build.gradle  
 │       └── settings.gradle
 

@@ -251,6 +251,9 @@ class AudioBasicUsageMainVC: UIViewController {
         engine.enableEarBack(self.enableEarBack)
         engine.setEarBackVolume(self.earBackVolume)
         engine.muteAllRemoteAudioPlaying(self.isMuteAllRemoteAudioPlaying)
+        
+        // 用户音量回调和说话人检测
+        engine.enableAudioVolumeIndication(500, smooth: 3, reportVad: 1)
                 
         self.rtcEngine = engine
     }
@@ -453,6 +456,16 @@ extension AudioBasicUsageMainVC: AliRtcEngineDelegate {
     func onUserAudioMuted(_ uid: String, audioMuted isMute: Bool) {
         // 远端用户静音
         "onUserAUdioMuted uid: \(uid), isMute: \(isMute)".printLog()
+    }
+    
+    func onAudioVolumeCallback(_ array: [AliRtcUserVolumeInfo]?, totalVolume: Int32) {
+        // 用户音量回调
+        "onAudioVolumeCallback, totalVolume: \(totalVolume)".printLog()
+    }
+    
+    func onActiveSpeaker(_ uid: String) {
+        // 说话人回调
+        "onActiveSpeaker, uid: \(uid)".printLog()
     }
     
     

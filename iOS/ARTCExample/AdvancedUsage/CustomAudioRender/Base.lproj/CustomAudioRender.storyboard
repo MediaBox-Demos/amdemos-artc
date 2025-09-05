@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Audio Render Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="CustomAudioRenderSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sC-WG-a73">
+                                <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VQ3-Qg-jwX">
+                                <rect key="frame" x="24" y="164.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="JP1-wM-4wt">
+                                <rect key="frame" x="24" y="222.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Custom Audio Render" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vri-lz-ek0">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p48-rB-bsJ">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SW7-3r-5YO">
+                                <rect key="frame" x="135.33333333333334" y="277.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Hpy-zF-J4v"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="JP1-wM-4wt" secondAttribute="trailing" constant="24" id="CKu-JC-OBa"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VQ3-Qg-jwX" secondAttribute="trailing" constant="24" id="Cap-y3-T0s"/>
+                            <constraint firstItem="SW7-3r-5YO" firstAttribute="top" secondItem="JP1-wM-4wt" secondAttribute="bottom" constant="24" id="HQ4-L0-ylF"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="5sC-WG-a73" secondAttribute="trailing" constant="24" id="JOI-05-B8R"/>
+                            <constraint firstItem="VQ3-Qg-jwX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="LyW-9X-Dnc"/>
+                            <constraint firstItem="VQ3-Qg-jwX" firstAttribute="top" secondItem="5sC-WG-a73" secondAttribute="bottom" constant="24" id="OZK-Qk-r91"/>
+                            <constraint firstItem="SW7-3r-5YO" firstAttribute="centerX" secondItem="VQ3-Qg-jwX" secondAttribute="centerX" id="PeF-SM-elU"/>
+                            <constraint firstItem="JP1-wM-4wt" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="SeM-Y6-pdC"/>
+                            <constraint firstItem="JP1-wM-4wt" firstAttribute="top" secondItem="VQ3-Qg-jwX" secondAttribute="bottom" constant="24" id="VkJ-67-b3l"/>
+                            <constraint firstItem="5sC-WG-a73" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="cVw-Xr-dr6"/>
+                            <constraint firstItem="5sC-WG-a73" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="fg9-gl-LBn"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="VQ3-Qg-jwX" id="3Mz-J6-bTp"/>
+                        <outlet property="customAudioRenderSwitch" destination="p48-rB-bsJ" id="CPA-lH-Z3h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="-34"/>
+        </scene>
+        <!--Custom Audio Render MainVC-->
+        <scene sceneID="gWO-N1-oef">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="Gdv-2K-SkJ" customClass="CustomAudioRenderMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CZL-Hp-0Xq">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deD-Oz-z90">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="9iR-zE-08h"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="9iR-zE-08h" firstAttribute="bottom" secondItem="deD-Oz-z90" secondAttribute="bottom" id="1dd-Qv-5bE"/>
+                            <constraint firstItem="deD-Oz-z90" firstAttribute="top" secondItem="9iR-zE-08h" secondAttribute="top" id="9Tm-Lr-J3c"/>
+                            <constraint firstItem="deD-Oz-z90" firstAttribute="leading" secondItem="9iR-zE-08h" secondAttribute="leading" id="Xld-YI-9kc"/>
+                            <constraint firstItem="deD-Oz-z90" firstAttribute="trailing" secondItem="9iR-zE-08h" secondAttribute="trailing" id="quO-Nf-RKp"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="deD-Oz-z90" id="ain-cM-Zxl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="POy-c2-qmH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="745.80152671755718" y="-35.211267605633807"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

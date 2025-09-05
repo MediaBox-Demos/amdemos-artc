@@ -2,25 +2,39 @@
 
 ## v1.0.0
 发布时间：2025-06-10
-* Android&iOS：提供Token验证入会的示例代码
-* Android&iOS：提供快速实现音视频通话的示例代码
-* Android&iOS：提供支持快速实现语聊房的示例代码
-* Server：提供服务端的Token生成示例代码
+* Android&iOS：Token验证入会
+* Android&iOS：快速实现音视频通话
+* Android&iOS：快速实现语聊房
+* Server：服务端的Token生成示例
 
 
 ## v1.1.0
 发布时间：2025-07-17
-* Android&iOS：提供音频常用操作和配置的示例代码
-* Android&iOS：提供视频常用操作和配置的示例代码
-* Android&iOS：提供摄像头常规控制的示例代码
-* Android&iOS：提供SEI发送和接收的示例代码
+* Android&iOS：音频常用操作和配置
+* Android&iOS：视频常用操作和配置
+* Android&iOS：摄像头常规控制
+* Android&iOS：SEI发送和接收
 
 
 ## v1.2.0
-发布时间：2025-08-05
-* Android&iOS：提供屏幕共享的示例代码
-* Android&iOS：提供通话中推拉流质量监测的示例代码
-* Android&iOS：提供用户自定义消息发送和接收的示例代码
-* Android&iOS：提供原始音频数据的示例代码
-* Android&iOS：提供原始视频数据的示例代码
-* Android：提供外部音频采集和外部音频渲染的示例代码
+发布时间：2025-07-31
+* Android&iOS：屏幕共享
+* Android&iOS：通话中推拉流质量监测
+* Android&iOS：原始音频数据
+* Android&iOS：原始视频数据
+
+
+## v1.3.0
+发布时间：2025-08-15
+* Android&iOS：自定义音频采集
+* Android&iOS：自定义音频播放
+
+
+## v1.4.0
+发布时间：2025-08-31
+* Android&iOS：自定义视频采集
+* Android&iOS：自定义视频播放
+* Android&iOS：播放伴奏和音效
+* Android&iOS：入会前网络和设备检测
+* Android&iOS：画中画
+* Windows: 屏幕共享

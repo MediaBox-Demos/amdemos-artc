@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,13 +11,44 @@
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".ProcessAudioRawData.ProcessAudioRawDataActivity"
-            android:label="@string/audio_raw"
+            android:label="@string/process_audio_raw_data"
             android:exported="true"/>
 
         <activity
             android:name=".ProcessVideoRawData.ProcessVideoRawDataActivity"
-            android:label="@string/audio_raw"
+            android:label="@string/process_video_raw_data"
             android:exported="true"/>
+
+        <activity
+            android:name=".CustomAudioCaptureAndRender.CustomAudioCaptureActivity"
+            android:label="@string/custom_audio_capture"
+            android:exported="true"/>
+
+        <activity
+            android:name=".CustomAudioCaptureAndRender.CustomAudioRenderActivity"
+            android:label="@string/custom_audio_render"
+            android:exported="true"/>
+
+        <activity android:name=".CustomVideoCaptureAndRender.CustomVideoCaptureActivity"
+            android:label="@string/custom_video_capture"
+            android:exported="true"/>
+
+        <activity android:name=".CustomVideoCaptureAndRender.CustomVideoRenderActivity"
+            android:label="@string/custom_video_render"
+            android:exported="true"/>
+
+        <activity android:name=".PreJoinChannelTest.PreJoinChannelTestActivity"
+            android:label="@string/pre_join_channel_test"
+            android:exported="true"/>
+
+        <activity android:name=".PictureInPicture.PictureInPictureAcitivity"
+            android:label="@string/picture_in_picture"
+            android:exported="false"
+            android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:resizeableActivity="true"
+            android:launchMode="singleTask"
+            tools:targetApi="24" />
 
     </application>
 </manifest>

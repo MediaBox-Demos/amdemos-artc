@@ -8,14 +8,19 @@
 
     <string name="advanced_usage">进阶用法</string>
 
-    <string name="audio_raw">获取原始音频数据</string>
-    <string name="video_raw">获取原始视频和纹理数据</string>
-    <string name="audio_external">自定义外部音频数据采集</string>
+    <string name="process_audio_raw_data">获取原始音频数据</string>
+    <string name="process_video_raw_data">获取原始视频数据</string>
+    <string name="custom_audio_capture">自定义音频采集</string>
+    <string name="custom_audio_render">自定义音频播放</string>
+    <string name="custom_video_capture">自定义视频采集</string>
+    <string name="custom_video_render">自定义视频渲染</string>
+    <string name="pre_join_channel_test">通话前质量检测</string>
+    <string name="picture_in_picture">画中画</string>
+
     <string name="quality_monitor">通话质量监测</string>
 
-
     <string name="video_chat_channel_desc">如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
-    <string name="video_chat_join_room">加入房间</string>
+    <string name="video_chat_join_channel">加入频道</string>
     <string name="video_chat_local_view">本地画面</string>
     <string name="video_chat_connection_failed">连接失败，请检查网络</string>
 
@@ -33,5 +38,30 @@
     <string name="stop_raw_data_failed">关闭失败</string>
     <string name="enable_audio_writeback">开启，aliRTC引擎回调获取原始数据后会继续写会SDK</string>
     <string name="disable_audio_writeback">关闭，aliRTC引擎回调获取原始数据后不会写回SDK</string>
+    <string name="stop_External_playback">关闭自定义音频播放</string>
+    <string name="start_External_playback">开始自定义音频播放</string>
 
+    <string name="set_external_audio_first">请先自定义外部音频数据来源</string>
+    <string name="custom_playback">自定义音频播放</string>
+
+    <string name="local_media">本地媒体</string>
+    <string name="microphone">麦克风</string>
+    <string name="audio_dump">音频Dump</string>
+    <string name="audio_source">音频源</string>
+    <string name="local_playout">本地播放</string>
+
+    <string name="get_video_raw_data">获取原始视频数据</string>
+    <string name="get_video_texture_data">获取纹理数据</string>
+    <string name="write_back_to_sdk">写回SDK更新数据</string>
+
+    <string name="channel_id_label">频道ID:</string>
+    <string name="custom_video_capture_video_source">Video Source</string>
+    <string name="video_source_yuv">YUV</string>
+    <string name="video_source_texture">纹理</string>
+    <string name="test_microphone">麦克风测试</string>
+    <string name="stop_test">停止测试</string>
+    <string name="test_speaker">扬声器测试</string>
+    <string name="test_camera">摄像头测试</string>
+    <string name="test_device">设备测试</string>
+    <string name="test_network">网络测试</string>
 </resources>

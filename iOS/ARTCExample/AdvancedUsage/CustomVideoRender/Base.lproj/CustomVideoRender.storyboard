@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Video Render Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="CustomVideoRenderSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxc-hl-vdO">
+                                <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="04j-Xx-XIU">
+                                <rect key="frame" x="24" y="164.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="CcH-H5-eR1">
+                                <rect key="frame" x="24" y="210.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Video Render" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K9p-qI-dHG">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YNB-q1-lEu">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BZn-Xd-69L">
+                                <rect key="frame" x="24" y="253.33333333333337" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Local Video Format" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YQO-Zm-tbr">
+                                        <rect key="frame" x="0.0" y="0.0" width="147" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="veA-J3-sAk">
+                                        <rect key="frame" x="155" y="0.0" width="190" height="32"/>
+                                        <segments>
+                                            <segment title="buffer"/>
+                                            <segment title="Texture"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="onLocalVideoSampleFormatSegmentedControlToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="egS-lq-b70"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afb-d6-s33">
+                                <rect key="frame" x="135.33333333333334" y="308.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b86-kR-fmJ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="CcH-H5-eR1" secondAttribute="trailing" constant="24" id="8ib-tL-ATB"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="04j-Xx-XIU" secondAttribute="trailing" constant="24" id="BDC-v2-dzc"/>
+                            <constraint firstItem="CcH-H5-eR1" firstAttribute="top" secondItem="04j-Xx-XIU" secondAttribute="bottom" constant="12" id="BWz-Zd-kXg"/>
+                            <constraint firstItem="CcH-H5-eR1" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="CcG-Li-Kyu"/>
+                            <constraint firstItem="BZn-Xd-69L" firstAttribute="top" secondItem="CcH-H5-eR1" secondAttribute="bottom" constant="12" id="Dzk-Vf-Usl"/>
+                            <constraint firstItem="Rxc-hl-vdO" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="KWp-7S-aI2"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="BZn-Xd-69L" secondAttribute="trailing" constant="24" id="Ovw-cr-BXO"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Rxc-hl-vdO" secondAttribute="trailing" constant="24" id="Saf-NI-327"/>
+                            <constraint firstItem="afb-d6-s33" firstAttribute="centerX" secondItem="04j-Xx-XIU" secondAttribute="centerX" id="Sp6-1v-2Dd"/>
+                            <constraint firstItem="04j-Xx-XIU" firstAttribute="top" secondItem="Rxc-hl-vdO" secondAttribute="bottom" constant="24" id="d9i-Xq-9uZ"/>
+                            <constraint firstItem="04j-Xx-XIU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="iuN-OY-pPp"/>
+                            <constraint firstItem="afb-d6-s33" firstAttribute="top" secondItem="BZn-Xd-69L" secondAttribute="bottom" constant="24" id="sqq-o8-sLs"/>
+                            <constraint firstItem="04j-Xx-XIU" firstAttribute="top" secondItem="Rxc-hl-vdO" secondAttribute="bottom" constant="24" id="xJY-t1-gVv"/>
+                            <constraint firstItem="BZn-Xd-69L" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="xcZ-KH-qNH"/>
+                            <constraint firstItem="Rxc-hl-vdO" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="yaa-ES-58c"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="04j-Xx-XIU" id="NiO-Rm-8pG"/>
+                        <outlet property="customVideoRenderSwitch" destination="YNB-q1-lEu" id="Eqe-hh-m7n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="57" y="-28"/>
+        </scene>
+        <!--Custom Video Render MainVC-->
+        <scene sceneID="CVx-3n-0iI">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="Pad-UH-ywi" customClass="CustomVideoRenderMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8fn-Gl-rF8">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f9k-hZ-xgf">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lKp-rG-vYU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="f9k-hZ-xgf" firstAttribute="top" secondItem="lKp-rG-vYU" secondAttribute="top" id="J3S-yy-xVS"/>
+                            <constraint firstItem="f9k-hZ-xgf" firstAttribute="trailing" secondItem="lKp-rG-vYU" secondAttribute="trailing" id="KBZ-rV-Zsw"/>
+                            <constraint firstItem="f9k-hZ-xgf" firstAttribute="leading" secondItem="lKp-rG-vYU" secondAttribute="leading" id="mQI-s6-asM"/>
+                            <constraint firstItem="lKp-rG-vYU" firstAttribute="bottom" secondItem="f9k-hZ-xgf" secondAttribute="bottom" id="zhR-bS-G5U"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="f9k-hZ-xgf" id="JBj-bF-tvT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cL0-fL-bW6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="719.84732824427476" y="-28.169014084507044"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

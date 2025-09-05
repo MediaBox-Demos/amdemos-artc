@@ -1,10 +1,13 @@
 package com.aliyun.artc.api.basicusage.VideoBasicUsage;
 
+import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackBoth;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackCamera;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackNo;
+import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackScreen;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,11 +65,11 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
     private boolean isMutedCamera = false;
     // 视频设置界面
     VideoConfigurationDialogFragment mVideoConfigurationDialogFragment;
-    private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
 
     private AliRtcEngine mAliRtcEngine = null;
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
-    private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
+    private Map<String, FrameLayout> remoteViews = new ConcurrentHashMap<>();
+    private GridLayout mGridVideoContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,7 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_video_basic_usage);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.video_chat_main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.video_basic_usage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -86,10 +90,7 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         mAliRtcEngine = AliRtcEngine.getInstance(this);
 
         // 视频显示视图
-        fl_local = findViewById(R.id.fl_local);
-        fl_remote = findViewById(R.id.fl_remote);
-        fl_remote_2 = findViewById(R.id.fl_remote2);
-        fl_remote_3 = findViewById(R.id.fl_remote3);
+        mGridVideoContainer = findViewById(R.id.grid_video_container);
 
         mChannelEditText = findViewById(R.id.channel_id_input);
         mChannelEditText.setText(GlobalConfig.getInstance().gerRandomChannelId());
@@ -101,7 +102,6 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             if(hasJoined) {
                 destroyRtcEngine();
                 mJoinChannelTextView.setText(R.string.video_chat_join_room);
-                resetUI();
             } else {
                 if(mAliRtcEngine == null) {
                     initAndSetupRtcEngine();
@@ -246,18 +246,6 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         return super.onOptionsItemSelected(item);
     }
 
-    private FrameLayout getAvailableView() {
-        if (fl_remote.getChildCount() == 0) {
-            return fl_remote;
-        } else if (fl_remote_2.getChildCount() == 0) {
-            return fl_remote_2;
-        } else if (fl_remote_3.getChildCount() == 0) {
-            return fl_remote_3;
-        } else {
-            return null;
-        }
-    }
-
     private void handleJoinResult(int result, String channel, String userId) {
         handler.post(() -> {
             String  str = null;
@@ -306,24 +294,19 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
 
     private void startPreview() {
         if (mAliRtcEngine != null) {
-            ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            FrameLayout localVideoFrame = createVideoView("local");
+            mGridVideoContainer.addView(localVideoFrame);
+            SurfaceView localSurfaceView = mAliRtcEngine.createRenderSurfaceView(this);
+            localSurfaceView.setZOrderOnTop(true);
+            localSurfaceView.setZOrderMediaOverlay(true);
 
-            // Reuse existing canvas and surface view if available
-            if (mLocalVideoCanvas == null) {
-                mLocalVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
-                SurfaceView localSurfaceView = mAliRtcEngine.createRenderSurfaceView(VideoBasicUsageActivity.this);
-                if (localSurfaceView != null) {
-                    localSurfaceView.setZOrderOnTop(true);
-                    localSurfaceView.setZOrderMediaOverlay(true);
-                    fl_local.addView(localSurfaceView, layoutParams);
-                    mLocalVideoCanvas.view = localSurfaceView;
-                    try {
-                        mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, AliRtcVideoTrackCamera);
-                    } catch (Exception e) {
-                        e.printStackTrace(); // Handle potential exceptions
-                    }
-                }
-            }
+            localVideoFrame.addView(localSurfaceView, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+
+            mLocalVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+            mLocalVideoCanvas.view = localSurfaceView;
+            mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, AliRtcVideoTrackCamera);
             mAliRtcEngine.startPreview();
         }
     }
@@ -345,6 +328,91 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         } else {
             Log.e("VideoCallActivity", "channelId is empty");
         }
+    }
+
+    private FrameLayout createVideoView(String tag) {
+        FrameLayout view = new FrameLayout(this);
+        int sizeInDp = 180;
+        int sizeInPx = (int) (getResources().getDisplayMetrics().density * sizeInDp);
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.width = 0;
+        params.height = sizeInPx;
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f); // 自动分两列
+        params.setMargins(8, 8, 8, 8);
+
+        view.setLayoutParams(params);
+        view.setTag(tag);
+        view.setBackgroundColor(Color.BLACK);
+        return view;
+    }
+
+    /**
+     * 显示远端流（包括摄像头流和屏幕共享流）
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     */
+    private void viewRemoteVideo(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        String streamKey = getStreamKey(uid, videoTrack);
+        FrameLayout view;
+        if (remoteViews.containsKey(streamKey)) {
+            view = remoteViews.get(streamKey);
+            if (view != null) {
+                view.removeAllViews();
+            } else {
+                view = createVideoView(streamKey);
+                mGridVideoContainer.addView(view);
+                remoteViews.put(streamKey, view);
+            }
+        } else {
+            view = createVideoView(streamKey);
+            mGridVideoContainer.addView(view);
+            remoteViews.put(streamKey, view);
+        }
+        // 创建 SurfaceView 并设置渲染
+        SurfaceView surfaceView = mAliRtcEngine.createRenderSurfaceView(this);
+        surfaceView.setZOrderMediaOverlay(true);
+        view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // 配置画布
+        AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+        videoCanvas.view = surfaceView;
+        mAliRtcEngine.setRemoteViewConfig(videoCanvas, uid, videoTrack);
+    }
+
+    /**
+     * 移除指定用户视频流的画面
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     */
+    private void removeRemoteVideo(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        String streamKey = getStreamKey(uid, videoTrack);
+
+        // 找到对应的 FrameLayout 容器并移除视图
+        FrameLayout frameLayout = remoteViews.remove(streamKey);
+        if(frameLayout != null) {
+            frameLayout.removeAllViews();
+            mGridVideoContainer.removeView(frameLayout);
+            Log.d("RemoveRemoteVideo", "Removed video stream for: " + streamKey);
+        }
+    }
+
+    /**
+     * 移除指定用户的所有视频
+     * @param uid 远端用户 ID
+     */
+    private void removeAllRemoteVideo(String uid) {
+        removeRemoteVideo(uid, AliRtcVideoTrackCamera);
+        removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+    }
+
+    /**
+     * 根据用户 ID 和流类型生成唯一标识
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     * @return 视频流标识符
+     */
+    private String getStreamKey(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        return uid + "_" + videoTrack.name();
     }
 
 
@@ -421,27 +489,17 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         @Override
         public void onRemoteTrackAvailableNotify(String uid, AliRtcEngine.AliRtcAudioTrack audioTrack, AliRtcEngine.AliRtcVideoTrack videoTrack){
             handler.post(() -> {
-                if(videoTrack == AliRtcVideoTrackCamera) {
-                    SurfaceView surfaceView = mAliRtcEngine.createRenderSurfaceView(VideoBasicUsageActivity.this);
-                    surfaceView.setZOrderMediaOverlay(true);
-                    FrameLayout view = getAvailableView();
-                    if (view == null) {
-                        return;
-                    }
-                    remoteViews.put(uid, view);
-                    view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    AliRtcEngine.AliRtcVideoCanvas remoteVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
-                    remoteVideoCanvas.view = surfaceView;
-                    mAliRtcEngine.setRemoteViewConfig(remoteVideoCanvas, uid, AliRtcVideoTrackCamera);
+                if(videoTrack == AliRtcVideoTrackCamera){
+                    viewRemoteVideo(uid, AliRtcVideoTrackCamera);
+                    removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+                } else if(videoTrack == AliRtcVideoTrackScreen) {
+                    viewRemoteVideo(uid, AliRtcVideoTrackScreen);
+                    removeRemoteVideo(uid, AliRtcVideoTrackCamera);
+                } else if (videoTrack == AliRtcVideoTrackBoth) {
+                    viewRemoteVideo(uid, AliRtcVideoTrackCamera);
+                    viewRemoteVideo(uid, AliRtcVideoTrackScreen);
                 } else if(videoTrack == AliRtcVideoTrackNo) {
-                    if(remoteViews.containsKey(uid)) {
-                        ViewGroup view = remoteViews.get(uid);
-                        if(view != null) {
-                            view.removeAllViews();
-                            remoteViews.remove(uid);
-                            mAliRtcEngine.setRemoteViewConfig(null, uid, AliRtcVideoTrackCamera);
-                        }
-                    }
+                    removeAllRemoteVideo(uid);
                 }
             });
         }
@@ -481,15 +539,12 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             mAliRtcEngine.destroy();
             mAliRtcEngine = null;
         }
-    }
 
-    // 离会后UI清除
-    private void resetUI() {
         for (ViewGroup value : remoteViews.values()) {
             value.removeAllViews();
         }
         remoteViews.clear();
-        fl_local.removeAllViews();
+        mGridVideoContainer.removeAllViews();
         mLocalVideoCanvas = null;
     }
 

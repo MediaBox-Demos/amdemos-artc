@@ -1,0 +1,24 @@
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "04j-Xx-XIU"; */
+"04j-Xx-XIU.placeholder" = "Channel Id";
+
+/* Class = "UILabel"; text = "Custom Video Render"; ObjectID = "K9p-qI-dHG"; */
+"K9p-qI-dHG.text" = "自定义视频渲染";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "Rxc-hl-vdO"; */
+"Rxc-hl-vdO.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UILabel"; text = "Local Video Format"; ObjectID = "YQO-Zm-tbr"; */
+"YQO-Zm-tbr.text" = "本地视频格式";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "afb-d6-s33"; */
+"afb-d6-s33.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "afb-d6-s33"; */
+"afb-d6-s33.normalTitle" = "加入频道";
+
+/* Class = "UISegmentedControl"; veA-J3-sAk.segmentTitles[0] = "buffer"; ObjectID = "veA-J3-sAk"; */
+"veA-J3-sAk.segmentTitles[0]" = "buffer";
+
+/* Class = "UISegmentedControl"; veA-J3-sAk.segmentTitles[1] = "Texture"; ObjectID = "veA-J3-sAk"; */
+"veA-J3-sAk.segmentTitles[1]" = "纹理";

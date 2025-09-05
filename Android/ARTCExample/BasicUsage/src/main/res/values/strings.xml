@@ -6,7 +6,7 @@
     <string name="sei_message_send_and_receive">SEI send and receive</string>
     <string name="screen_share">Screen Share</string>
     <string name="custom_msg_Title">Custom message sending and receiving</string>
-
+    <string name="play_audio_files">Play Audio Files</string>
 
     <string name="audio_route_speakerphone">speakerphone</string>
     <string name="audio_route_earpiece">earpiece</string>
@@ -131,4 +131,16 @@
     <string name="video_chat_connection_failed">Connection failed, please check the network</string>
 
 
+    <!-- Screen Share -->
+    <string name="publish_local_video_stream">Publish Camera Stream</string>
+
+    <string name="start">start</string>
+    <string name="pause">pause</string>
+    <string name="resume">resume</string>
+    <string name="stop">stop</string>
+    <string name="preload">preload</string>
+    <string name="unload">unload</string>
+    <string name="stop_all">stop all</string>
+    <string name="pause_all">pause all</string>
+    <string name="resume_all">resume all</string>
 </resources>

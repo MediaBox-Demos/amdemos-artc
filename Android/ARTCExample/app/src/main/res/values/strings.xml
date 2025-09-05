@@ -17,10 +17,16 @@
     <string name="sei_send_and_receive">SEI Sending and Receiving</string>
     <string name="data_channel_msg_basic_usage">Custom Message Sending and Receiving</string>
     <string name="screen_share">Screen Share</string>
+    <string name="call_quality">Call-Stream Quality Monitor</string>
+    <string name="play_audio_files">Play Audio Files</string>
+    <string name="pre_join_channel_test">Pre-join Channel Test</string>
 
     <string name="advance_features">Advance Features</string>
     <string name="raw_audio_capture">Raw Audio Data</string>
     <string name="raw_video_capture">Raw Video Data</string>
-    <string name="call_quality">Call-Stream Quality Monitor</string>
+    <string name="external_audio_capture">Custom Audio Capture</string>
+    <string name="custom_audio_render">Custom Audio Render</string>
+    <string name="custom_video_capture">Custom Video Capture</string>
+    <string name="picture_in_picture">Picture in Picture</string>
 
 </resources>

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -39,7 +40,9 @@ import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AudioBasicUsageActivity extends AppCompatActivity {
     private Handler handler;
@@ -58,15 +61,12 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
     private Switch mAudioInEarSwitch;
     private SeekBar mAudioInEarVolumeSeekBar;
 
-    private FrameLayout mLocalFrameLayout, mRemoteFrameLayout, mRemoteFrameLayout1; // 用于显示本端和远端麦位
-    private Map<String, FrameLayout> remoteUsersMap = new HashMap<>(); // 绑定远端用户id和麦位
+    private GridLayout mUserGridLayout; // 显示用户麦位
+    private final Map<String, FrameLayout> remoteUsersMap = new ConcurrentHashMap<>(); // 绑定远端用户id和麦位
     private Map<String, Boolean> userMuteStatusMap = new HashMap<>(); // 维护远端用户的静音状态，键为用户ID，值为是否已静音
-
-    private static final int MAX_REMOTE_USERS = 2; // 限制2个远端用户
 
     private SeekBar mAudioPlayVolumeSeekBar;
     private SwitchCompat mMuteAllRemoteUserSwitch;
-
 
     // 耳返音量控制
     private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
@@ -96,12 +96,10 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
         }
     };
 
@@ -121,11 +119,8 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
 
         createRtcEngine();
 
-        // UI
-        // 麦位
-        mLocalFrameLayout = findViewById(R.id.fl_local);
-        mRemoteFrameLayout = findViewById(R.id.fl_remote);
-        mRemoteFrameLayout1 = findViewById(R.id.fl_remote_1);
+        // UI 麦位
+        mUserGridLayout = findViewById(R.id.grid_user_container);
         // 音频配置
         mAudioRouteSpinner = findViewById(R.id.audio_route_spinner);
         mAudioScenarioSpinner = findViewById(R.id.audio_scenario_spinner);
@@ -262,15 +257,11 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
         mAudioPlayVolumeSeekBar.setEnabled(false);
         mMuteAllRemoteUserSwitch.setChecked(false);
 
-
-        mLocalFrameLayout.removeAllViews();
         // 清空远端用户列表
-        for(String uid : remoteUsersMap.keySet()) {
-            FrameLayout frameLayout = remoteUsersMap.get(uid);
-            if (frameLayout != null) {
-                frameLayout.removeAllViews();
-            }
-        }
+        mUserGridLayout.removeAllViews();
+
+        remoteUsersMap.clear();
+        userMuteStatusMap.clear();
     }
 
     private void handleJoinResult(int result, String channel, String userId) {
@@ -291,82 +282,45 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
                 mChannelEditText.setEnabled(false);
                 mAudioPlayVolumeSeekBar.setEnabled(true);
                 // 设置本端麦位
-                TextView userIdText = new TextView(this); // 动态创建一个文本组件用于显示用户ID
+                FrameLayout localFrameLayout = createFrameLayout("local_" + userId);
+                mUserGridLayout.addView(localFrameLayout);
+                remoteUsersMap.put(userId, localFrameLayout); // 将本地用户也加入到remoteUsersMap中统一管理
+
+                // 在对应麦位显示用户ID
+                TextView userIdText = new TextView(this);
                 userIdText.setText("Local: " + userId);
-                userIdText.setTextColor(Color.BLACK);
-                userIdText.setBackgroundColor(Color.GRAY);
+                userIdText.setTextColor(Color.WHITE);
+                userIdText.setBackgroundColor(Color.parseColor("#80000000"));
+                userIdText.setPadding(10, 10, 10, 10);
+
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT
+                        FrameLayout.LayoutParams.WRAP_CONTENT
                 );
-                layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM; // 水平居中 & 底部对齐
-                layoutParams.bottomMargin = 16;
+                layoutParams.gravity = Gravity.TOP | Gravity.START;
                 userIdText.setLayoutParams(layoutParams);
-                mLocalFrameLayout.removeAllViews(); // 清空可能残留的控件
-                mLocalFrameLayout.addView(userIdText);
+                localFrameLayout.addView(userIdText);
             }
         });
     }
 
-    private void handleRemoteUserOnline(String uid) {
-        if (remoteUsersMap.size() < MAX_REMOTE_USERS) {
-            // 还有剩余麦位，将用户绑定到空闲麦位
-            FrameLayout targetFrameLayout = remoteUsersMap.isEmpty() ? mRemoteFrameLayout : mRemoteFrameLayout1;
-            remoteUsersMap.put(uid, targetFrameLayout);
+    // 创建一个FrameLayout用于添加麦位
+    private FrameLayout createFrameLayout(String tag) {
+        FrameLayout view = new FrameLayout(this);
+        int sizeInDp = 180;
+        int sizeInPx = (int) (getResources().getDisplayMetrics().density * sizeInDp);
 
-            // 在对应麦位显示用户ID
-            TextView userIdText = new TextView(this); // 动态创建一个文本组件用于显示用户ID
-            userIdText.setText("Remote: " + uid);
-            userIdText.setTextColor(Color.BLACK);
-            userIdText.setBackgroundColor(Color.GRAY);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-            );
-            layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM; // 水平居中 & 底部对齐
-            layoutParams.bottomMargin = 16;
-            userIdText.setLayoutParams(layoutParams);
-            targetFrameLayout.removeAllViews(); // 清空可能残留的控件
-            targetFrameLayout.addView(userIdText);
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.width = 0;
+        params.height = sizeInPx;
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+        params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+        params.setMargins(8, 8, 8, 8);
 
-            // 为麦位添加点击事件
-            targetFrameLayout.setOnClickListener(v -> {
-                // 检查用户当前的静音状态，默认为未静音（false）
-                boolean isMuted = userMuteStatusMap.containsKey(uid) && Boolean.TRUE.equals(userMuteStatusMap.get(uid));
-
-                // 创建 AlertDialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.playout_volume_user_prompt_message + uid); // 设置对话框标题
-
-                // 动态菜单项，根据静音状态调整内容
-                String muteOption = isMuted ? getString(R.string.unmute_user) : getString(R.string.mute_user);
-                String userPlayVolume = getString(R.string.set_playout_volume);
-                builder.setItems(new String[]{muteOption,userPlayVolume, getString(R.string.cancel)}, (dialog, which) -> {
-                    switch (which) {
-                        case 0: // 静音 / 取消静音
-                            if(mAliRtcEngine != null) {
-                                mAliRtcEngine.muteRemoteAudioPlaying(uid, !isMuted);
-                            }
-                            // 切换静音状态
-                            userMuteStatusMap.put(uid, !isMuted);
-                            break;
-                        case 1:
-                            dialog.dismiss();
-                            showVolumeSeekBarDialog(uid);
-                            break;
-                        case 2: // 取消
-                            dialog.dismiss();
-                            break;
-                    }
-                });
-
-                // 显示对话框
-                builder.show();
-            });
-        } else {
-            // 超过限制人数时，踢掉第一个用户
-            kickExtraUser(uid);
-        }
+        view.setLayoutParams(params);
+        view.setTag(tag);
+        view.setBackgroundColor(Color.GRAY);
+        return view;
     }
 
     // 使用滑动条来设置音量
@@ -414,30 +368,77 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void handleRemoteUserOnline(String uid) {
+        // 创建新的麦位视图
+        FrameLayout targetFrameLayout = createFrameLayout(uid);
+        remoteUsersMap.put(uid, targetFrameLayout);
+        mUserGridLayout.addView(targetFrameLayout);
 
-    private void kickExtraUser(String newUid) {
-        // 获取第一个加入的用户（作为被踢出的用户）
-        String userToKick = remoteUsersMap.keySet().iterator().next();
-        FrameLayout targetFrameLayout = remoteUsersMap.get(userToKick);
+        // 在对应麦位显示用户ID
+        TextView userIdText = new TextView(this);
+        userIdText.setText("Remote: " + uid);
+        userIdText.setTextColor(Color.WHITE);
+        userIdText.setBackgroundColor(Color.parseColor("#80000000"));
+        userIdText.setPadding(10, 10, 10, 10);
 
-        if (targetFrameLayout != null) {
-            targetFrameLayout.removeAllViews(); // 清空 UI
-        }
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.gravity = Gravity.TOP | Gravity.START;
+        userIdText.setLayoutParams(layoutParams);
+        targetFrameLayout.addView(userIdText);
 
-        remoteUsersMap.remove(userToKick); // 从 Map 中移除
+        // 为麦位添加点击事件
+        targetFrameLayout.setOnClickListener(v -> {
+            // 检查用户当前的静音状态，默认为未静音（false）
+            boolean isMuted = userMuteStatusMap.containsKey(uid) && Boolean.TRUE.equals(userMuteStatusMap.get(uid));
 
-        // 处理新用户加入
-        handleRemoteUserOnline(newUid);
+            // 创建 AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.playout_volume_user_prompt_message + uid); // 设置对话框标题
+
+            // 动态菜单项，根据静音状态调整内容
+            String muteOption = isMuted ? getString(R.string.unmute_user) : getString(R.string.mute_user);
+            String userPlayVolume = getString(R.string.set_playout_volume);
+            builder.setItems(new String[]{muteOption,userPlayVolume, getString(R.string.cancel)}, (dialog, which) -> {
+                switch (which) {
+                    case 0: // 静音 / 取消静音
+                        if(mAliRtcEngine != null) {
+                            mAliRtcEngine.muteRemoteAudioPlaying(uid, !isMuted);
+                        }
+                        // 切换静音状态
+                        userMuteStatusMap.put(uid, !isMuted);
+                        break;
+                    case 1:
+                        dialog.dismiss();
+                        showVolumeSeekBarDialog(uid);
+                        break;
+                    case 2: // 取消
+                        dialog.dismiss();
+                        break;
+                }
+            });
+
+            // 显示对话框
+            builder.show();
+        });
     }
 
+    /**
+     * 处理远端用户离开
+     * @param uid
+     */
     private void handleRemoteUserOffline(String uid) {
         if (remoteUsersMap.containsKey(uid)) {
             // 找到对应的麦位清空
             FrameLayout targetFrameLayout = remoteUsersMap.get(uid);
             if (targetFrameLayout != null) {
                 targetFrameLayout.removeAllViews(); // 移除显示的用户信息
+                mUserGridLayout.removeView(targetFrameLayout); // 从GridLayout中移除整个麦位视图
             }
             remoteUsersMap.remove(uid); // 从管理列表删除
+            userMuteStatusMap.remove(uid);
         }
     }
 
@@ -554,6 +555,37 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
         }
     };
 
+    private final AliRtcEngine.AliRtcAudioVolumeObserver mAliRtcAudioVolumeObserver = new AliRtcEngine.AliRtcAudioVolumeObserver() {
+        @Override
+        public void onAudioVolume(List<AliRtcEngine.AliRtcAudioVolume> speakers, int totalVolume){
+            handler.post(() -> {
+                if(!speakers.isEmpty()) {
+                    for(AliRtcEngine.AliRtcAudioVolume volume : speakers) {
+                        if("0".equals(volume.mUserId)) {
+                            // 本地当前用户音量
+
+                        } else if ("1".equals(volume.mUserId)) {
+                            // 远端用户整体音量
+
+                        } else {
+                            // 远端用户音量
+
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onActiveSpeaker(String uid){
+            // 说话人
+            handler.post(() -> {
+                String mag = "onActiveSpeaker uid:" + uid;
+                ToastHelper.showToast(AudioBasicUsageActivity.this, mag, Toast.LENGTH_SHORT);
+            });
+        }
+    };
+
     private void startRTCCall() {
         if(hasJoined) {
             return;
@@ -588,8 +620,13 @@ public class AudioBasicUsageActivity extends AppCompatActivity {
         mAliRtcEngine.setDefaultSubscribeAllRemoteAudioStreams(true);
         mAliRtcEngine.subscribeAllRemoteAudioStreams(true);
 
+        // 注册回调
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
+
+        // 开启音量监测功能并注册音量数据回调
+        mAliRtcEngine.enableAudioVolumeIndication(1000, 3,1);
+        mAliRtcEngine.registerAudioVolumeObserver(mAliRtcAudioVolumeObserver);
     }
 
     private void joinChannel() {

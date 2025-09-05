@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Custom Video Capture"; ObjectID = "VsW-SG-j88"; */
+"VsW-SG-j88.text" = "自定义视频采集";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "Ynr-3b-6d3"; */
+"Ynr-3b-6d3.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "lny-78-S7n"; */
+"lny-78-S7n.placeholder" = "Channel Id";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "uJF-ji-JZb"; */
+"uJF-ji-JZb.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "uJF-ji-JZb"; */
+"uJF-ji-JZb.normalTitle" = "加入频道";

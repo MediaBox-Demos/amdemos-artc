@@ -1,0 +1,42 @@
+
+/* Class = "UILabel"; text = "Device Test"; ObjectID = "9aR-0z-PlF"; */
+"9aR-0z-PlF.text" = "设备测试";
+
+/* Class = "UIButton"; configuration.title = "Test Speaker"; ObjectID = "Go5-pm-b06"; */
+"Go5-pm-b06.configuration.title" = "测试扬声器";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Go5-pm-b06"; */
+"Go5-pm-b06.normalTitle" = "测试扬声器";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "P2e-aY-4A1"; */
+"P2e-aY-4A1.placeholder" = "Channel Id";
+
+/* Class = "UIButton"; configuration.title = "Test Network"; ObjectID = "Scy-1G-gpl"; */
+"Scy-1G-gpl.configuration.title" = "测试网络";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Scy-1G-gpl"; */
+"Scy-1G-gpl.normalTitle" = "测试网络";
+
+/* Class = "UIButton"; configuration.title = "Test Camera"; ObjectID = "gA9-i6-Jrb"; */
+"gA9-i6-Jrb.configuration.title" = "测试相机";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "gA9-i6-Jrb"; */
+"gA9-i6-Jrb.normalTitle" = "测试相机";
+
+/* Class = "UILabel"; text = "The test needs to be conducted before joining the channel."; ObjectID = "iB0-vQ-fcg"; */
+"iB0-vQ-fcg.text" = "通话前设备或网络测试需要在加入频道前进行.";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "mN5-vz-bRK"; */
+"mN5-vz-bRK.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "mN5-vz-bRK"; */
+"mN5-vz-bRK.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; configuration.title = "Test Microphone"; ObjectID = "nv4-jM-GQZ"; */
+"nv4-jM-GQZ.configuration.title" = "测试麦克风";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "nv4-jM-GQZ"; */
+"nv4-jM-GQZ.normalTitle" = "测试麦克风";
+
+/* Class = "UILabel"; text = "Network Test"; ObjectID = "tFB-Od-0SW"; */
+"tFB-Od-0SW.text" = "网络测试";

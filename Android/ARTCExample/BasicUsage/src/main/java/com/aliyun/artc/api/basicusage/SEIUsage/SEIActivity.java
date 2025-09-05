@@ -64,7 +64,7 @@ public class SEIActivity extends AppCompatActivity {
         handler = new Handler(Looper.getMainLooper());
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sei);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.video_chat_main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.sei_send_and_receive), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

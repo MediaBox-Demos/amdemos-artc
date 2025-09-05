@@ -52,3 +52,6 @@
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "yek-Hc-xv1"; */
 "yek-Hc-xv1.normalTitle" = "停止共享";
+
+/* Class = "UILabel"; text = "Publish Camera Stream"; ObjectID = "GIh-YT-xxq"; */
+"GIh-YT-xxq.text" = "推送相机流";

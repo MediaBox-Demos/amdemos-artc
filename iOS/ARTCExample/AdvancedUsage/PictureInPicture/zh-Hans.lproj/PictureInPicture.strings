@@ -1,0 +1,18 @@
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "3Oj-Mt-GAQ"; */
+"3Oj-Mt-GAQ.text" = "如果要体验画中画功能，请确保您的ios设备系统版本在15.0以上。";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "Zv9-xt-xJp"; */
+"Zv9-xt-xJp.placeholder" = "Channel Id";
+
+/* Class = "UIButton"; configuration.title = "Enter PIP Mode"; ObjectID = "u2M-QO-yGv"; */
+"u2M-QO-yGv.configuration.title" = "进入画中画模式";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "u2M-QO-yGv"; */
+"u2M-QO-yGv.normalTitle" = "进入画中画模式";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "zNZ-KH-8ot"; */
+"zNZ-KH-8ot.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "zNZ-KH-8ot"; */
+"zNZ-KH-8ot.normalTitle" = "加入频道";

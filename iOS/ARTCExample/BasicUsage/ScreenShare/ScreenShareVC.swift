@@ -36,7 +36,11 @@ class ScreenShareSetParamsVC: UIViewController, UITextFieldDelegate {
         vc?.channelId = channelId
         vc?.userId = userId
         vc?.joinToken = joinToken
+        vc?.isPublishLocalVideoStreamEnalbe = publishLocalVideoStreamSwitch.isOn
     }
+    
+    @IBOutlet weak var publishLocalVideoStreamSwitch: UISwitch!
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -129,6 +133,8 @@ class ScreenShareMainVC: UIViewController {
 
     var joinToken: String? = nil
     
+    var isPublishLocalVideoStreamEnalbe = true
+    
     // Screen Share Configs
     var screenShareConfig: AliRtcScreenShareEncoderConfiguration = AliRtcScreenShareEncoderConfiguration()
     var screenShareMode:AliRtcScreenShareMode = .all
@@ -209,7 +215,7 @@ class ScreenShareMainVC: UIViewController {
         engine.setCapturePipelineScaleMode(.post)
         
         // SDK默认会publish音频，publishLocalVideoStream(true)可以不调用
-        engine.publishLocalVideoStream(true)
+        engine.publishLocalVideoStream(isPublishLocalVideoStreamEnalbe)
         // SDK默认会publish视频，如果是视频通话，publishLocalAudioStream(true)可以不调用
         // 如果是纯语音通话 则需要设置publishLocalVideoStream(false)设置不publish视频
         engine.publishLocalAudioStream(true)

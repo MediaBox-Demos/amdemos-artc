@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Video Capture Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="CustomVideoCaptureSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lny-78-S7n">
+                                <rect key="frame" x="24" y="164.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ynr-3b-6d3">
+                                <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GMW-ZE-90X">
+                                <rect key="frame" x="24" y="222.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Video Capture" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VsW-SG-j88">
+                                        <rect key="frame" x="0.0" y="0.0" width="296" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FCr-v3-JYe">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJF-ji-JZb">
+                                <rect key="frame" x="135.33333333333334" y="277.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="xde-s0-txQ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Ynr-3b-6d3" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="1bv-zm-MNs"/>
+                            <constraint firstItem="lny-78-S7n" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="5B8-2p-I9x"/>
+                            <constraint firstItem="Ynr-3b-6d3" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="7R0-GX-MRM"/>
+                            <constraint firstItem="GMW-ZE-90X" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="AXN-cg-MLl"/>
+                            <constraint firstItem="lny-78-S7n" firstAttribute="top" secondItem="Ynr-3b-6d3" secondAttribute="bottom" constant="24" id="DZg-zE-hMf"/>
+                            <constraint firstItem="uJF-ji-JZb" firstAttribute="top" secondItem="GMW-ZE-90X" secondAttribute="bottom" constant="24" id="IVy-XK-7cx"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="GMW-ZE-90X" secondAttribute="trailing" constant="24" id="KIA-Li-hcd"/>
+                            <constraint firstItem="GMW-ZE-90X" firstAttribute="top" secondItem="lny-78-S7n" secondAttribute="bottom" constant="24" id="LdT-WT-DqM"/>
+                            <constraint firstItem="uJF-ji-JZb" firstAttribute="centerX" secondItem="lny-78-S7n" secondAttribute="centerX" id="Sh6-Zf-GXJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="lny-78-S7n" secondAttribute="trailing" constant="24" id="ilZ-LC-eTQ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Ynr-3b-6d3" secondAttribute="trailing" constant="24" id="mlA-5P-GvN"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="lny-78-S7n" id="mC1-uI-JXy"/>
+                        <outlet property="customVideoCaptureSwitch" destination="FCr-v3-JYe" id="JrY-8M-ePR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="57" y="-28"/>
+        </scene>
+        <!--Custom Video Capture MainVC-->
+        <scene sceneID="kdG-sn-INQ">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="A5o-6s-kcE" customClass="CustomVideoCaptureMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eTr-7o-V0B">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jlG-O5-xsf">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="1xx-qQ-ZDN"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="jlG-O5-xsf" firstAttribute="trailing" secondItem="1xx-qQ-ZDN" secondAttribute="trailing" id="8Om-VJ-sUV"/>
+                            <constraint firstItem="jlG-O5-xsf" firstAttribute="leading" secondItem="1xx-qQ-ZDN" secondAttribute="leading" id="Jid-9i-6XK"/>
+                            <constraint firstItem="1xx-qQ-ZDN" firstAttribute="bottom" secondItem="jlG-O5-xsf" secondAttribute="bottom" id="UBF-FN-3kL"/>
+                            <constraint firstItem="jlG-O5-xsf" firstAttribute="top" secondItem="1xx-qQ-ZDN" secondAttribute="top" id="Xpe-y6-YsA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="jlG-O5-xsf" id="owf-8W-YTQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BSb-lo-AAY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="694" y="-28"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

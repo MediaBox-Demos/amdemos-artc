@@ -31,3 +31,6 @@
 
 /* Class = "UILabel"; text = "Video Alignment"; ObjectID = "vgi-HM-opw"; */
 "vgi-HM-opw.text" = "视频对齐";
+
+/* Class = "UILabel"; text = "Texture Data"; ObjectID = "i6y-gH-KAj"; */
+"i6y-gH-KAj.text" = "纹理数据";

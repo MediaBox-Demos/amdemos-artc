@@ -13,31 +13,39 @@ Download [address](https://github.com/MediaBox-Demos/amdemos-artc/tree/main/iOS)
 
 ### Source Code Structure
 ```
-├── iOS                                // iOS platform project root directory
-│   ├── ARTCExample                    // Source code directory
-│       ├── Common                     // Common module
-│           ├── ARTCTokenHelper.swift      // AppId/AppKey configuration file
-│           ├── ...                        // Ohter files
-│       ├── QuickStart                 // Quick start module
-│           ├── TokenGenerate              // Token generation and joining a session  
-│           ├── VideoCall                  // Quick implementation of audio/video calls  
-│           ├── VoiceChat                  // Quick implementation of voice chat rooms 
-│       ├── BasicUsage                  // Basic function module
-│           ├── AudioBasicUsage            // Common audio operations and configurations
-│           ├── VideoBasicUsage            // Common video operations and configurations
-│           |—— CameraCommonControl            // Camera common configuration
-│           |—— SEIUsage                      // SEI message sending and receiving
-            ├── CameraCommonSetting        // Camera common configuration
-│           ├── DataChannelMessage         // User-defined message sending and receiving
-│           ├── ScreenShare                 // Screen sharing
-│       ├── AdvancedUsage                  // Advanced function module
-│           ├── ProcessAudioRawData        // Raw audio data
-│           ├── ProcessVideoRawData        // Raw video data
-│       ├── Setting                    // Setting module
-│       ├── ...                        // Other files for the project
-│   ├── ARTCExample.xcodeproj          // Demo's project
-│   ├── ARTCExample.xcworkspace        // Demo's workspace
-│   ├── Podfile                        // Demo's podfile
+├── iOS                       // iOS platform project root directory
+│   ├── ARTCExample              // Source code directory
+│       ├── Common                  // Common module
+│           ├── ARTCTokenHelper.swift   // AppId/AppKey configuration file
+│           ├── ...                     // Ohter files
+│       ├── QuickStart              // Quick start module
+│           ├── TokenGenerate           // Token generation and joining a session  
+│           ├── VideoCall               // Quick implementation of audio/video calls  
+│           ├── VoiceChat               // Quick implementation of voice chat rooms 
+│       ├── BasicUsage              // Basic function module
+│           ├── AudioBasicUsage         // Common audio operations and configurations
+│           ├── VideoBasicUsage         // Common video operations and configurations
+│           |—— CameraCommonControl     // Camera common configuration
+│           |—— SEIUsage                // SEI message sending and receiving
+            ├── CameraCommonSetting     // Camera common configuration
+│           ├── DataChannelMessage      // User-defined message sending and receiving
+│           ├── ScreenShare             // Screen sharing
+│           ├── StreamMonitoring        // Monitoring of stream quality
+│           ├── PlayAudioFiles          // Playback of accompanying and sound effects
+│       ├── AdvancedUsage           // Advanced function module
+│           ├── ProcessAudioRawData     // Raw audio data
+│           ├── ProcessVideoRawData     // Raw video data
+|           |—— CustomAudioCapture      // Custom audio capture
+|           |—— CustomAudioRender       // Custom audio render
+|           |—— CustomVideoCapture      // Custom video capture
+|           |—— CustomVideoRender       // Custom video render
+|           |—— PreJoinChannelTest      // Network and Device Check before joining a channel
+|           |—— PictureInPicture        // Picture in Picture
+│       ├── Setting                     // Setting module
+│       ├── ...                         // Other files for the project
+│   ├── ARTCExample.xcodeproj      // Demo's project
+│   ├── ARTCExample.xcworkspace    // Demo's workspace
+│   ├── Podfile                    // Demo's podfile
 
 ```
 

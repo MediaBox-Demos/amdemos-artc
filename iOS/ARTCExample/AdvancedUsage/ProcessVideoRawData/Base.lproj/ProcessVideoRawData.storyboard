@@ -24,12 +24,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eOV-Xr-l2g">
-                                <rect key="frame" x="24" y="483.33333333333331" width="345" height="33.999999999999943"/>
+                                <rect key="frame" x="24" y="522.33333333333337" width="345" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nPH-Uh-ROI">
-                                <rect key="frame" x="24" y="188.33333333333337" width="345" height="271"/>
+                                <rect key="frame" x="24" y="188.33333333333337" width="345" height="310"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ohY-yf-vCD">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="31"/>
@@ -40,7 +40,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Jbx-zv-Isa">
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jbx-zv-Isa">
                                                 <rect key="frame" x="296" y="0.0" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="onCaptureVideoFrameSwitchToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="Tjq-0H-UMg"/>
@@ -148,10 +148,28 @@
                                             </switch>
                                         </subviews>
                                     </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="edW-jo-cF5">
+                                        <rect key="frame" x="0.0" y="279" width="345" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Texture Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6y-gH-KAj">
+                                                <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wIw-Qj-2h1">
+                                                <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="onTextureDataSwitchToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="sda-YX-ncb"/>
+                                                    <action selector="onWriteBackSwitchToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="1vv-6S-OhZ"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Bi-4i-Chi">
-                                <rect key="frame" x="135.33333333333334" y="541.33333333333337" width="122.33333333333334" height="34.333333333333371"/>
+                                <rect key="frame" x="135.33333333333334" y="580.33333333333337" width="122.33333333333334" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
                                 <connections>

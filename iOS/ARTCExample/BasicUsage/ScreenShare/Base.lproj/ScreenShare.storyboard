@@ -21,14 +21,20 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZo-sv-bon">
-                                <rect key="frame" x="135.33333333333334" y="222.33333333333334" width="122.33333333333334" height="34.333333333333343"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
-                                <connections>
-                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Ruk-k2-apb"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rYq-bU-lSp">
+                                <rect key="frame" x="24" y="222.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Publish Camera Stream" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIh-YT-xxq">
+                                        <rect key="frame" x="0.0" y="0.0" width="296" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3h-wu-J35">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gqq-dk-Z8y">
                                 <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
                                 <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
@@ -36,6 +42,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZo-sv-bon">
+                                <rect key="frame" x="135.33333333333334" y="277.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Ruk-k2-apb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ndv-MY-r9x"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -43,15 +57,19 @@
                             <constraint firstItem="YZo-sv-bon" firstAttribute="centerX" secondItem="ZoO-uN-NZ5" secondAttribute="centerX" id="3hV-oq-E7M"/>
                             <constraint firstItem="Ndv-MY-r9x" firstAttribute="trailing" secondItem="gqq-dk-Z8y" secondAttribute="trailing" constant="24" id="4dR-pg-hla"/>
                             <constraint firstItem="gqq-dk-Z8y" firstAttribute="top" secondItem="Ndv-MY-r9x" secondAttribute="top" id="5An-WZ-gMY"/>
+                            <constraint firstItem="YZo-sv-bon" firstAttribute="top" secondItem="rYq-bU-lSp" secondAttribute="bottom" constant="24" id="ABW-3G-Qtx"/>
                             <constraint firstItem="gqq-dk-Z8y" firstAttribute="leading" secondItem="Ndv-MY-r9x" secondAttribute="leading" constant="24" id="GF7-HD-6d7"/>
-                            <constraint firstItem="Ndv-MY-r9x" firstAttribute="trailing" secondItem="ZoO-uN-NZ5" secondAttribute="trailing" constant="24" id="J36-cA-zok"/>
-                            <constraint firstItem="ZoO-uN-NZ5" firstAttribute="leading" secondItem="Ndv-MY-r9x" secondAttribute="leading" constant="24" id="KgY-XS-f9R"/>
+                            <constraint firstItem="Ndv-MY-r9x" firstAttribute="trailing" secondItem="rYq-bU-lSp" secondAttribute="trailing" constant="24" id="JyJ-rG-0EQ"/>
+                            <constraint firstItem="ZoO-uN-NZ5" firstAttribute="leading" secondItem="rYq-bU-lSp" secondAttribute="leading" id="Qp5-hW-gsS"/>
+                            <constraint firstItem="rYq-bU-lSp" firstAttribute="top" secondItem="ZoO-uN-NZ5" secondAttribute="bottom" constant="24" id="XfY-7Y-S5N"/>
                             <constraint firstItem="ZoO-uN-NZ5" firstAttribute="top" secondItem="gqq-dk-Z8y" secondAttribute="bottom" constant="24" id="am2-CD-IMm"/>
-                            <constraint firstItem="YZo-sv-bon" firstAttribute="top" secondItem="ZoO-uN-NZ5" secondAttribute="bottom" constant="24" id="gPY-F8-hgd"/>
+                            <constraint firstItem="ZoO-uN-NZ5" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rYq-bU-lSp" secondAttribute="trailing" id="qtn-ER-FsW"/>
+                            <constraint firstItem="rYq-bU-lSp" firstAttribute="leading" secondItem="Ndv-MY-r9x" secondAttribute="leading" constant="24" id="wkk-RZ-Eba"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="channelIdTextField" destination="ZoO-uN-NZ5" id="nOb-4y-hPL"/>
+                        <outlet property="publishLocalVideoStreamSwitch" destination="c3h-wu-J35" id="VfN-Aa-NhX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -92,13 +110,13 @@
                                         <rect key="frame" x="0.0" y="41.999999999999943" width="345" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share Audio Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TdC-zE-K8w">
-                                                <rect key="frame" x="0.0" y="0.0" width="109" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="101" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dYe-LC-rpV">
-                                                <rect key="frame" x="115" y="0.0" width="232" height="31"/>
+                                                <rect key="frame" x="107" y="0.0" width="240" height="31"/>
                                                 <connections>
                                                     <action selector="onShareAudioVolumeSliderChanged:" destination="Dxd-du-kYb" eventType="valueChanged" id="eLZ-3D-xVZ"/>
                                                 </connections>

@@ -28,8 +28,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alivc.rtc.AliRtcEngine;
 import com.aliyun.aio.aio_env.AlivcEnv;
+import com.aliyun.artc.api.advancedusage.CustomVideoCaptureAndRender.CustomVideoCaptureActivity;
+import com.aliyun.artc.api.advancedusage.CustomVideoCaptureAndRender.CustomVideoRenderActivity;
+import com.aliyun.artc.api.advancedusage.PictureInPicture.PictureInPictureAcitivity;
+import com.aliyun.artc.api.advancedusage.PreJoinChannelTest.PreJoinChannelTestActivity;
+import com.aliyun.artc.api.basicusage.PlayAudioFiles.PlayAudioFilesActivity;
 import com.aliyun.artc.api.basicusage.ScreenShare.ScreenShareActivity;
 import com.aliyun.artc.api.basicusage.CameraCommonControl.CameraActivity;
+import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.CustomAudioCaptureActivity;
 import com.aliyun.artc.api.basicusage.StreamMonitoring.StreamMonitoringActivity;
 import com.aliyun.artc.api.advancedusage.ProcessVideoRawData.ProcessVideoRawDataActivity;
 import com.aliyun.artc.api.basicusage.VideoBasicUsage.VideoBasicUsageActivity;
@@ -51,6 +57,8 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.aliyun.artc.api.basicusage.SEIUsage.SEIActivity;
 import com.aliyun.artc.api.basicusage.DataChannelMessage.DataChannelMessageActivity;
 import com.aliyun.artc.api.advancedusage.ProcessAudioRawData.ProcessAudioRawDataActivity;
+import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.CustomAudioRenderActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,15 +108,27 @@ public class MainActivity extends AppCompatActivity {
                     DataChannelMessageActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.screen_share))) {
                     ScreenShareActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.call_quality))) {
+                    StreamMonitoringActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.basicusage.R.string.play_audio_files))) {
+                    PlayAudioFilesActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.raw_audio_capture))) {
                     ProcessAudioRawDataActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.raw_video_capture))) {
                     ProcessVideoRawDataActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.external_audio_capture))) {
+                    CustomAudioCaptureActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.custom_audio_render))) {
+                    CustomAudioRenderActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_capture))) {
+                    CustomVideoCaptureActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_render))) {
+                    CustomVideoRenderActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.pre_join_channel_test))) {
+                    PreJoinChannelTestActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.picture_in_picture))) {
+                    PictureInPictureAcitivity.startActionActivity(MainActivity.this);
                 }
-                else if(moduleInfo.getModule().equals(getString(R.string.call_quality))) {
-                    StreamMonitoringActivity.startActionActivity(MainActivity.this);
-                }
-
             } else {
                 Toast.makeText(this, "请允许相关权限", Toast.LENGTH_SHORT).show();
             }
@@ -129,11 +149,16 @@ public class MainActivity extends AppCompatActivity {
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.data_channel_msg_basic_usage)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.screen_share)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.call_quality)));
-
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.play_audio_files)));
 
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.raw_audio_capture)).titleName(getString(R.string.advance_features)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.raw_video_capture)));
-
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.external_audio_capture)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.custom_audio_render)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_capture)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_render)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.pre_join_channel_test)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.picture_in_picture)));
     }
 
     public boolean checkOrRequestPermission(int code) {
@@ -227,4 +252,5 @@ public class MainActivity extends AppCompatActivity {
                 .create();
         dialogPlus.show();
     }
+
 }

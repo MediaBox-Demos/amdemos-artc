@@ -29,10 +29,14 @@ ARTC SDK Android平台(Java语言)的API示例Demo，展示ARTC SDK 的API调用
 │           |—— SEIUsage         //SEI消息发送和接收
 │           |—— ScreenShareUsage  //屏幕共享
 │           |—— StreamMonitoring //通话中推拉流质量监测  
+            |—— PlayAudioFiles    // 播放音频伴奏和音效
         |—— AdvancedUsage //进阶功能模块
-            |—— ExternalAudio //外部音频采集和外部音频渲染
             |—— ProcessAudioRawData //原始音频数据
             |—— ProcessVideoRawData //原始视频数据
+            |—— CustomAudioCaptureAndRender //自定义音频采集和渲染
+            |—— CustomVideoCaptureAndRender //自定义视频采集和渲染
+            |—— PreJoinChannelTest //入会前质量检测（设备+网络）
+            |—— PictureInPicture //画中画
 │       ├── build.gradle  
 │       └── settings.gradle
 

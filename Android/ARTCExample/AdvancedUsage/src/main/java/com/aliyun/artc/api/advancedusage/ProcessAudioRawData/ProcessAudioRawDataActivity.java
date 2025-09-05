@@ -1,15 +1,10 @@
 package com.aliyun.artc.api.advancedusage.ProcessAudioRawData;
 
 import static android.view.View.VISIBLE;
-import static com.alivc.rtc.AliRtcEngine.AliRtcAudioSampleRate.AliRtcAudioSampleRate_48000;
-import static com.alivc.rtc.AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePlayback;
-import static com.alivc.rtc.AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceProcessCaptured;
-import static com.alivc.rtc.AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceRemoteUser;
-import static com.alivc.rtc.AliRtcEngine.AliRtcVideoEncoderOrientationMode.AliRtcVideoEncoderOrientationModeAdaptive;
+
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackCamera;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackNo;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,52 +42,44 @@ import android.widget.Toast;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioTrack;
-
 /**
  * 获取音频原始数据API调用示例
  */
 public class ProcessAudioRawDataActivity extends AppCompatActivity {
+    private static final String TAG = ProcessAudioRawDataActivity.class.getSimpleName();
 
     private Handler handler;
     private EditText mChannelEditText;
     private TextView mJoinChannelTextView;
-    private SwitchCompat mPlaybackAudioFrame;
-    private SwitchCompat mRemoteUserAudioFrame;
+    // Audio Raw Frame Switch
+    private SwitchCompat mCapturedAudioFrame;
     private SwitchCompat mProcessCapturedAudioSwitch;
     private SwitchCompat mPublishAudioSwitch;
-    private SwitchCompat mCapturedAudioFrame;
+    private SwitchCompat mPlaybackAudioFrame;
+    private SwitchCompat mRemoteUserAudioFrame;
 
     private boolean hasJoined = false;
-    private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
+    private FrameLayout fl_local, fl_remote;
 
     private AliRtcEngine mAliRtcEngine = null;
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
-    private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
+    private final Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
 
-
-    private AudioTrack mAudioTrack= null;
-    private boolean isAudioTrackInitialized = false;
-    private int currentSampleRate = -1;
-    private int currentChannelCount = -1;
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.audio_capture);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.audioCap), (v, insets) -> {
+        setContentView(R.layout.activity_process_audio_raw_date);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.process_audio_raw_data), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setTitle(getString(R.string.audio_raw));
+        setTitle(getString(R.string.process_audio_raw_data));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // 视频显示视图
         fl_local = findViewById(R.id.fl_local);
         fl_remote = findViewById(R.id.fl_remote);
 
@@ -102,7 +89,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         mJoinChannelTextView.setOnClickListener(v -> {
             if(hasJoined) {
                 destroyRtcEngine();
-                mJoinChannelTextView.setText(R.string.video_chat_join_room);
+                mJoinChannelTextView.setText(R.string.video_chat_join_channel);
             } else {
                 // 重复入会时需要重新初始化引擎
                 if(mAliRtcEngine == null) {
@@ -111,160 +98,12 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 startRTCCall();
             }
         });
-        
-        // 初始化并设置 SwitchCompat 触发事件
 
-        mPlaybackAudioFrame=findViewById(R.id.audio_playback_switch);
-        //负责获取远程音频，混音处理后，播放前的数据
-        mPlaybackAudioFrame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
-                    mPlaybackAudioFrame.setChecked(false);
-                    return;
-                }
-                AliRtcEngine.AliRtcAudioFrameObserverConfig config = null;
-                config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                config.sampleRate = AliRtcAudioSampleRate_48000;
+        // Create Rtc Engine
+        initAndSetupRtcEngine();
 
-                if (isChecked) {
-                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcAudioSourcePlayback, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.start_raw_data_callback), Toast.LENGTH_SHORT);
-
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.get_raw_data_failed), Toast.LENGTH_SHORT);
-                        mPlaybackAudioFrame.setChecked(false);
-                    }
-                } else {
-                    if(mAliRtcEngine.enableAudioFrameObserver(false, AliRtcAudioSourcePlayback, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.stop_raw_data_callback), Toast.LENGTH_SHORT);
-                        if (mAudioTrack != null) {
-                            try {
-                                mAudioTrack.stop();
-                                mAudioTrack.release();
-                                mAudioTrack = null;
-                            } catch (Exception e) {
-                                Log.e("AudioCapture", "释放AudioTrack失败: " + e.getMessage());
-                            }
-                        }
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.stop_raw_data_failed), Toast.LENGTH_SHORT);
-                        mPlaybackAudioFrame.setChecked(true);
-                    }
-                }
-            }
-        });
-
-        mRemoteUserAudioFrame = findViewById(R.id.RemoteUserAudioFrame);
-        mRemoteUserAudioFrame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
-                    mRemoteUserAudioFrame.setChecked(false);
-                    return;
-                }
-                if(isChecked){
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcAudioSourceRemoteUser, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start onRemoteUserAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start onRemoteUserAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(false);
-                    }
-                }else {
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    if(mAliRtcEngine.enableAudioFrameObserver(false, AliRtcAudioSourceRemoteUser, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop onRemoteUserAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop onRemoteUserAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(true);
-                    }
-                }
-            }
-        });
-
-        mProcessCapturedAudioSwitch = findViewById(R.id.process_captured_audio_switch);
-        mProcessCapturedAudioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
-                    mProcessCapturedAudioSwitch.setChecked(false);
-                    return;
-                }
-                if(isChecked){
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
-
-                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcAudioSourceProcessCaptured, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start ProcessCapturedAudioSwitch", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start ProcessCapturedAudioSwitch failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(false);
-                    }
-                }else {
-
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
-
-                    if(mAliRtcEngine.enableAudioFrameObserver(false, AliRtcAudioSourceProcessCaptured, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop ProcessCapturedAudioSwitch", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop ProcessCapturedAudioSwitch failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(true);
-                    }
-                }
-            }
-        });
-
-        mPublishAudioSwitch = findViewById(R.id.PublishAudioFrame_switch);
-        mPublishAudioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
-                    mPublishAudioSwitch.setChecked(false);
-                    return;
-                }
-                if(isChecked){
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;//默认设置，可以修改
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
-
-                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePub, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start PublishAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start PublishAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(false);
-                    }
-                }else {
-
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;//默认设置，可以修改
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
-
-                    if(mAliRtcEngine.enableAudioFrameObserver(false, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePub, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop PublishAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop PublishAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(true);
-                    }
-                }
-            }
-        });
-
+        // Enable or Disable Audio Frame Callback
+        // Capture Audio Frame
         mCapturedAudioFrame = findViewById(R.id.CapturedAudioFrame_Switch);
         mCapturedAudioFrame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -274,37 +113,91 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                     mCapturedAudioFrame.setChecked(false);
                     return;
                 }
-                if(isChecked){
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
 
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;//默认设置，可以修改
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
+                AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                config.sampleRate = AliRtcEngine.AliRtcAudioSampleRate.AliRtcAudioSampleRate_48000;
+                config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
+                config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
 
-                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceCaptured, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start onCapturedAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "start onCapturedAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(false);
-                    }
-                }else {
-
-                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
-                    config.mode=AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
-                    config.sampleRate = AliRtcAudioSampleRate_48000;//默认设置，可以修改
-                    config.channels=AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;   //默认设置，可以修改
-
-                    if(mAliRtcEngine.enableAudioFrameObserver(false, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceCaptured, config) == 0){
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop onCapturedAudioFrame", Toast.LENGTH_SHORT);
-                    } else {
-                        ToastHelper.showToast(ProcessAudioRawDataActivity.this, "stop onCapturedAudioFrame failed", Toast.LENGTH_SHORT);
-                        mRemoteUserAudioFrame.setChecked(true);
-                    }
-                }
+                mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceCaptured, config);
             }
         });
 
-        initAndSetupRtcEngine();
+        // 3A Audio Raw Data
+        mProcessCapturedAudioSwitch = findViewById(R.id.process_captured_audio_switch);
+        mProcessCapturedAudioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mAliRtcEngine == null) {
+                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
+                    mProcessCapturedAudioSwitch.setChecked(false);
+                    return;
+                }
+
+                AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                config.sampleRate = AliRtcEngine.AliRtcAudioSampleRate.AliRtcAudioSampleRate_48000;
+                config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
+                config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
+
+                mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceProcessCaptured, config);
+            }
+        });
+
+        // Publish Audio Frame
+        mPublishAudioSwitch = findViewById(R.id.PublishAudioFrame_switch);
+        mPublishAudioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mAliRtcEngine == null) {
+                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
+                    mPublishAudioSwitch.setChecked(false);
+                    return;
+                }
+                AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                config.sampleRate = AliRtcEngine.AliRtcAudioSampleRate.AliRtcAudioSampleRate_48000;
+                config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly; // 只能设置为ReadOnly
+                config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
+
+                mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePub, config);
+            }
+        });
+
+        // Playback Audio Frame (After Mix)
+        mPlaybackAudioFrame=findViewById(R.id.audio_playback_switch);
+        mPlaybackAudioFrame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mAliRtcEngine == null) {
+                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
+                    mPlaybackAudioFrame.setChecked(false);
+                    return;
+                }
+                AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                config.sampleRate = AliRtcEngine.AliRtcAudioSampleRate.AliRtcAudioSampleRate_48000;
+                config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
+                config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
+
+                mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePlayback, config);
+            }
+        });
+
+        // Remote User Audio Frame
+        mRemoteUserAudioFrame = findViewById(R.id.RemoteUserAudioFrame);
+        mRemoteUserAudioFrame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mAliRtcEngine == null) {
+                    ToastHelper.showToast(ProcessAudioRawDataActivity.this, getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
+                    mRemoteUserAudioFrame.setChecked(false);
+                    return;
+                }
+                // 可以设置读写模式，但是无法设置采样率、声道数
+                AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
+
+                mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceRemoteUser, config);
+            }
+        });
     }
 
     public static void startActionActivity(Activity activity) {
@@ -326,10 +219,6 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
     private FrameLayout getAvailableView() {
         if (fl_remote.getChildCount() == 0) {
             return fl_remote;
-        } else if (fl_remote_2.getChildCount() == 0) {
-            return fl_remote_2;
-        } else if (fl_remote_3.getChildCount() == 0) {
-            return fl_remote_3;
         } else {
             return null;
         }
@@ -366,9 +255,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
 
         //添加音频帧原始数据回调监听器
-        mAliRtcEngine.registerAudioFrameObserver(m_rtcobserver);
-
-
+        mAliRtcEngine.registerAudioFrameObserver(rtcAudioFrameObserver);
 
         // 设置频道模式为互动模式,RTC下都使用AliRTCSdkInteractiveLive
         mAliRtcEngine.setChannelProfile(AliRtcEngine.AliRTCSdkChannelProfile.AliRTCSdkInteractiveLive);
@@ -380,12 +267,11 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
 
         //设置视频编码参数
         AliRtcEngine.AliRtcVideoEncoderConfiguration aliRtcVideoEncoderConfiguration = new AliRtcEngine.AliRtcVideoEncoderConfiguration();
-        aliRtcVideoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(
-                720, 1280);
+        aliRtcVideoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(720, 1280);
         aliRtcVideoEncoderConfiguration.frameRate = 20;
         aliRtcVideoEncoderConfiguration.bitrate = 1200;
         aliRtcVideoEncoderConfiguration.keyFrameInterval = 2000;
-        aliRtcVideoEncoderConfiguration.orientationMode = AliRtcVideoEncoderOrientationModeAdaptive;
+        aliRtcVideoEncoderConfiguration.orientationMode = AliRtcEngine.AliRtcVideoEncoderOrientationMode.AliRtcVideoEncoderOrientationModeAdaptive;
         mAliRtcEngine.setVideoEncoderConfiguration(aliRtcVideoEncoderConfiguration);
 
         //SDK默认会publish音频，publishLocalAudioStream可以不调用
@@ -452,7 +338,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
             super.onLeaveChannelResult(result, stats);
 
             //离开频道后，需要移除音频帧原始数据回调监听器
-            if(m_rtcobserver != null) {
+            if(rtcAudioFrameObserver != null) {
                 mAliRtcEngine.registerAudioFrameObserver(null);
             }
         }
@@ -488,159 +374,48 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
 
     };
 
-    private AliRtcEngine.AliRtcAudioFrameObserver m_rtcobserver = new AliRtcEngine.AliRtcAudioFrameObserver() {
-
-        private void initAudioTrack(int sampleRate, int channelCount, int bytesPerSample) {
-            try {
-                if (mAudioTrack != null) {
-                    mAudioTrack.stop();
-                    mAudioTrack.release();
-                }
-
-                int channelConfig = channelCount == 1 ?
-                        AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO;
-                int audioFormat = bytesPerSample == 2 ?
-                        AudioFormat.ENCODING_PCM_16BIT : AudioFormat.ENCODING_PCM_8BIT;
-
-                int bufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat);
-                bufferSize = Math.max(bufferSize, sampleRate * channelCount * bytesPerSample / 10);
-
-                mAudioTrack = new AudioTrack(
-                        AudioManager.STREAM_MUSIC,
-                        sampleRate,
-                        channelConfig,
-                        audioFormat,
-                        bufferSize,
-                        AudioTrack.MODE_STREAM
-                );
-
-                if (mAudioTrack.getState() == AudioTrack.STATE_INITIALIZED) {
-                    mAudioTrack.play();
-                    currentSampleRate = sampleRate;
-                    currentChannelCount = channelCount;
-                    isAudioTrackInitialized = true;
-                }
-            } catch (Exception e) {
-                Log.e("AudioCapture", "初始化AudioTrack失败: " + e.getMessage());
-                isAudioTrackInitialized = false;
-            }
-        }
-
-        /**
-         * 检测字节数组是否全为0
-         * @param data 要检测的字节数组
-         * @return true表示数组全为0或为空，false表示数组包含非0数据
-         */
-        private boolean isAllZeroArray(byte[] data) {
-            if (data == null || data.length == 0) {
-                return true;
-            }
-            for (byte b : data) {
-                if (b != 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
+    private final AliRtcEngine.AliRtcAudioFrameObserver rtcAudioFrameObserver = new AliRtcEngine.AliRtcAudioFrameObserver() {
         @Override
         public boolean onCapturedAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
-            Log.d("AudioCapture", "onCapturedAudioFrame");
-            //该方法负责获取本地采集的裸数据
+            // 本地采集音频数据回调，根据业务场景进行处理
+            Log.i(TAG, "onCaptureAudioFrame");
             return true;
         }
 
         @Override
         public boolean onProcessCapturedAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
-            Log.d("AudioCapture", "onProcessCapturedAudioFrame");
-//            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ToastHelper.showToast(AudioCaptureActivity.this, "onProcessCapturedAudioFrame", Toast.LENGTH_SHORT);
-//                }
-//            });
-            //该方法负责获取本地采集、3A处理后的数据
+            // 3A后数据回调，根据业务场景进行处理
+            Log.i(TAG, "onProcessCaptureAudioFrame");
             return true;
         }
 
         @Override
         public boolean onPublishAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
-            Log.d("AudioCapture", "onPublishAudioFrame");
-//            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ToastHelper.showToast(AudioCaptureActivity.this, "onPublishAudioFrame", Toast.LENGTH_SHORT);
-//                }
-//            });
-            //该方法负责获取本地采集、处理、编码后，准备推流的数据，只读模式
+            // 推流音频数据回调，根据业务场景进行处理
+            Log.i(TAG, "onPublishAudioFrame");
             return true;
         }
 
         @Override
         public boolean onPlaybackAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
-//该方法获得将所有用户的音频混音处理后得到的音频数据，供直接播放使用
-            Log.d("AudioCapture", "onPlaybackAudioFrame");
-
-            if (frame != null && frame.data != null) {
-
-                // 数据有效性检查，包括全0数组检测
-                if (frame == null || frame.data == null || frame.data.length == 0 ||
-                    frame.samplesPerSec <= 0 || frame.numChannels <= 0 || frame.bytesPerSample <= 0 ||
-                    isAllZeroArray(frame.data)) {
-                    // 跳过无效数据，等待下次回调
-                    Log.d("AudioCapture", "跳过无效音频帧 - 采样率: " +
-                            (frame != null ? frame.samplesPerSec : "null") +
-                            ", 数据长度: " + (frame != null && frame.data != null ? frame.data.length : "null") +
-                            ", 是否全0数组: " + (frame != null && frame.data != null ? isAllZeroArray(frame.data) : "null"));
-                    return true;
-                }
-                // 检查音频参数是否变化
-                if (!isAudioTrackInitialized || currentSampleRate != frame.samplesPerSec || currentChannelCount != frame.numChannels)
-                {
-                    initAudioTrack(frame.samplesPerSec, frame.numChannels, frame.bytesPerSample);
-                }
-
-                // 播放音频数据
-                if (isAudioTrackInitialized && mAudioTrack != null) {
-                    try {
-                        int dataLength = frame.numSamples * frame.numChannels * frame.bytesPerSample;
-                        if (dataLength <= frame.data.length) {
-                            mAudioTrack.write(frame.data, 0, dataLength);
-                        }
-                    } catch (Exception e) {
-                        Log.e("AudioCapture", "播放音频失败: " + e.getMessage());
-                    }
-                }
-            }
-
-//            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ToastHelper.showToast(AudioCaptureActivity.this, "onLocalAudioSample", Toast.LENGTH_SHORT);
-//                }
-//            });
+            // 播放数据（混音后），根据业务场景进行处理
+            Log.i(TAG, "onPlaybackAudioFrame");
             return true;
         }
 
         @Override
+        @Deprecated
         public boolean onMixedAllAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
+            // 该方法已弃用
             return true;
-            //该方法已被弃用
         }
-
 
         @Override
-        public boolean onRemoteUserAudioFrame(String uid, AliRtcEngine.AliRtcAudioFrame frame) { //该方法负责获取当前单个用户的音频数据
-            Log.d("AudioCapture", "onRemoteUserAudioFrame: ");
-            //            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ToastHelper.showToast(AudioCaptureActivity.this, "onRemoteUserAudioFrame", Toast.LENGTH_SHORT);
-//                }
-//            });
+        public boolean onRemoteUserAudioFrame(String uid, AliRtcEngine.AliRtcAudioFrame frame) {
+            // 远端用户拉流音频数据，根据业务场景进行处理
+            Log.i(TAG, "onRemoteUserAudioFrame");
             return true;
         }
-
     };
 
 
@@ -705,11 +480,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     };
-
-
 
     private void destroyRtcEngine() {
         if( mAliRtcEngine != null) {

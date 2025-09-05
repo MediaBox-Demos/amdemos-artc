@@ -67,13 +67,15 @@ public class ScreenShareActivity extends AppCompatActivity {
     private EditText mWidthEditText, mHeightEditText, mFpsEditText, mBitrateEditText;
     private EditText mGOPEditText;
     private SwitchCompat mForceKeyFrameSwitch;
+
+    private boolean isPublishLocalVideo = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_screen_share);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.video_chat_main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.screen_share), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -151,6 +153,11 @@ public class ScreenShareActivity extends AppCompatActivity {
             if(mAliRtcEngine != null && mAliRtcEngine.isScreenSharePublished()) {
                 mAliRtcEngine.stopScreenShare();
             }
+        });
+
+        SwitchCompat mPublishLocalVideoSwitch = findViewById(R.id.switch_publish_local_video_stream);
+        mPublishLocalVideoSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isPublishLocalVideo = isChecked;
         });
     }
 
@@ -269,7 +276,7 @@ public class ScreenShareActivity extends AppCompatActivity {
         mAliRtcEngine.publishLocalAudioStream(true);
         //如果是视频通话，publishLocalVideoStream(true)可以不调用，SDK默认会publish视频
         //如果是纯语音通话 则需要设置publishLocalVideoStream(false)设置不publish视频
-        mAliRtcEngine.publishLocalVideoStream(true);
+        mAliRtcEngine.publishLocalVideoStream(isPublishLocalVideo);
 
         //设置默认订阅远端的音频和视频流
         mAliRtcEngine.setDefaultSubscribeAllRemoteAudioStreams(true);

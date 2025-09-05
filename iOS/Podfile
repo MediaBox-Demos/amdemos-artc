@@ -5,7 +5,7 @@ target 'ARTCExample' do
 
   # Pods for ARTCExample
   
-  pod 'AliVCSDK_ARTC', '~> 7.5.0'
+  pod 'AliVCSDK_ARTC', '~> 7.6.0'
 
 end
 

@@ -44,10 +44,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * 获取视频原始数据API调用示例
  */
 public class ProcessVideoRawDataActivity extends AppCompatActivity {
+    private static final String TAG = ProcessVideoRawDataActivity.class.getSimpleName();
     private Handler handler;
     private EditText mChannelEditText;
     private TextView mJoinChannelTextView;
-    private SwitchCompat mVideoCaptureSwitch;
+    private SwitchCompat mVideoSampleRawDataSwitch;
+    private SwitchCompat mWriteBackToSDKSwitch;
+    private SwitchCompat mEnableTextureDataSwitch;
     private boolean hasJoined = false;
     private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
 
@@ -55,26 +58,27 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
     private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
 
-    private SwitchCompat isContinueSwitch;
-
-    private boolean isVideoEngineContinue = false;
+    // 获取的原始视频数据是否写回SDK更新
+    private boolean isWriteBackToSDK = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.video_capture);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.videoCap), (v, insets) -> {
+        setContentView(R.layout.activity_process_video_raw_data);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.process_video_raw_data), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setTitle(getString(R.string.video_raw));
+        setTitle(getString(R.string.process_video_raw_data));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fl_local = findViewById(R.id.fl_local);
         fl_remote = findViewById(R.id.fl_remote);
+        fl_remote_2 = findViewById(R.id.fl_remote2);
+        fl_remote_3 = findViewById(R.id.fl_remote3);
 
         mChannelEditText = findViewById(R.id.channel_id_input);
         mChannelEditText.setText(GlobalConfig.getInstance().gerRandomChannelId());
@@ -82,9 +86,8 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         mJoinChannelTextView.setOnClickListener(v -> {
             if(hasJoined) {
                 destroyRtcEngine();
-                mJoinChannelTextView.setText(R.string.video_chat_join_room);
+                mJoinChannelTextView.setText(R.string.video_chat_join_channel);
             } else {
-                // 重复入会时需要重新初始化引擎
                 if(mAliRtcEngine == null) {
                     initAndSetupRtcEngine();
                 }
@@ -92,50 +95,46 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
             }
         });
         
-        // 初始化并设置 SwitchCompat 触发事件
-        mVideoCaptureSwitch = findViewById(R.id.video_capture_switch);
-        mVideoCaptureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // 视频原始数据回调开关
+        mVideoSampleRawDataSwitch = findViewById(R.id.video_capture_switch);
+        mVideoSampleRawDataSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(mAliRtcEngine == null) {
-                    ToastHelper.showToast(ProcessVideoRawDataActivity.this,getString(R.string.rtc_engine_init_required), Toast.LENGTH_SHORT);
-                    mVideoCaptureSwitch.setChecked(false);
-                    return;
+                    initAndSetupRtcEngine();
                 }
-                // isChecked 参数表示开关的状态：true 表示开启，false 表示关闭
                 if (isChecked) {
-                    mAliRtcEngine.registerLocalVideoTextureObserver(m_rtcTextureObserver);
-                    mAliRtcEngine.registerVideoSampleObserver(m_rtcVideoObserver);
-
+                    // 注册视频原始数据回调
+                    mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
                 } else {
-                    if(m_rtcTextureObserver != null) {
-                        mAliRtcEngine.unRegisterLocalVideoTextureObserver();
-                    }
-                    if(m_rtcVideoObserver!= null) {
-                        mAliRtcEngine.unRegisterVideoSampleObserver();
-                    }
-
+                    mAliRtcEngine.unRegisterVideoSampleObserver();
                 }
-
             }
         });
 
-        isContinueSwitch = findViewById(R.id.video_capture_continue);
-        isContinueSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mWriteBackToSDKSwitch = findViewById(R.id.raw_data_write_back_switch);
+        mWriteBackToSDKSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    ToastHelper.showToast(ProcessVideoRawDataActivity.this, getString(R.string.enable_audio_writeback), Toast.LENGTH_SHORT);
-                    isVideoEngineContinue = true;
-                }else {
-                    ToastHelper.showToast(ProcessVideoRawDataActivity.this, getString(R.string.disable_audio_writeback), Toast.LENGTH_SHORT);
-                    isVideoEngineContinue = false;
-                }
+                isWriteBackToSDK = isChecked;
             }
         });
 
-        // 在onCreate阶段初始化引擎，使视频配置可以在入会前进行
-        initAndSetupRtcEngine();
+        // 纹理数据回调开关
+        mEnableTextureDataSwitch = findViewById(R.id.video_capture_texture_switch);
+        mEnableTextureDataSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mAliRtcEngine == null) {
+                    initAndSetupRtcEngine();
+                }
+                if(isChecked){
+                    mAliRtcEngine.registerLocalVideoTextureObserver(mRtcTextureObserver);
+                } else {
+                    mAliRtcEngine.unRegisterLocalVideoTextureObserver();
+                }
+            }
+        });
     }
 
     public static void startActionActivity(Activity activity) {
@@ -188,11 +187,12 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
     }
 
     private void initAndSetupRtcEngine() {
-
-        //创建并初始化引擎
+        //创建并初始化引擎 获取纹理相关回调需要开启纹理采集、纹理编码
         if(mAliRtcEngine == null) {
-            mAliRtcEngine = AliRtcEngine.getInstance(this);
+            String extras = "{\"user_specified_camera_texture_capture\":\"TRUE\",\"user_specified_texture_encode\":\"TRUE\" }";
+            mAliRtcEngine = AliRtcEngine.getInstance(this, extras);
         }
+
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
 
@@ -227,6 +227,13 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         mAliRtcEngine.setDefaultSubscribeAllRemoteVideoStreams(true);
         mAliRtcEngine.subscribeAllRemoteVideoStreams(true);
 
+        if(mVideoSampleRawDataSwitch.isChecked()) {
+            mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
+        }
+
+        if(mEnableTextureDataSwitch.isChecked()) {
+            mAliRtcEngine.registerLocalVideoTextureObserver(mRtcTextureObserver);
+        }
     }
 
     private void startPreview(){
@@ -374,61 +381,29 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
 
     };
 
-    private AliRtcEngine.AliRtcTextureObserver m_rtcTextureObserver= new AliRtcEngine.AliRtcTextureObserver() {
+    private final AliRtcEngine.AliRtcTextureObserver mRtcTextureObserver = new AliRtcEngine.AliRtcTextureObserver() {
         @Override
         public void onTextureCreate(long context) {
-//            Params:
-//            context – OpenGL上下文
-//            Returns:
-//            OpenGL纹理ID
-//                    brief
-//            OpenGL上下文创建回调
-//                    note
-//            该回调是在SDK内部OpenGL上下文创建的时候触发
-
-        //用户渲染器绑定openGL上下文，由用户来实现
-//            context_ = context ;
-//            render.bind(context);
-//            Log.d(TAG, "texture context: "+context_+" create!") ;
+            Log.d(TAG, "onTextureCreate");
         }
 
         @Override
         public int onTextureUpdate(int textureId, int width, int height, AliRtcEngine.AliRtcVideoSample videoSample) {
-
-//            Params:
-//            textureId – OpenGL纹理ID
-//            width – OpenGL纹理高
-//            height – OpenGL纹理高
-//            videoSample – 视频帧数据，详见 AliRtcEngine.AliRtcVideoSample
-//            Returns:
-//            OpenGL纹理ID
-//                    brief
-//            OpenGL纹理更新回调
-//                    note
-//            - 该回调会在每一帧视频数据上传到OpenGL纹理之后触发，当外部注册了OpenGL纹理数据观测器，在该回调中可以对纹理进行处理，并返回处理后的纹理ID - 注意该回调返回值必须为有效的纹理ID，如果不做任何处理必须返回参数textureId
-//
-            // openGL 纹理变更回调
-            /*
-             *  进行 textureid处理
-             */
-//            render.drawTexture(textureId);
-//            return textureId;
-            return 0;
+            Log.d(TAG, "onTextureUpdate");
+            return textureId;
         }
 
         @Override
         public void onTextureDestroy() {
-//            brief
-//                    OpenGL上下文销毁回调
-//            note
-//                    该回调是在SDK内部OpenGL上下文销毁的时候触发
+            // 直接destroy销毁引擎会释放相关资源但是不会触发此回调，如有需求请在destroy前调用unRegisterLocalVideoTextureObserver
+            Log.d(TAG, "onTextureDestroy");
         }
     };
 
 
 
     //视频数据回调监听器，回调函数处理逻辑在此处实现
-    private AliRtcEngine.AliRtcVideoObserver m_rtcVideoObserver= new AliRtcEngine.AliRtcVideoObserver() {
+    private AliRtcEngine.AliRtcVideoObserver mRtcVideoSampleObserver = new AliRtcEngine.AliRtcVideoObserver() {
 
         @Override
         public boolean onLocalVideoSample(AliRtcEngine.AliRtcVideoSourceType sourceType, AliRtcEngine.AliRtcVideoSample videoSample){
@@ -447,7 +422,7 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
                     ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onLocalVideoSample", Toast.LENGTH_SHORT);
                 }
             });
-            return isVideoEngineContinue;
+            return isWriteBackToSDK;
         }
 
         @Override
@@ -464,7 +439,7 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
              */
             ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onRemoteVideoSample", Toast.LENGTH_SHORT);
 
-            return isVideoEngineContinue;
+            return isWriteBackToSDK;
         }
 
         @Override
@@ -479,7 +454,7 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
              */
             ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onPreEncodeVideoSample", Toast.LENGTH_SHORT);
 
-            return isVideoEngineContinue;
+            return isWriteBackToSDK;
         }
 
     };
@@ -489,12 +464,9 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
             mAliRtcEngine.stopPreview();
             mAliRtcEngine.setLocalViewConfig(null, AliRtcVideoTrackCamera);
             mAliRtcEngine.leaveChannel();
+            mAliRtcEngine.unRegisterLocalVideoTextureObserver();
             mAliRtcEngine.destroy();
             mAliRtcEngine = null;
-
-            handler.post(() -> {
-                ToastHelper.showToast(this, "Leave Channel", Toast.LENGTH_SHORT);
-            });
         }
         hasJoined = false;
         for (ViewGroup value : remoteViews.values()) {

@@ -24,14 +24,17 @@ class VideoRawFrameConfig {
     // 写会SDK
     var isWriteBack: Bool // 是否写回SDK,仅支持I420和CVPixelBuffer
     
+    var isEnableTextureCallback: Bool
+    
     init() {
-        self.isCaptureVideoFrameEnable =  false
+        self.isCaptureVideoFrameEnable =  true
         self.isRemoteVideoFrameEnable = false
         self.isPreEncodeVideoFrameEnable = false
         self.videoFormatPreference = .I420
         self.videoAlignmentMode = AliRtcAlignmentDefault
         self.mirrorMode = false
         self.isWriteBack = true
+        self.isEnableTextureCallback = true
     }
 }
 
@@ -91,6 +94,10 @@ class ProcessVideoRawDataSetParamsVC: UIViewController, UITextFieldDelegate {
     
     @IBAction func onWriteBackSwitchToggled(_ sender: UISwitch) {
         self.videoRawFrameConfig.isWriteBack = sender.isOn
+    }
+    
+    @IBAction func onTextureDataSwitchToggled(_ sender: UISwitch) {
+        self.videoRawFrameConfig.isEnableTextureCallback = sender.isOn
     }
     
     @objc func dismissKeyboardAndPickers() {
@@ -247,6 +254,7 @@ class ProcessVideoRawDataMainVC: UIViewController {
     private var captureInfoLabel: UILabel!
     private var preEncodeInfoLabel: UILabel!
     private var remoteInfoLabel: UILabel!
+    private var textureDataInfoLabel: UILabel!
     
     func setup() {
         
@@ -289,6 +297,11 @@ class ProcessVideoRawDataMainVC: UIViewController {
         engine.setDefaultSubscribeAllRemoteVideoStreams(true)
         engine.subscribeAllRemoteVideoStreams(true)
         
+        // 纹理数据回调
+        if(self.videoRawFrameConfig?.isEnableTextureCallback == true) {
+            engine.registerLocalVideoTexture()
+        }
+        
         self.rtcEngine = engine
     }
     
@@ -312,14 +325,18 @@ class ProcessVideoRawDataMainVC: UIViewController {
         captureInfoLabel = createLabel()
         preEncodeInfoLabel = createLabel()
         remoteInfoLabel = createLabel()
+        textureDataInfoLabel = createLabel()
+        
         
         captureInfoLabel.text = "Capture: -"
         preEncodeInfoLabel.text = "PreEncode: -"
-        remoteInfoLabel.text = "🌐 Remote -"
+        remoteInfoLabel.text = "Remote -"
+        textureDataInfoLabel.text = "Texture -"
         
         self.view.addSubview(captureInfoLabel)
         self.view.addSubview(preEncodeInfoLabel)
         self.view.addSubview(remoteInfoLabel)
+        self.view.addSubview(textureDataInfoLabel)
         // 布局：垂直排列在顶部 safeArea 下方
         NSLayoutConstraint.activate([
             captureInfoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -335,7 +352,12 @@ class ProcessVideoRawDataMainVC: UIViewController {
             remoteInfoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             remoteInfoLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             remoteInfoLabel.topAnchor.constraint(equalTo: preEncodeInfoLabel.bottomAnchor, constant: margin),
-            remoteInfoLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+            remoteInfoLabel.heightAnchor.constraint(equalToConstant: labelHeight),
+            
+            textureDataInfoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            textureDataInfoLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            textureDataInfoLabel.topAnchor.constraint(equalTo: remoteInfoLabel.bottomAnchor, constant: margin),
+            textureDataInfoLabel.heightAnchor.constraint(equalToConstant: labelHeight)
         ])
     }
 
@@ -488,11 +510,29 @@ extension ProcessVideoRawDataMainVC: AliRtcEngineDelegate {
     }
     // 远端视频数据
     func onRemoteVideoSample(_ uid: String, videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
-        "onRemoteVideoSample".printLog()
         let message = "onRemoteVideoSample: uid: \(uid), timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(videoSample.width), height: \(videoSample.height), dataLength: \(videoSample.dataLength)"
         message.printLog()
         updateInfoLabel(remoteInfoLabel, text: message)
         return true
+    }
+    // 纹理数据
+    func onTextureCreate(_ context: UnsafeMutableRawPointer?) {
+        let message = "onTextureCreate"
+        message.printLog()
+        updateInfoLabel(textureDataInfoLabel, text: message)
+    }
+    
+    func onTextureUpdate(_ textureId: Int32, width: Int32, height: Int32, videoSample: AliRtcVideoDataSample) -> Int32 {
+        let message = "onTextureUpdate: textureId: \(textureId), timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(width), height: \(height)"
+        message.printLog()
+        updateInfoLabel(textureDataInfoLabel, text: message)
+        return textureId
+    }
+    
+    func onTextureDestory() {
+        let message = "onTextureDestroy"
+        message.printLog()
+        updateInfoLabel(textureDataInfoLabel, text: message)
     }
     // MARK: Other Callback
     func onJoinChannelResult(_ result: Int32, channel: String, elapsed: Int32) {

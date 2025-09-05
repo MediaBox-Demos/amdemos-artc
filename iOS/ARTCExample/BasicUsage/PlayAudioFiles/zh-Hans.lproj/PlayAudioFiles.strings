@@ -1,0 +1,126 @@
+
+/* Class = "UILabel"; text = "Loop Count"; ObjectID = "35l-AN-Mc8"; */
+"35l-AN-Mc8.text" = "循环次数";
+
+/* Class = "UIButton"; configuration.title = "Stop"; ObjectID = "7pi-2z-l7i"; */
+"7pi-2z-l7i.configuration.title" = "停止";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "7pi-2z-l7i"; */
+"7pi-2z-l7i.normalTitle" = "停止";
+
+/* Class = "UIButton"; configuration.title = "Resume"; ObjectID = "9Oe-mq-Vhp"; */
+"9Oe-mq-Vhp.configuration.title" = "恢复";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9Oe-mq-Vhp"; */
+"9Oe-mq-Vhp.normalTitle" = "恢复";
+
+/* Class = "UIButton"; configuration.title = "Start"; ObjectID = "9Su-uG-oum"; */
+"9Su-uG-oum.configuration.title" = "开始";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9Su-uG-oum"; */
+"9Su-uG-oum.normalTitle" = "开始";
+
+/* Class = "UIButton"; configuration.title = "Resume All"; ObjectID = "9gC-Nq-Hh0"; */
+"9gC-Nq-Hh0.configuration.title" = "恢复所有";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9gC-Nq-Hh0"; */
+"9gC-Nq-Hh0.normalTitle" = "恢复所有";
+
+/* Class = "UIButton"; configuration.title = "Start"; ObjectID = "BIv-Yd-XkY"; */
+"BIv-Yd-XkY.configuration.title" = "开始";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "BIv-Yd-XkY"; */
+"BIv-Yd-XkY.normalTitle" = "开始";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Cfb-fn-nql"; */
+"Cfb-fn-nql.text" = "Label";
+
+/* Class = "UILabel"; text = "Playout Volume"; ObjectID = "Cl2-Bk-qUY"; */
+"Cl2-Bk-qUY.text" = "播放音量";
+
+/* Class = "UIButton"; configuration.title = "Resume"; ObjectID = "J8W-0I-nT5"; */
+"J8W-0I-nT5.configuration.title" = "恢复";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "J8W-0I-nT5"; */
+"J8W-0I-nT5.normalTitle" = "恢复";
+
+/* Class = "UILabel"; text = "Loop Count"; ObjectID = "NOH-9A-uvU"; */
+"NOH-9A-uvU.text" = "循环次数";
+
+/* Class = "UILabel"; text = "Volume"; ObjectID = "P3l-4k-wAe"; */
+"P3l-4k-wAe.text" = "音量";
+
+/* Class = "UIButton"; configuration.title = "Unload"; ObjectID = "R5o-sP-efW"; */
+"R5o-sP-efW.configuration.title" = "取消加载";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "R5o-sP-efW"; */
+"R5o-sP-efW.normalTitle" = "取消加载";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "TQZ-ff-5ft"; */
+"TQZ-ff-5ft.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UIButton"; configuration.title = "Pause"; ObjectID = "TcL-9m-Ckt"; */
+"TcL-9m-Ckt.configuration.title" = "暂停";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "TcL-9m-Ckt"; */
+"TcL-9m-Ckt.normalTitle" = "暂停";
+
+/* Class = "UILabel"; text = "Audio Accompany File"; ObjectID = "UUg-ur-ZwE"; */
+"UUg-ur-ZwE.text" = "音频伴奏文件";
+
+/* Class = "UIButton"; configuration.title = "Stop"; ObjectID = "Wwm-tG-9oG"; */
+"Wwm-tG-9oG.configuration.title" = "停止";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Wwm-tG-9oG"; */
+"Wwm-tG-9oG.normalTitle" = "停止";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "X5d-jH-eGr"; */
+"X5d-jH-eGr.placeholder" = "Channel Id";
+
+/* Class = "UILabel"; text = "Audio Effects"; ObjectID = "XeO-ad-y2f"; */
+"XeO-ad-y2f.text" = "音效";
+
+/* Class = "UILabel"; text = "All Effects Volume"; ObjectID = "a9l-Id-4Ab"; */
+"a9l-Id-4Ab.text" = "所有音效音量";
+
+/* Class = "UILabel"; text = "Volume"; ObjectID = "kZy-Vj-aMZ"; */
+"kZy-Vj-aMZ.text" = "音量";
+
+/* Class = "UIButton"; configuration.title = "Stop All"; ObjectID = "m8K-ka-AQJ"; */
+"m8K-ka-AQJ.configuration.title" = "停止所有";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "m8K-ka-AQJ"; */
+"m8K-ka-AQJ.normalTitle" = "停止所有";
+
+/* Class = "UILabel"; text = "Audio Effect File"; ObjectID = "peX-uw-KoX"; */
+"peX-uw-KoX.text" = "音频音效文件";
+
+/* Class = "UILabel"; text = "Publish Volume"; ObjectID = "sPQ-tX-cXS"; */
+"sPQ-tX-cXS.text" = "推流音量";
+
+/* Class = "UIButton"; configuration.title = "Pause All"; ObjectID = "teU-0N-eEc"; */
+"teU-0N-eEc.configuration.title" = "暂停所有";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "teU-0N-eEc"; */
+"teU-0N-eEc.normalTitle" = "暂停所有";
+
+/* Class = "UIButton"; configuration.title = "Pause"; ObjectID = "vAc-Ej-JnR"; */
+"vAc-Ej-JnR.configuration.title" = "暂停";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "vAc-Ej-JnR"; */
+"vAc-Ej-JnR.normalTitle" = "暂停";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "wpC-p0-H9S"; */
+"wpC-p0-H9S.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wpC-p0-H9S"; */
+"wpC-p0-H9S.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Audio Accompany"; ObjectID = "zAg-K2-5fq"; */
+"zAg-K2-5fq.text" = "伴奏";
+
+/* Class = "UIButton"; configuration.title = "Preload"; ObjectID = "zRO-OX-t2y"; */
+"zRO-OX-t2y.configuration.title" = "预加载";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "zRO-OX-t2y"; */
+"zRO-OX-t2y.normalTitle" = "预加载";

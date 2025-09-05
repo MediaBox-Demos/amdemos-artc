@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Audio Capture Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="CustomAudioCaptureSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8I-Ff-jaV">
+                                <rect key="frame" x="24" y="58.999999999999993" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qkB-hm-fk1">
+                                <rect key="frame" x="24" y="164.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="AC0-5U-OPK">
+                                <rect key="frame" x="24" y="222.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Custom Audio Capture" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sU5-DF-an3">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mmu-eL-tYA">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="92x-Kn-cCR">
+                                <rect key="frame" x="24" y="277.33333333333331" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Audio Source" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uC-RA-4Es">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mTz-Va-FVq">
+                                        <rect key="frame" x="160" y="0.0" width="185" height="32"/>
+                                        <segments>
+                                            <segment title="Local File"/>
+                                            <segment title="Microphone"/>
+                                        </segments>
+                                    </segmentedControl>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="woY-zS-nw4">
+                                <rect key="frame" x="24" y="332.33333333333331" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Local Playout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vmH-At-ow2">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BTr-kz-DXL">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n9t-eW-OeY">
+                                <rect key="frame" x="135.33333333333334" y="387.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="nc7-Rf-NtS"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="92x-Kn-cCR" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="7ac-zj-CDl"/>
+                            <constraint firstItem="92x-Kn-cCR" firstAttribute="top" secondItem="AC0-5U-OPK" secondAttribute="bottom" constant="24" id="93H-qY-szF"/>
+                            <constraint firstItem="woY-zS-nw4" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="C4S-Lw-MLb"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="92x-Kn-cCR" secondAttribute="trailing" constant="24" id="DDy-AR-EIG"/>
+                            <constraint firstItem="n9t-eW-OeY" firstAttribute="top" secondItem="woY-zS-nw4" secondAttribute="bottom" constant="24" id="H3D-is-mWZ"/>
+                            <constraint firstItem="n9t-eW-OeY" firstAttribute="centerX" secondItem="qkB-hm-fk1" secondAttribute="centerX" id="Ifv-8b-CgT"/>
+                            <constraint firstItem="qkB-hm-fk1" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="Kwb-Ki-AMJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="woY-zS-nw4" secondAttribute="trailing" constant="24" id="LmG-sn-C1X"/>
+                            <constraint firstItem="z8I-Ff-jaV" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="Ln6-bx-bQA"/>
+                            <constraint firstItem="qkB-hm-fk1" firstAttribute="top" secondItem="z8I-Ff-jaV" secondAttribute="bottom" constant="24" id="NBo-2E-qNJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="AC0-5U-OPK" secondAttribute="trailing" constant="24" id="WIz-b6-k7t"/>
+                            <constraint firstItem="z8I-Ff-jaV" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="WMA-4E-MvM"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="qkB-hm-fk1" secondAttribute="trailing" constant="24" id="Z5k-Pw-EWx"/>
+                            <constraint firstItem="AC0-5U-OPK" firstAttribute="top" secondItem="qkB-hm-fk1" secondAttribute="bottom" constant="24" id="bOr-ZP-5QR"/>
+                            <constraint firstItem="AC0-5U-OPK" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="p84-Aj-ioL"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="z8I-Ff-jaV" secondAttribute="trailing" constant="24" id="tHR-WU-MMi"/>
+                            <constraint firstItem="woY-zS-nw4" firstAttribute="top" secondItem="92x-Kn-cCR" secondAttribute="bottom" constant="24" id="xQd-yr-cJS"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioLocalPlayoutSwitch" destination="BTr-kz-DXL" id="DGq-Qe-dK7"/>
+                        <outlet property="audioSourceSegmentedControl" destination="mTz-Va-FVq" id="ZAu-e2-JlQ"/>
+                        <outlet property="channelIdTextField" destination="qkB-hm-fk1" id="bo3-0n-w26"/>
+                        <outlet property="customAudioCaptureSwitch" destination="mmu-eL-tYA" id="yop-1K-21G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="-27"/>
+        </scene>
+        <!--Custom Audio Capture MainVC-->
+        <scene sceneID="aB6-oW-TsO">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="eIK-Pg-ZYd" customClass="CustomAudioCaptureMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6km-at-nzi">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ry-v4-cXm">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="axl-KT-IRq"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="9Ry-v4-cXm" firstAttribute="trailing" secondItem="axl-KT-IRq" secondAttribute="trailing" id="N69-sG-lRc"/>
+                            <constraint firstItem="9Ry-v4-cXm" firstAttribute="top" secondItem="axl-KT-IRq" secondAttribute="top" id="PpX-t7-vo6"/>
+                            <constraint firstItem="9Ry-v4-cXm" firstAttribute="leading" secondItem="axl-KT-IRq" secondAttribute="leading" id="VGW-Es-Ndz"/>
+                            <constraint firstItem="axl-KT-IRq" firstAttribute="bottom" secondItem="9Ry-v4-cXm" secondAttribute="bottom" id="Y3M-UO-dqs"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="9Ry-v4-cXm" id="Hfi-N3-sIX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lhb-TW-vNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="755" y="-27"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

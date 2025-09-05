@@ -13,31 +13,38 @@ ARTC SDK iOS平台(Swift语言)的API示例Demo，展示ARTC SDK 的API调用示
 
 ### 源码结构
 ```
-├── iOS                                // iOS平台工程结构根目录
-│   ├── ARTCExample                    // API Example源码目录
-│       ├── Common                     // 通用模块
-│           ├── ARTCTokenHelper.swift      // 设置AppId/AppKey等信息
-│           ├── ...                        // 其他文件
-│       ├── QuickStart                 // 快速开发模块
-│           ├── TokenGenerate              // Token生成及入会
-│           ├── VideoCall                  // 快速实现音视频通话
-│           ├── VoiceChat                  // 快速实现语聊房
+├── iOS                         // iOS平台工程结构根目录
+│   ├── ARTCExample                // API Example源码目录
+│       ├── Common                      // 通用模块
+│           ├── ARTCTokenHelper.swift       // 设置AppId/AppKey等信息
+│           ├── ...                         // 其他文件
+│       ├── QuickStart                  // 快速开发模块
+│           ├── TokenGenerate               // Token生成及入会
+│           ├── VideoCall                   // 快速实现音视频通话
+│           ├── VoiceChat                   // 快速实现语聊房
 │       ├── BasicUsage                  // 基础功能模块
-│           ├── AudioBasicUsage  // 常用音频操作和配置
-│           ├── VideoBasicUsage // 常用视频操作和配置
-│           ├── CameraCommonSetting // 摄像头常规配置
-│           ├── SEIUsage         // SEI消息发送和接收
-│           ├── DataChannelMessage // 用户自定义消息发送和接收
-│           ├── ScreenShare         // 屏幕共享
-│           ├── StreamMonitoring // 通话中推拉流质量监测
-│       ├── AdvancedUsage          // 高级功能模块
-│           ├── ProcessAudioRawData  // 原始音频数据
-│           ├── ProcessVideoRawData // 原始视频数据
-│       ├── Setting                    // 设置模块
-│       ├── ...                        // 工程其他文件
-│   ├── ARTCExample.xcodeproj          // Demo的Project
-│   ├── ARTCExample.xcworkspace        // Demo的workspace
-│   ├── Podfile                        // Demo的podfile文件
+│           ├── AudioBasicUsage             // 常用音频操作和配置
+│           ├── VideoBasicUsage             // 常用视频操作和配置
+│           ├── CameraCommonSetting         // 摄像头常规配置
+│           ├── SEIUsage                    // SEI消息发送和接收
+│           ├── DataChannelMessage          // 用户自定义消息发送和接收
+│           ├── ScreenShare                 // 屏幕共享
+│           ├── StreamMonitoring            // 通话中推拉流质量监测
+│           ├── PlayAudioFiles              // 播放伴奏和音效
+│       ├── AdvancedUsage               // 高级功能模块
+│           ├── ProcessAudioRawData         // 原始音频数据
+│           ├── ProcessVideoRawData         // 原始视频数据
+|           |—— CustomAudioCapture          // 自定义音频采集
+|           |—— CustomAudioRender           // 自定义音频播放
+|           |—— CustomVideoCapture          // 自定义视频采集
+|           |—— CustomVideoRender           // 自定义视频渲染
+|           |—— PreJoinChannelTest          // 入会前网络和设备检测
+|           |—— PictureInPicture            // 画中画
+│       ├── Setting                     // 设置模块
+│       ├── ...                         // 工程其他文件
+│   ├── ARTCExample.xcodeproj        // Demo的Project
+│   ├── ARTCExample.xcworkspace      // Demo的workspace
+│   ├── Podfile                      // Demo的podfile文件
 
 ```
 

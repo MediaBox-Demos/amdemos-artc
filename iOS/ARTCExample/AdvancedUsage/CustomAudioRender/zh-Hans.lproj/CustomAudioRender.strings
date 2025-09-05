@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "5sC-WG-a73"; */
+"5sC-WG-a73.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "SW7-3r-5YO"; */
+"SW7-3r-5YO.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "SW7-3r-5YO"; */
+"SW7-3r-5YO.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "VQ3-Qg-jwX"; */
+"VQ3-Qg-jwX.placeholder" = "频道 Id";
+
+/* Class = "UILabel"; text = "Custom Audio Render"; ObjectID = "vri-lz-ek0"; */
+"vri-lz-ek0.text" = "自定义音频播放";

@@ -7,16 +7,20 @@
     <string name="leave_channel">Leave</string>
 
     <string name="advanced_usage">advanced usage</string>
+    <string name="custom_audio_capture">Custom Audio Capture</string>
+    <string name="custom_audio_render">Custom Audio Render</string>
+    <string name="custom_video_capture">Custom Video Capture</string>
+    <string name="custom_video_render">Custom Video Render</string>
+    <string name="pre_join_channel_test">Pre-join Channel Test</string>
+    <string name="picture_in_picture">Picture in Picture</string>
 
-    <string name="audio_external">Custom external audio data capture</string>
-
-    <string name="audio_raw">Get raw audio data</string>
-    <string name="video_raw">Get raw video and texture data</string>
+    <string name="process_audio_raw_data">Get raw audio data</string>
+    <string name="process_video_raw_data">Get raw video data</string>
     <string name="quality_monitor">Call quality monitoring</string>
 
 
     <string name="video_chat_channel_desc">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
-    <string name="video_chat_join_room">Join Room</string>
+    <string name="video_chat_join_channel">Join Channel</string>
     <string name="video_chat_local_view">Local View</string>
     <string name="video_chat_connection_failed">Connection failed, please check the network</string>
 
@@ -31,9 +35,33 @@
     <string name="start_raw_data_callback">Start callback to get raw data, needs user customization</string>
     <string name="get_raw_data_failed">Failed to get</string>
     <string name="stop_raw_data_callback">Stop getting raw data</string>
+    <string name="stop_External_playback">Stop custom external audio data playback</string>
+    <string name="start_External_playback">Start callback to get raw data, needs user customization</string>
 
     <string name="stop_raw_data_failed">Failed to stop</string>
     <string name="enable_audio_writeback">Enabled, aliRTC engine callback will continue to write back to SDK after getting raw data</string>
     <string name="disable_audio_writeback">Disabled, aliRTC engine callback will not write back to SDK after getting raw data</string>
+
+    <string name="set_external_audio_first">please set external audio source first</string>
+    <string name="custom_playback">Custom Audio Playback</string>
+
+    <string name="local_media">Local Media</string>
+    <string name="microphone">Microphone</string>
+    <string name="audio_dump">Audio Dump</string>
+    <string name="audio_source">Audio Source</string>
+    <string name="local_playout">Local Playout</string>
+    <string name="get_video_raw_data">Get Video Raw Data</string>
+    <string name="get_video_texture_data">Get Video Texture Data</string>
+    <string name="write_back_to_sdk">Write Back to SDK</string>
+    <string name="channel_id_label">ChannelID:</string>
+    <string name="custom_video_capture_video_source">Video Source</string>
+    <string name="video_source_yuv">YUV</string>
+    <string name="video_source_texture">Texture</string>
+    <string name="test_microphone">Test Microphone</string>
+    <string name="stop_test">Stop Test</string>
+    <string name="test_speaker">Test Speaker</string>
+    <string name="test_camera">Test Camera</string>
+    <string name="test_device">Test Device</string>
+    <string name="test_network">Test Network</string>
 
 </resources>

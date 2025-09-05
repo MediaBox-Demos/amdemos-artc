@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "Audio Source"; ObjectID = "6uC-RA-4Es"; */
+"6uC-RA-4Es.text" = "音频源";
+
+/* Class = "UISegmentedControl"; mTz-Va-FVq.segmentTitles[0] = "Local File"; ObjectID = "mTz-Va-FVq"; */
+"mTz-Va-FVq.segmentTitles[0]" = "本地文件";
+
+/* Class = "UISegmentedControl"; mTz-Va-FVq.segmentTitles[1] = "Microphone"; ObjectID = "mTz-Va-FVq"; */
+"mTz-Va-FVq.segmentTitles[1]" = "麦克风";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "n9t-eW-OeY"; */
+"n9t-eW-OeY.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "n9t-eW-OeY"; */
+"n9t-eW-OeY.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "qkB-hm-fk1"; */
+"qkB-hm-fk1.placeholder" = "频道 Id";
+
+/* Class = "UILabel"; text = "Custom Audio Capture"; ObjectID = "sU5-DF-an3"; */
+"sU5-DF-an3.text" = "自定义音频采集";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "z8I-Ff-jaV"; */
+"z8I-Ff-jaV.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UILabel"; text = "Local Playout"; ObjectID = "vmH-At-ow2"; */
+"vmH-At-ow2.text" = "本地播放";

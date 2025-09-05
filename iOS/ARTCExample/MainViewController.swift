@@ -42,12 +42,19 @@ class MainViewController: UIViewController {
             ActionItem(name: "SEI Sending and Receiving".localized, detail: "".localized, sbName: "SEIUsage"),
             ActionItem(name: "Common Message Sending And Receiving".localized, detail: "".localized, sbName: "DataChannelMessage"),
             ActionItem(name: "Screen Share".localized, detail: "".localized, sbName: "ScreenShare"),
-            ActionItem(name: "Stream Monitoring".localized, detail: "".localized, sbName: "StreamMonitoring")
+            ActionItem(name: "Stream Monitoring".localized, detail: "".localized, sbName: "StreamMonitoring"),
+            ActionItem(name: "Play Audio Files".localized, detail: "".localized, sbName: "PlayAudioFiles"),
         ]),
         
         GroupItem(name: "ADVANCED".localized, actions: [
             ActionItem(name: "Process Audio Raw Data".localized, detail: "".localized, sbName: "ProcessAudioRawData"),
             ActionItem(name: "Process Video Raw Data".localized, detail: "".localized, sbName: "ProcessVideoRawData"),
+            ActionItem(name: "Custom Audio Capture".localized, detail: "".localized, sbName: "CustomAudioCapture"),
+            ActionItem(name: "Custom Audio Render".localized, detail: "".localized, sbName: "CustomAudioRender"),
+            ActionItem(name: "Custom Video Capture".localized, detail: "".localized, sbName: "CustomVideoCapture"),
+            ActionItem(name: "Custom Video Render".localized, detail: "".localized, sbName: "CustomVideoRender"),
+            ActionItem(name: "Pre-Join Channel Test".localized, detail: "".localized, sbName: "PreJoinChannelTest"),
+            ActionItem(name: "Picture In Picture".localized, detail: "".localized, sbName: "PictureInPicture")
         ]),
     ]
 }

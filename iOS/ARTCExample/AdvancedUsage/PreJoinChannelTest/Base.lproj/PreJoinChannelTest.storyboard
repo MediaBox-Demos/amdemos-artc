@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Pre Join Channel Test Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="PreJoinChannelTestSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The test needs to be conducted before joining the channel." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iB0-vQ-fcg">
+                                <rect key="frame" x="24" y="59" width="345" height="40.666666666666657"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P2e-aY-4A1">
+                                <rect key="frame" x="24" y="111.66666666666669" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mN5-vz-bRK">
+                                <rect key="frame" x="135.33333333333334" y="157.66666666666666" width="122.33333333333334" height="34.333333333333343"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="5bQ-c7-f46"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="QId-5V-nBZ">
+                                <rect key="frame" x="24" y="204" width="345" height="256"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9aR-0z-PlF">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e7n-nX-wFS">
+                                        <rect key="frame" x="0.0" y="28.333333333333339" width="345" height="47.666666666666657"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nv4-jM-GQZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="109.66666666666667" height="47.666666666666664"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Test Microphone">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="testMicrophoneBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Xbm-7n-zsB"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Go5-pm-b06">
+                                                <rect key="frame" x="117.66666666666666" y="0.0" width="109.66666666666666" height="47.666666666666664"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Test Speaker">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="testSpeakerBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="6iN-dm-iBm"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gA9-i6-Jrb">
+                                                <rect key="frame" x="235.33333333333329" y="0.0" width="109.66666666666666" height="47.666666666666664"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Test Camera">
+                                                    <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="testCameraBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="wQq-yn-GTJ"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hja-T3-fGS">
+                                        <rect key="frame" x="0.0" y="84" width="345" height="172"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                            </stackView>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcT-e9-NPp">
+                                <rect key="frame" x="24" y="683" width="345" height="135"/>
+                            </scrollView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ohh-en-oer">
+                                <rect key="frame" x="24" y="472" width="345" height="199"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFB-Od-0SW">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Scy-1G-gpl">
+                                        <rect key="frame" x="0.0" y="28.333333333333314" width="345" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Test Network">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="testNetworkBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="nvj-mE-Vr3"/>
+                                        </connections>
+                                    </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bAc-Sf-6Bb">
+                                        <rect key="frame" x="0.0" y="67.333333333333357" width="345" height="131.66666666666663"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ohh-en-oer" firstAttribute="top" secondItem="QId-5V-nBZ" secondAttribute="bottom" constant="12" id="2go-yJ-wIp"/>
+                            <constraint firstItem="ohh-en-oer" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="3mU-Mq-ZxY"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="P2e-aY-4A1" secondAttribute="trailing" constant="24" id="6Ax-H6-bq4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QId-5V-nBZ" secondAttribute="trailing" constant="24" id="846-DA-sYf"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="ohh-en-oer" secondAttribute="trailing" constant="24" id="Bts-EH-bMD"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PcT-e9-NPp" secondAttribute="trailing" constant="24" id="GeS-wq-k4q"/>
+                            <constraint firstItem="mN5-vz-bRK" firstAttribute="top" secondItem="P2e-aY-4A1" secondAttribute="bottom" constant="12" id="Hob-57-LFI"/>
+                            <constraint firstItem="QId-5V-nBZ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="Pmz-FD-Dg5"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="PcT-e9-NPp" secondAttribute="bottom" id="bWN-gC-5qN"/>
+                            <constraint firstItem="mN5-vz-bRK" firstAttribute="centerX" secondItem="P2e-aY-4A1" secondAttribute="centerX" id="bZa-zL-a3f"/>
+                            <constraint firstItem="PcT-e9-NPp" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="f3l-F6-cvP"/>
+                            <constraint firstItem="PcT-e9-NPp" firstAttribute="top" secondItem="ohh-en-oer" secondAttribute="bottom" constant="12" id="h3e-dl-QAY"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="iB0-vQ-fcg" secondAttribute="trailing" constant="24" id="jfc-1Q-d7q"/>
+                            <constraint firstItem="iB0-vQ-fcg" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="lDH-tb-T5A"/>
+                            <constraint firstItem="PcT-e9-NPp" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" constant="683" id="nMI-7q-hCk"/>
+                            <constraint firstItem="P2e-aY-4A1" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="oBg-o3-Yvt"/>
+                            <constraint firstItem="ohh-en-oer" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" constant="472" id="pHe-RH-o9R"/>
+                            <constraint firstItem="QId-5V-nBZ" firstAttribute="top" secondItem="mN5-vz-bRK" secondAttribute="bottom" constant="12" id="qkM-Hb-LXv"/>
+                            <constraint firstItem="iB0-vQ-fcg" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="qkO-Z1-twv"/>
+                            <constraint firstItem="P2e-aY-4A1" firstAttribute="top" secondItem="iB0-vQ-fcg" secondAttribute="bottom" constant="12" id="vO6-RF-djd"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="P2e-aY-4A1" id="wgs-Zn-YPp"/>
+                        <outlet property="contentScrollView" destination="PcT-e9-NPp" id="fBX-ei-E77"/>
+                        <outlet property="testCameraBtn" destination="gA9-i6-Jrb" id="px0-Su-qx6"/>
+                        <outlet property="testDeviceTextView" destination="hja-T3-fGS" id="OxA-fp-ieb"/>
+                        <outlet property="testMicrophoneBtn" destination="nv4-jM-GQZ" id="3sg-35-ONc"/>
+                        <outlet property="testNetworkBtn" destination="Scy-1G-gpl" id="fiL-1T-0jN"/>
+                        <outlet property="testNetworkTextView" destination="bAc-Sf-6Bb" id="clp-S2-GZZ"/>
+                        <outlet property="testSpeakderBtn" destination="Go5-pm-b06" id="RAR-SE-GuP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

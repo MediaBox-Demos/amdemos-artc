@@ -3,74 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/video_chat_main"
+    android:id="@+id/video_basic_usage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VideoBasicUsage.VideoBasicUsageActivity">
 
-    <!-- 视频显示区域 -->
-    <LinearLayout
-        android:id="@+id/ll_video_layout"
+    <ScrollView
+        android:id="@+id/scroll_remote_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="10dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_channel_layout"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 第一行视频布局 -->
-        <LinearLayout
-            android:id="@+id/video_layout_1"
+        <GridLayout
+            android:id="@+id/grid_video_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/fl_local"
-                android:layout_width="108dp"
-                android:layout_height="192dp"
-                android:layout_weight="0.5"/>
-
-            <FrameLayout
-                android:id="@+id/fl_remote"
-                android:layout_width="108dp"
-                android:layout_height="192dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.5"/>
-        </LinearLayout>
-
-        <!-- 第二行视频布局 -->
-        <LinearLayout
-            android:id="@+id/video_layout_2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/fl_remote2"
-                android:layout_width="108dp"
-                android:layout_height="192dp"
-                android:layout_weight="0.5"/>
-
-            <FrameLayout
-                android:id="@+id/fl_remote3"
-                android:layout_width="108dp"
-                android:layout_height="192dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.5"/>
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:padding="8dp" />
+    </ScrollView>
 
     <!-- 控制按钮区域 -->
     <LinearLayout
         android:id="@+id/ll_channel_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ll_video_layout"
+        app:layout_constraintTop_toBottomOf="@+id/scroll_remote_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

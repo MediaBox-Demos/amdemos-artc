@@ -6,6 +6,7 @@
     <string name="sei_message_send_and_receive">SEI发送和接收</string>
     <string name="screen_share">屏幕共享</string>
     <string name="custom_msg_Title">自定义消息发送和接收</string>
+    <string name="play_audio_files">播放伴奏和音效</string>
 
     <string name="video_chat_channel_desc">如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。</string>
     <string name="audio_route_speakerphone">扬声器</string>
@@ -128,4 +129,15 @@
     <string name="quality_monitor">通话质量监测</string>
     <string name="video_chat_connection_failed">连接失败，请检查网络</string>
 
+    <!-- 屏幕共享 -->
+    <string name="publish_local_video_stream">推送相机流</string>
+    <string name="start">开始</string>
+    <string name="pause">暂停</string>
+    <string name="resume">恢复</string>
+    <string name="stop">停止</string>
+    <string name="preload">预加载</string>
+    <string name="unload">取消加载</string>
+    <string name="stop_all">停止所有</string>
+    <string name="pause_all">暂停所有</string>
+    <string name="resume_all">恢复所有</string>
 </resources>
