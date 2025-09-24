@@ -50,5 +50,9 @@
             android:launchMode="singleTask"
             tools:targetApi="24" />
 
+        <activity android:name=".IntelligentDenoise.IntelligentDenoiseActivity"
+            android:label="@string/intelligent_denoise"
+            android:exported="false" />
+
     </application>
 </manifest>

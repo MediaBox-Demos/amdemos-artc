@@ -7,6 +7,7 @@
     <string name="screen_share">Screen Share</string>
     <string name="custom_msg_Title">Custom message sending and receiving</string>
     <string name="play_audio_files">Play Audio Files</string>
+    <string name="voice_change">Set Voice Change、Reverb、Beautify</string>
 
     <string name="audio_route_speakerphone">speakerphone</string>
     <string name="audio_route_earpiece">earpiece</string>
@@ -143,4 +144,42 @@
     <string name="stop_all">stop all</string>
     <string name="pause_all">pause all</string>
     <string name="resume_all">resume all</string>
+
+    <string name="voice_change_label">Voice Change</string>
+    <string name="reverb_label">Reverb</string>
+    <string name="voice_beautify_label">Voice Beautify</string>
+
+    <!-- 变声 -->
+    <string-array name="voice_change_options">
+        <item>OFF</item>
+        <item>Old Man</item>
+        <item>Baby Boy</item>
+        <item>Baby Girl</item>
+        <item>Robot</item>
+        <item>Daimo</item>
+        <item>KTV</item>
+        <item>Echo</item>
+        <item>Dialect</item>
+        <item>How</item>
+        <item>Electroinc</item>
+        <item>Phonograph</item>
+    </string-array>
+    <!-- 混响 -->
+    <string-array name="voice_reverb_options">
+        <item>OFF</item>
+        <item>Vocal I</item>
+        <item>Vocal II</item>
+        <item>Bathroom</item>
+        <item>Small Room Bright</item>
+        <item>Small Room Dark</item>
+        <item>Medium Room</item>
+        <item>Large Room</item>
+        <item>Church Hall</item>
+    </string-array>
+    <!-- 美声 -->
+    <string-array name="voice_opera_options">
+        <item>OFF</item>
+        <item>Vigorous</item>
+        <item>Ringing</item>
+    </string-array>
 </resources>

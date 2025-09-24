@@ -30,6 +30,8 @@ dependencies {
     implementation libs.appcompat
     implementation libs.material
     implementation libs.alivcsdk.artc
+    // 智能降噪
+    implementation 'com.alivc.live.component:intelligentdenoise:1.0.0'
     implementation project(path: ':KeyCenter')
     implementation libs.camera.video
     testImplementation libs.junit

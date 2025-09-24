@@ -20,6 +20,7 @@
     <string name="call_quality">通话中推拉流质量监测</string>
     <string name="play_audio_files">播放伴奏和音效</string>
     <string name="pre_join_channel_test">入会前测试</string>
+    <string name="set_voice_change_mode">设置变声、混响、美声</string>
 
     <string name="advance_features">进阶功能</string>
     <string name="raw_audio_capture">原始音频数据</string>
@@ -28,5 +29,5 @@
     <string name="custom_audio_render">自定义音频播放</string>
     <string name="custom_video_capture">自定义视频采集</string>
     <string name="picture_in_picture">画中画</string>
-
+    <string name="intelligent_denoise">智能降噪</string>
 </resources>

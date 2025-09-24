@@ -34,14 +34,17 @@
 		156627A32E4C6E01004E7863 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156627A22E4C6E01004E7863 /* CustomAudioRender.storyboard */; };
 		156B05CD2E675197007040F3 /* CustomVideoRenderSeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B05CC2E675197007040F3 /* CustomVideoRenderSeatView.swift */; };
 		156B05D52E67F67A007040F3 /* PictureInPictureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B05D42E67F67A007040F3 /* PictureInPictureVC.swift */; };
-		156B05DA2E6829A1007040F3 /* ARTCPixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B05D92E6829A1007040F3 /* ARTCPixelBufferRenderView.swift */; };
-		156B05DC2E6829D2007040F3 /* PIPSeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B05DB2E6829D2007040F3 /* PIPSeatView.swift */; };
 		156B05DF2E683399007040F3 /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156B05DE2E683399007040F3 /* PictureInPicture.storyboard */; };
 		156B05E42E683432007040F3 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156B05E32E683432007040F3 /* CustomVideoRender.storyboard */; };
+		156B05EA2E687000007040F3 /* WavRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B05E92E687000007040F3 /* WavRecorder.swift */; };
 		156D226B2E65BA8500E83252 /* CameraCaptureHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156D226A2E65BA8500E83252 /* CameraCaptureHelper.swift */; };
 		156D226E2E66457100E83252 /* CustomVideoCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156D226D2E66457100E83252 /* CustomVideoCapture.storyboard */; };
 		156D22732E66463E00E83252 /* PlayAudioFiles.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156D22722E66463E00E83252 /* PlayAudioFiles.storyboard */; };
 		158672022E5D458400C86B4E /* PlayAudioFilesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158672012E5D458400C86B4E /* PlayAudioFilesVC.swift */; };
+		159DC7902E78C9680033101C /* VoiceChangeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DC78F2E78C9680033101C /* VoiceChangeVC.swift */; };
+		159DC7952E7994FC0033101C /* IntelligentDenoiseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DC7942E7994FC0033101C /* IntelligentDenoiseVC.swift */; };
+		159DC79A2E799A2E0033101C /* IntelligentDenoise.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */; };
+		159DC79F2E799AAC0033101C /* VoiceChange.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159DC79E2E799AAC0033101C /* VoiceChange.storyboard */; };
 		15D53DDC2E430A93004957FF /* music.wav in Resources */ = {isa = PBXBuildFile; fileRef = 15D53DDB2E430A93004957FF /* music.wav */; };
 		15D53DDF2E433229004957FF /* CustomAudioCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15D53DDE2E433229004957FF /* CustomAudioCapture.storyboard */; };
 		15D53DE42E43339E004957FF /* CustomAudioRenderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D53DE32E43339E004957FF /* CustomAudioRenderVC.swift */; };
@@ -154,18 +157,23 @@
 		156627A52E4C6E03004E7863 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioRender.strings"; sourceTree = "<group>"; };
 		156B05CC2E675197007040F3 /* CustomVideoRenderSeatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoRenderSeatView.swift; sourceTree = "<group>"; };
 		156B05D42E67F67A007040F3 /* PictureInPictureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureInPictureVC.swift; sourceTree = "<group>"; };
-		156B05D92E6829A1007040F3 /* ARTCPixelBufferRenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARTCPixelBufferRenderView.swift; sourceTree = "<group>"; };
-		156B05DB2E6829D2007040F3 /* PIPSeatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIPSeatView.swift; sourceTree = "<group>"; };
 		156B05DD2E683399007040F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PictureInPicture.storyboard; sourceTree = "<group>"; };
 		156B05E12E68339B007040F3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		156B05E22E683432007040F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoRender.storyboard; sourceTree = "<group>"; };
 		156B05E62E683434007040F3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoRender.strings"; sourceTree = "<group>"; };
+		156B05E92E687000007040F3 /* WavRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavRecorder.swift; sourceTree = "<group>"; };
 		156D226A2E65BA8500E83252 /* CameraCaptureHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureHelper.swift; sourceTree = "<group>"; };
 		156D226C2E66457100E83252 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoCapture.storyboard; sourceTree = "<group>"; };
 		156D22702E66457400E83252 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoCapture.strings"; sourceTree = "<group>"; };
 		156D22712E66463E00E83252 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PlayAudioFiles.storyboard; sourceTree = "<group>"; };
 		156D22752E66464100E83252 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PlayAudioFiles.strings"; sourceTree = "<group>"; };
 		158672012E5D458400C86B4E /* PlayAudioFilesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAudioFilesVC.swift; sourceTree = "<group>"; };
+		159DC78F2E78C9680033101C /* VoiceChangeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChangeVC.swift; sourceTree = "<group>"; };
+		159DC7942E7994FC0033101C /* IntelligentDenoiseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntelligentDenoiseVC.swift; sourceTree = "<group>"; };
+		159DC7982E799A2E0033101C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/IntelligentDenoise.storyboard; sourceTree = "<group>"; };
+		159DC79C2E799A310033101C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/IntelligentDenoise.strings"; sourceTree = "<group>"; };
+		159DC79D2E799AAC0033101C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChange.storyboard; sourceTree = "<group>"; };
+		159DC7A12E799AAE0033101C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChange.strings"; sourceTree = "<group>"; };
 		15D53DDB2E430A93004957FF /* music.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music.wav; sourceTree = "<group>"; };
 		15D53DDD2E433229004957FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioCapture.storyboard; sourceTree = "<group>"; };
 		15D53DE12E43322B004957FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioCapture.strings"; sourceTree = "<group>"; };
@@ -276,6 +284,7 @@
 		152871152DF9617E00CC87C7 /* BasicUsage */ = {
 			isa = PBXGroup;
 			children = (
+				159DC78E2E78C94B0033101C /* VoiceChange */,
 				158672002E5D456800C86B4E /* PlayAudioFiles */,
 				15F3D0A32E37B0AE005186DB /* StreamMonitoring */,
 				155F08662E2645C7008B8661 /* DataChannelMessage */,
@@ -329,6 +338,7 @@
 		154F4FA12E277D6B001761F1 /* AdvancedUsage */ = {
 			isa = PBXGroup;
 			children = (
+				159DC7932E7994DE0033101C /* IntelligentDenoise */,
 				156B05D32E67F663007040F3 /* PictureInPicture */,
 				154DCD512E5F0020000CFC59 /* CustomVideoCapture */,
 				154DCD4B2E5EFDC6000CFC59 /* CustomVideoRender */,
@@ -362,6 +372,7 @@
 		1557F29A2E40B8BE0089F375 /* CustomAudioCapture */ = {
 			isa = PBXGroup;
 			children = (
+				156B05E82E686FEC007040F3 /* utils */,
 				1557F29B2E40B8DF0089F375 /* CustomAudioCaptureVC.swift */,
 				15D53DDE2E433229004957FF /* CustomAudioCapture.storyboard */,
 			);
@@ -388,20 +399,18 @@
 		156B05D32E67F663007040F3 /* PictureInPicture */ = {
 			isa = PBXGroup;
 			children = (
-				156B05D82E68298D007040F3 /* helper */,
 				156B05D42E67F67A007040F3 /* PictureInPictureVC.swift */,
 				156B05DE2E683399007040F3 /* PictureInPicture.storyboard */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
 		};
-		156B05D82E68298D007040F3 /* helper */ = {
+		156B05E82E686FEC007040F3 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				156B05D92E6829A1007040F3 /* ARTCPixelBufferRenderView.swift */,
-				156B05DB2E6829D2007040F3 /* PIPSeatView.swift */,
+				156B05E92E687000007040F3 /* WavRecorder.swift */,
 			);
-			path = helper;
+			path = utils;
 			sourceTree = "<group>";
 		};
 		156D22692E65BA6000E83252 /* helper */ = {
@@ -419,6 +428,24 @@
 				156D22722E66463E00E83252 /* PlayAudioFiles.storyboard */,
 			);
 			path = PlayAudioFiles;
+			sourceTree = "<group>";
+		};
+		159DC78E2E78C94B0033101C /* VoiceChange */ = {
+			isa = PBXGroup;
+			children = (
+				159DC78F2E78C9680033101C /* VoiceChangeVC.swift */,
+				159DC79E2E799AAC0033101C /* VoiceChange.storyboard */,
+			);
+			path = VoiceChange;
+			sourceTree = "<group>";
+		};
+		159DC7932E7994DE0033101C /* IntelligentDenoise */ = {
+			isa = PBXGroup;
+			children = (
+				159DC7942E7994FC0033101C /* IntelligentDenoiseVC.swift */,
+				159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */,
+			);
+			path = IntelligentDenoise;
 			sourceTree = "<group>";
 		};
 		15D53DD92E430A4E004957FF /* Resources */ = {
@@ -694,6 +721,7 @@
 			files = (
 				410B2BBE2DE5B7F900E274D1 /* TokenGenerate.storyboard in Resources */,
 				154DCD482E5EFB4C000CFC59 /* PreJoinChannelTest.storyboard in Resources */,
+				159DC79F2E799AAC0033101C /* VoiceChange.storyboard in Resources */,
 				418D33F82B4EA19B003A5959 /* LaunchScreen.storyboard in Resources */,
 				154F4F9D2E277B90001761F1 /* DataChannelMessage.storyboard in Resources */,
 				156D22732E66463E00E83252 /* PlayAudioFiles.storyboard in Resources */,
@@ -707,6 +735,7 @@
 				15F3D0702E3662C4005186DB /* ScreenShare.storyboard in Resources */,
 				154DCD3F2E5DE6AC000CFC59 /* applause.wav in Resources */,
 				156B05E42E683432007040F3 /* CustomVideoRender.storyboard in Resources */,
+				159DC79A2E799A2E0033101C /* IntelligentDenoise.storyboard in Resources */,
 				418D33F52B4EA19B003A5959 /* Assets.xcassets in Resources */,
 				150327272E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard in Resources */,
 				154DCD3D2E5DE6A4000CFC59 /* thunder.wav in Resources */,
@@ -802,6 +831,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159DC7952E7994FC0033101C /* IntelligentDenoiseVC.swift in Sources */,
 				155F08682E2645ED008B8661 /* DataChannelMessageVC.swift in Sources */,
 				410B2BA42DE3F56D00E274D1 /* ARTCTokenHelper.swift in Sources */,
 				156D226B2E65BA8500E83252 /* CameraCaptureHelper.swift in Sources */,
@@ -818,7 +848,8 @@
 				156B05D52E67F67A007040F3 /* PictureInPictureVC.swift in Sources */,
 				1528711C2DF9638900CC87C7 /* AudioBasicUsageVC.swift in Sources */,
 				154DCD4E2E5EFDE2000CFC59 /* CustomVideoRenderVC.swift in Sources */,
-				156B05DC2E6829D2007040F3 /* PIPSeatView.swift in Sources */,
+				156B05EA2E687000007040F3 /* WavRecorder.swift in Sources */,
+				159DC7902E78C9680033101C /* VoiceChangeVC.swift in Sources */,
 				150327242E1CC7B500B8CEC6 /* CameraCommonControlVC.swift in Sources */,
 				15D53DE42E43339E004957FF /* CustomAudioRenderVC.swift in Sources */,
 				410B2BC32DE5B85F00E274D1 /* SeatView.swift in Sources */,
@@ -830,7 +861,6 @@
 				150326F92E169B4000B8CEC6 /* VideoBasicUsageVC.swift in Sources */,
 				1557F29C2E40B8DF0089F375 /* CustomAudioCaptureVC.swift in Sources */,
 				154F4FC72E2A209D001761F1 /* ConfigViewController.swift in Sources */,
-				156B05DA2E6829A1007040F3 /* ARTCPixelBufferRenderView.swift in Sources */,
 				154F4FB12E292581001761F1 /* ProcessVideoRawDataVC.swift in Sources */,
 				418D33EE2B4EA199003A5959 /* SceneDelegate.swift in Sources */,
 				15254EDA2E2F298900B4C77A /* ScreenShareVC.swift in Sources */,
@@ -955,6 +985,24 @@
 				156D22752E66464100E83252 /* zh-Hans */,
 			);
 			name = PlayAudioFiles.storyboard;
+			sourceTree = "<group>";
+		};
+		159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				159DC7982E799A2E0033101C /* Base */,
+				159DC79C2E799A310033101C /* zh-Hans */,
+			);
+			name = IntelligentDenoise.storyboard;
+			sourceTree = "<group>";
+		};
+		159DC79E2E799AAC0033101C /* VoiceChange.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				159DC79D2E799AAC0033101C /* Base */,
+				159DC7A12E799AAE0033101C /* zh-Hans */,
+			);
+			name = VoiceChange.storyboard;
 			sourceTree = "<group>";
 		};
 		15D53DDE2E433229004957FF /* CustomAudioCapture.storyboard */ = {

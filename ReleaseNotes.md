@@ -38,3 +38,9 @@
 * Android&iOS：入会前网络和设备检测
 * Android&iOS：画中画
 * Windows: 屏幕共享
+
+## v1.5.0
+发布时间：2025-09-15
+* Android&iOS：变声/混响/美声
+* Android&iOS：智能降噪
+  

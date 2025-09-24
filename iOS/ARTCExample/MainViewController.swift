@@ -44,6 +44,7 @@ class MainViewController: UIViewController {
             ActionItem(name: "Screen Share".localized, detail: "".localized, sbName: "ScreenShare"),
             ActionItem(name: "Stream Monitoring".localized, detail: "".localized, sbName: "StreamMonitoring"),
             ActionItem(name: "Play Audio Files".localized, detail: "".localized, sbName: "PlayAudioFiles"),
+            ActionItem(name: "Set Voice Change、Reverb、Beautify".localized, detail: "".localized, sbName: "VoiceChange")
         ]),
         
         GroupItem(name: "ADVANCED".localized, actions: [
@@ -54,7 +55,8 @@ class MainViewController: UIViewController {
             ActionItem(name: "Custom Video Capture".localized, detail: "".localized, sbName: "CustomVideoCapture"),
             ActionItem(name: "Custom Video Render".localized, detail: "".localized, sbName: "CustomVideoRender"),
             ActionItem(name: "Pre-Join Channel Test".localized, detail: "".localized, sbName: "PreJoinChannelTest"),
-            ActionItem(name: "Picture In Picture".localized, detail: "".localized, sbName: "PictureInPicture")
+            ActionItem(name: "Picture In Picture".localized, detail: "".localized, sbName: "PictureInPicture"),
+            ActionItem(name: "Intelligent Denoise".localized, detail: "".localized, sbName: "IntelligentDenoise")
         ]),
     ]
 }

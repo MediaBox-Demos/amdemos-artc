@@ -20,6 +20,7 @@
     <string name="call_quality">Call-Stream Quality Monitor</string>
     <string name="play_audio_files">Play Audio Files</string>
     <string name="pre_join_channel_test">Pre-join Channel Test</string>
+    <string name="set_voice_change_mode">Set Voice Change、Reverb、Beautify</string>
 
     <string name="advance_features">Advance Features</string>
     <string name="raw_audio_capture">Raw Audio Data</string>
@@ -28,5 +29,6 @@
     <string name="custom_audio_render">Custom Audio Render</string>
     <string name="custom_video_capture">Custom Video Capture</string>
     <string name="picture_in_picture">Picture in Picture</string>
+    <string name="intelligent_denoise">Intelligent Denoise</string>
 
 </resources>

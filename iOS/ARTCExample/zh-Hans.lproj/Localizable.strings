@@ -25,6 +25,7 @@
 "Screen Share" = "屏幕共享";
 "Stream Monitoring" = "通话中推拉流质量监测";
 "Play Audio Files" = "播放伴奏和音效";
+"Set Voice Change、Reverb、Beautify" = "设置变声、混响、美声";
 
 "Process Audio Raw Data" = "原始音频数据";
 "Process Video Raw Data" = "原始视频数据";
@@ -34,6 +35,7 @@
 "Custom Video Render" = "自定义视频渲染";
 "Pre-Join Channel Test" = "通话前质量检测";
 "Picture In Picture" = "画中画";
+"Intelligent Denoise" = "智能降噪";
 
 
 // 音频常用操作

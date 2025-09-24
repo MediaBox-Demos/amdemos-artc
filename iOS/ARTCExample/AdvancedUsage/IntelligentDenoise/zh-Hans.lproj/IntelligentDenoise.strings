@@ -1,0 +1,18 @@
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "4IC-wB-XyM"; */
+"4IC-wB-XyM.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "MM7-nx-V1v"; */
+"MM7-nx-V1v.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "MM7-nx-V1v"; */
+"MM7-nx-V1v.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Intelligent Denoise"; ObjectID = "XeQ-yf-M4g"; */
+"XeQ-yf-M4g.text" = "智能降噪";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "gLk-yo-T3U"; */
+"gLk-yo-T3U.placeholder" = "Channel Id";
+
+/* Class = "UILabel"; text = "Intelligent Denoise"; ObjectID = "q9E-UR-K4G"; */
+"q9E-UR-K4G.text" = "智能降噪";

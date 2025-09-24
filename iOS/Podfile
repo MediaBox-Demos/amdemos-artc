@@ -6,6 +6,7 @@ target 'ARTCExample' do
   # Pods for ARTCExample
   
   pod 'AliVCSDK_ARTC', '~> 7.6.0'
+  pod 'AlivcIntelligentDenoise', '~> 1.0.0'
 
 end
 

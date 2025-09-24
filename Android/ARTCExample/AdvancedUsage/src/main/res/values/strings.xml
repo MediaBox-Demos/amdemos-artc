@@ -13,6 +13,7 @@
     <string name="custom_video_render">Custom Video Render</string>
     <string name="pre_join_channel_test">Pre-join Channel Test</string>
     <string name="picture_in_picture">Picture in Picture</string>
+    <string name="intelligent_denoise">Intelligent Denoise</string>
 
     <string name="process_audio_raw_data">Get raw audio data</string>
     <string name="process_video_raw_data">Get raw video data</string>
@@ -63,5 +64,7 @@
     <string name="test_camera">Test Camera</string>
     <string name="test_device">Test Device</string>
     <string name="test_network">Test Network</string>
+    <string name="audio_dump_wav">Audio Dump</string>
+    <string name="dump_audio_file_name_prefix">Dump File Name prefix</string>
 
 </resources>

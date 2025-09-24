@@ -18,6 +18,7 @@ class CustomAudioCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
         self.title = "Custom Audio Capture".localized
         self.channelIdTextField.delegate = self
+        self.dumpAudioFileNameTextField.delegate = self
     }
     
     @IBOutlet weak var audioLocalPlayoutSwitch: UISwitch!
@@ -38,9 +39,11 @@ class CustomAudioCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
         vc?.userId = userId
         vc?.joinToken = joinToken
         vc?.isEnableCustomAudioCapture = customAudioCaptureSwitch.isOn
-        vc?.isEnableCustomAudioCapture = audioLocalPlayoutSwitch.isOn
-        print(audioSourceSegmentedControl.selectedSegmentIndex)
+        vc?.isEnableLocalPlayout = audioLocalPlayoutSwitch.isOn
         vc?.isMicroPhoneCapture = audioSourceSegmentedControl.selectedSegmentIndex != 0
+        vc?.enableDumpAudio = enableDumpAudioSwitch.isOn
+        vc?.dumpAudioFileName = dumpAudioFileNameTextField.text ?? "audio_dump_file"
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -51,6 +54,10 @@ class CustomAudioCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
     // Custom Audio Capture
     @IBOutlet weak var customAudioCaptureSwitch: UISwitch!
     @IBOutlet weak var audioSourceSegmentedControl: UISegmentedControl!
+    
+    // Audio Dump
+    @IBOutlet weak var enableDumpAudioSwitch: UISwitch!
+    @IBOutlet weak var dumpAudioFileNameTextField: UITextField!
 }
 
 class CustomAudioCaptureMainVC: UIViewController {
@@ -69,7 +76,13 @@ class CustomAudioCaptureMainVC: UIViewController {
     private var audioPlayerNode: AVAudioPlayerNode?
     private var mixerNode: AVAudioMixerNode?
     var isMicroPhoneCapture: Bool = false
-    var isEnableLocalPlayout: Bool = true
+    var isEnableLocalPlayout: Bool = false
+    
+    // 音频Dump
+    var enableDumpAudio: Bool = false
+    var dumpAudioFileName: String = "audio_dump_file"
+    
+    private var wavRecorder: WavRecorder?
     
     // 麦克风采集参数
     private let sampleRate: Int32 = 48000
@@ -178,8 +191,6 @@ class CustomAudioCaptureMainVC: UIViewController {
         if isEnableCustomAudioCapture {
             // 关闭SDK内部音频采集
             engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"FALSE\"}}")
-            // 请求麦克风权限并启动外部音频采集
-            requestMicrophonePermission()
         } else {
             engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"TRUE\"}}")
         }
@@ -226,7 +237,7 @@ class CustomAudioCaptureMainVC: UIViewController {
         let config = AliRtcExternalAudioStreamConfig()
         config.channels = Int32(channels)
         config.sampleRate = Int32(sampleRate)
-        config.publishVolume = 80
+        config.publishVolume = 100
         config.playoutVolume = self.isEnableLocalPlayout ? 100 : 0;
         config.enable3A = true
         
@@ -246,6 +257,12 @@ class CustomAudioCaptureMainVC: UIViewController {
         } catch {
             print("设置AVAudioSession失败: \(error)")
             return
+        }
+        
+        // 如果启动音频dump，初始化并启动WavRecorder
+        if enableDumpAudio {
+            wavRecorder = WavRecorder(sampleRate: sampleRate, channels: channels, fileName: dumpAudioFileName)
+            wavRecorder?.startRecording()
         }
         
         // 初始化音频引擎
@@ -282,6 +299,12 @@ class CustomAudioCaptureMainVC: UIViewController {
         let frameLength = Int32(buffer.frameLength)
         let bytesCount = frameLength * Int32(bytesPerSample) * Int32(channels)
         
+        // 写入到wav文件
+        if enableDumpAudio, let recorder = wavRecorder {
+            let data = Data(bytes:buffer.int16ChannelData![0], count: Int(bytesCount))
+            recorder.writeAudioData(data)
+        }
+        
         // 创建音频帧
         let sample = AliRtcAudioFrame()
         sample.dataPtr = UnsafeMutableRawPointer(mutating: channelData.pointee)
@@ -290,11 +313,23 @@ class CustomAudioCaptureMainVC: UIViewController {
         sample.numOfChannels = channels
         sample.numOfSamples = frameLength
         
-        // 推送音频数据到RTC引擎
-        let rc = rtcEngine?.pushExternalAudioStream(externalPublishStreamId, rawData: sample) ?? 0
+        var success = false
+        var retryCount = 0
         
-        if rc < 0 && rc != 0x01070101 {
-            print("推送音频数据失败，错误码: \(rc)")
+        while retryCount < 20 {
+            
+            let rc = rtcEngine?.pushExternalAudioStream(externalPublishStreamId, rawData: sample) ?? 0
+            
+            // 0x01070101 SDK_AUDIO_INPUT_BUFFER_FULL 缓冲区满需要重传
+            if rc == 0x01070101 {
+                Thread.sleep(forTimeInterval: 0.03) //30 ms
+                retryCount += 1
+            } else {
+                if rc < 0 {
+                    "pushExternalAudioStream error, ret: \(rc)".printLog()
+                }
+                break
+            }
         }
     }
     
@@ -342,7 +377,7 @@ class CustomAudioCaptureMainVC: UIViewController {
         config.channels = pcmChannels
         config.sampleRate = pcmSampleRate
         config.publishVolume = 100
-        config.playoutVolume = 0
+        config.playoutVolume = self.isEnableLocalPlayout ? 100 : 0;
         
         let ret = rtcEngine?.addExternalAudioStream(config)
         if ret ?? 0 < 0 {
@@ -552,36 +587,32 @@ class CustomAudioCaptureMainVC: UIViewController {
                 }
             }
             
-            var pushError = false
+            let sample = AliRtcAudioFrame()
+            sample.dataPtr = UnsafeMutableRawPointer(mutating: pcmData)
+            sample.samplesPerSec = pcmSampleRate
+            sample.bytesPerSample = Int32(MemoryLayout<Int16>.size)
+            sample.numOfChannels = pcmChannels
+            sample.numOfSamples = numOfSamples
             
-            while true {
+            var retryCount = 0
+            
+            while retryCount < 20 {
                 if !(pcmInputThread?.isExecuting ?? false) {
-                    pushError = true
                     break
                 }
-                
-                let sample = AliRtcAudioFrame()
-                sample.dataPtr = UnsafeMutableRawPointer(mutating: pcmData)
-                sample.samplesPerSec = pcmSampleRate
-                sample.bytesPerSample = Int32(MemoryLayout<Int16>.size)
-                sample.numOfChannels = pcmChannels
-                sample.numOfSamples = numOfSamples
                 
                 let rc = rtcEngine?.pushExternalAudioStream(externalPublishStreamId, rawData: sample) ?? 0
                 
-                // 0x01070101 SDK_AUDIO_INPUT_BUFFER_FULL
+                // 0x01070101 SDK_AUDIO_INPUT_BUFFER_FULL 缓冲区满了需要重传
                 if rc == 0x01070101 && !(pcmInputThread?.isCancelled ?? true) {
-                    Thread.sleep(forTimeInterval: 0.08)
+                    Thread.sleep(forTimeInterval: 0.03) // 30ms
+                    retryCount += 1;
                 } else {
                     if rc < 0 {
-                        pushError = true
+                        "pushExternalAudioStream error, ret: \(rc)".printLog()
                     }
                     break
                 }
-            }
-            
-            if pushError {
-                break
             }
         }
         
@@ -628,6 +659,10 @@ class CustomAudioCaptureMainVC: UIViewController {
     }
     
     func leaveAnddestroyEngine() {
+        
+        wavRecorder?.stopRecording()
+        wavRecorder = nil
+
         // 停止外部音频采集线程
         pcmInputThread?.cancel()
         
@@ -773,69 +808,13 @@ extension CustomAudioCaptureMainVC {
     }
 }
 
-// 下拉菜单
-extension CustomAudioCaptureMainVC: UIPickerViewDataSource, UIPickerViewDelegate {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch pickerView.tag {
-//        case 0:
-//            return self.screenShareModeOptions.count
-        default:
-            return 0
-        }
-    }
-    
-    // UIPickerViewDelegate Methods
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch pickerView.tag {
-//        case 0:
-//            return NSLocalizedString(self.screenShareModeOptions[row], comment: "")
-        default:
-            return nil
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch pickerView.tag {
-//        case 0:
-//            let selectedMode = AliRtcScreenShareMode(rawValue: Int(row)) ?? .none
-//            screenShareMode = selectedMode
-//            self.screenShareModeTextField.text = self.screenShareModeOptions[row]
-//            self.screenShareModeTextField.resignFirstResponder()
-//            break
-        default:
-            break
-        }
-    }
-}
-
-extension CustomAudioCaptureMainVC: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else {return}
-        
-        switch textField {
-//        case screenShareVideoWidthTextField,screenShareVideoHeightTextField:
-//            if let width = Int32(text), let height = Int32(textField == screenShareVideoWidthTextField ? text : screenShareVideoHeightTextField.text ?? "0") {
-//                // 验证分辨率范围3840x2160
-//                if (0...3840).contains(width) && (0...2160).contains(height) {
-//                    screenShareConfig.dimensions = CGSize(width: Int(width), height: Int(height))
-//                }
-//            }
-        default:
-            break
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-}
-
 extension CustomAudioCaptureMainVC: AliRtcEngineDelegate {
+    
+    func onAudioPublishStateChanged(_ track: AliRtcAudioTrack, oldState: AliRtcPublishState, newState: AliRtcPublishState, elapseSinceLastState: Int, channel: String) {
+        if newState == .statsPublished && isEnableCustomAudioCapture {
+            requestMicrophonePermission();
+        }
+    }
     
     func onJoinChannelResult(_ result: Int32, channel: String, elapsed: Int32) {
         "onJoinChannelResult1 result: \(result)".printLog()

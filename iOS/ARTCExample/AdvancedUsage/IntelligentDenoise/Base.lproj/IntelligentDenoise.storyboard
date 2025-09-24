@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Intelligent Denoise Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="IntelligentDenoiseSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IC-wB-XyM">
+                                <rect key="frame" x="24" y="83" width="345" height="81.333333333333314"/>
+                                <string key="text">If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="AoM-FG-Zap">
+                                <rect key="frame" x="24" y="188.33333333333334" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Intelligent Denoise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9E-UR-K4G">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqe-Vv-m8G">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MM7-nx-V1v">
+                                <rect key="frame" x="135.33333333333334" y="325.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="JQW-Y3-RlC"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gLk-yo-T3U">
+                                <rect key="frame" x="24" y="243.33333333333337" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="4IC-wB-XyM" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="2YE-zE-OeB"/>
+                            <constraint firstItem="MM7-nx-V1v" firstAttribute="centerX" secondItem="gLk-yo-T3U" secondAttribute="centerX" id="3P9-5r-3va"/>
+                            <constraint firstItem="AoM-FG-Zap" firstAttribute="top" secondItem="4IC-wB-XyM" secondAttribute="bottom" constant="24" id="4DL-4n-3v2"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="AoM-FG-Zap" secondAttribute="trailing" constant="24" id="6g2-5p-gv2"/>
+                            <constraint firstItem="gLk-yo-T3U" firstAttribute="top" secondItem="AoM-FG-Zap" secondAttribute="bottom" constant="24" id="MOE-G4-1vh"/>
+                            <constraint firstItem="4IC-wB-XyM" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="24" id="Ojt-1H-EOy"/>
+                            <constraint firstItem="MM7-nx-V1v" firstAttribute="top" secondItem="gLk-yo-T3U" secondAttribute="bottom" constant="48" id="bRd-bX-F0I"/>
+                            <constraint firstItem="gLk-yo-T3U" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="bjP-U0-ntd"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="4IC-wB-XyM" secondAttribute="trailing" constant="24" id="kGL-Po-jHm"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="gLk-yo-T3U" secondAttribute="trailing" constant="24" id="spv-sC-rEt"/>
+                            <constraint firstItem="AoM-FG-Zap" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="xVB-IO-f0x"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="gLk-yo-T3U" id="jNw-b7-rLc"/>
+                        <outlet property="intelligentDenoiseSwitch" destination="pqe-Vv-m8G" id="N6b-jF-b2a"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131" y="-27"/>
+        </scene>
+        <!--Intelligent Denoise MainVC-->
+        <scene sceneID="vlB-P3-Vm8">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="6R8-fo-6fI" customClass="IntelligentDenoiseMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aCp-ra-9Zl">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5cG-0O-yxa">
+                                <rect key="frame" x="24" y="83" width="345" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Intelligent Denoise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XeQ-yf-M4g">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ves-og-jU6">
+                                        <rect key="frame" x="296" y="0.0" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="intelligentDenoiseSwitchToggled:" destination="6R8-fo-6fI" eventType="valueChanged" id="xgK-cr-bAX"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CW7-hT-fqP">
+                                <rect key="frame" x="0.0" y="138" width="393" height="680"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="aQV-Em-ZHl"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5cG-0O-yxa" firstAttribute="leading" secondItem="aQV-Em-ZHl" secondAttribute="leading" constant="24" id="2Ra-g0-4jw"/>
+                            <constraint firstItem="CW7-hT-fqP" firstAttribute="trailing" secondItem="aQV-Em-ZHl" secondAttribute="trailing" id="C67-2k-Y33"/>
+                            <constraint firstItem="aQV-Em-ZHl" firstAttribute="trailing" secondItem="5cG-0O-yxa" secondAttribute="trailing" constant="24" id="OWM-4k-4Ch"/>
+                            <constraint firstItem="aQV-Em-ZHl" firstAttribute="bottom" secondItem="CW7-hT-fqP" secondAttribute="bottom" id="UzQ-wd-Jk2"/>
+                            <constraint firstItem="CW7-hT-fqP" firstAttribute="top" secondItem="5cG-0O-yxa" secondAttribute="bottom" constant="24" id="atd-b8-2vK"/>
+                            <constraint firstItem="5cG-0O-yxa" firstAttribute="top" secondItem="aQV-Em-ZHl" secondAttribute="top" constant="24" id="hvU-NX-TBe"/>
+                            <constraint firstItem="CW7-hT-fqP" firstAttribute="leading" secondItem="aQV-Em-ZHl" secondAttribute="leading" id="oQh-Wf-7HH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="CW7-hT-fqP" id="dEX-F2-Ra8"/>
+                        <outlet property="intelligentDenoiseSwitch" destination="Ves-og-jU6" id="yOk-1D-yrT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T9i-mg-aJ6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="781" y="-15"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

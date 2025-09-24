@@ -102,7 +102,7 @@ class PictureInPictureMainVC: UIViewController {
     private var pipCallViewController: AnyObject?
     private var pipSourceView: UIView?
 
-    var seatViewList: [PIPSeatView] = []
+    var seatViewList: [CustomVideoRenderSeatView] = []
 
     var channelId: String = ""
     var userId: String = ""
@@ -187,11 +187,11 @@ class PictureInPictureMainVC: UIViewController {
 
         // 如果还没有创建控制器，尝试初始化
         if pipController == nil {
-            guard let canvasView = self.seatViewList.first(where: { $0.uidLabel.text == self.userId })?.canvasView else {
+            guard let seatView = self.seatViewList.first(where: { $0.uid == self.userId }) else {
                 print("无法获取本地预览视图")
                 return
             }
-            setupPipController(with: canvasView)
+            setupPipController(with: seatView)
         }
 
         guard let pipController = self.pipController else { return }
@@ -204,37 +204,32 @@ class PictureInPictureMainVC: UIViewController {
     }
 
     @available(iOS 15.0, *)
-    func setupPipController(with sourceView: UIView) {
+    func setupPipController(with seatView: CustomVideoRenderSeatView) {
         
-        guard let canvasView = seatViewList.first(where: { $0.uidLabel.text == userId })?.canvasView else {
-            print("❌ 无法获取本地预览视图")
-            return
-        }
-
-        // 保存源视图
-        self.pipSourceView = canvasView
-        canvasView.originalSuperview = canvasView.superview
-
-        // 创建 contentViewController
+        // 只保存引用和父视图信息，不做移动
+        seatView.originalSuperview = seatView.superview
+        self.pipSourceView = seatView
+        
+        // PIP 容器（先是空的）
         let callVC = AVPictureInPictureVideoCallViewController()
         callVC.preferredContentSize = CGSize(width: 720, height: 1280)
         callVC.view.backgroundColor = .clear
-
         self.pipCallViewController = callVC
-
-        // 创建 ContentSource（必须传两个参数）
+        
+        // 创建 ContentSource（activeVideoCallSourceView 在这里还是 seatView）
+        // 注意：用 seatView 作为源，而不是 callVC.view
         let contentSource = AVPictureInPictureController.ContentSource(
-            activeVideoCallSourceView: canvasView,
+            activeVideoCallSourceView: seatView,
             contentViewController: callVC
         )
-
-        // 创建 PIP 控制器
+        
         let pipController = AVPictureInPictureController(contentSource: contentSource)
-        pipController.canStartPictureInPictureAutomaticallyFromInline = false
         pipController.delegate = self
-
+        pipController.canStartPictureInPictureAutomaticallyFromInline = false
+        
         self.pipController = pipController
     }
+
 
     // MARK: - RTC Lifecycle
     func joinChannel() {
@@ -260,7 +255,7 @@ class PictureInPictureMainVC: UIViewController {
         let seatView = self.createSeatView(uid: self.userId)
 
         let canvas = AliVideoCanvas()
-        canvas.view = seatView.canvasView
+        canvas.view = seatView.renderingView
         canvas.renderMode = .auto
         canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
         canvas.rotationMode = ._0
@@ -271,9 +266,8 @@ class PictureInPictureMainVC: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self,
                   #available(iOS 15.0, *),
-                  let canvasView = seatView.canvasView,
                   self.pipController == nil else { return }
-            self.setupPipController(with: canvasView)
+            self.setupPipController(with: seatView)
         }
     }
 
@@ -285,9 +279,9 @@ class PictureInPictureMainVC: UIViewController {
     }
 
     // MARK: - Seat View Management
-    func createSeatView(uid: String) -> PIPSeatView {
-        let view = PIPSeatView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        view.uidLabel.text = uid
+    func createSeatView(uid: String) -> CustomVideoRenderSeatView {
+        let view = CustomVideoRenderSeatView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        view.uid = uid
 
         self.contentScrollView.addSubview(view)
         self.seatViewList.append(view)
@@ -296,7 +290,7 @@ class PictureInPictureMainVC: UIViewController {
     }
 
     func removeSeatView(uid: String) {
-        let seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+        let seatView = self.seatViewList.first { $0.uid == uid }
         if let seatView = seatView {
             seatView.removeFromSuperview()
             self.seatViewList.removeAll(where: { $0 == seatView })
@@ -328,38 +322,21 @@ extension PictureInPictureMainVC: AVPictureInPictureControllerDelegate {
 
     func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         print("即将进入画中画模式")
+        
+        // 迁移seatView
+        if let seatView = self.pipSourceView as? CustomVideoRenderSeatView,
+           let callVC = self.pipCallViewController as? AVPictureInPictureVideoCallViewController {
+            
+            seatView.removeFromSuperview()
+            callVC.view.addSubview(seatView)
+            seatView.frame = callVC.view.bounds
+            seatView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        }
     }
+
 
     func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         print("已进入画中画模式")
-        
-//        guard #available(iOS 15.0, *) else {return}
-//        
-//        guard let contentSource = pictureInPictureController.contentSource as? AVPictureInPictureController.ContentSource else {
-//            print("无法获取 ContentSource")
-//            return
-//        }
-//        
-//        guard let callVC = contentSource.contentViewController as? AVPictureInPictureVideoCallViewController else {
-//            print("无法获取 contentViewController 或类型不匹配")
-//            return
-//        }
-//        
-//        guard let sourceView = self.pipSourceView else {
-//            print("无源视图")
-//            return
-//        }
-//
-//        sourceView.removeFromSuperview()
-//
-//        callVC.view.addSubview(sourceView)
-//        sourceView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            sourceView.leadingAnchor.constraint(equalTo: callVC.view.leadingAnchor),
-//            sourceView.trailingAnchor.constraint(equalTo: callVC.view.trailingAnchor),
-//            sourceView.topAnchor.constraint(equalTo: callVC.view.topAnchor),
-//            sourceView.bottomAnchor.constraint(equalTo: callVC.view.bottomAnchor)
-//        ])
     }
 
     func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
@@ -368,13 +345,17 @@ extension PictureInPictureMainVC: AVPictureInPictureControllerDelegate {
 
     func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         print("已退出画中画模式")
-
-        guard let sourceView = self.pipSourceView,
-              let originalSuperview = sourceView.originalSuperview else { return }
         
-        sourceView.removeFromSuperview()
-        originalSuperview.addSubview(sourceView)
+        if let seatView = self.pipSourceView as? CustomVideoRenderSeatView,
+           let originalSuperview = seatView.originalSuperview {
+            
+            seatView.removeFromSuperview()
+            originalSuperview.addSubview(seatView)
+            self.updateSeatViewsLayout()
+        }
     }
+
+
 
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
                    restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
@@ -394,6 +375,18 @@ extension PictureInPictureMainVC: AVPictureInPictureControllerDelegate {
 // MARK: - AliRtcEngineDelegate
 extension PictureInPictureMainVC: AliRtcEngineDelegate {
     
+    // 渲染CVPixelBuffer格式视频数据
+    private func renderCVPixelBuffer(_ videoSample: AliRtcVideoDataSample, on seatView: CustomVideoRenderSeatView) {
+        guard let pixelBuffer = videoSample.pixelBuffer else {
+            return
+        }
+        
+        // 直接在主线程更新UI
+        DispatchQueue.main.async {
+            seatView.renderPixelBuffer(pixelBuffer)
+        }
+    }
+    
     func onGetVideoFormatPreference() -> AliRtcVideoFormat {
         .cvPixelBuffer
     }
@@ -403,13 +396,14 @@ extension PictureInPictureMainVC: AliRtcEngineDelegate {
             print("Local video buffer is not CVPixelBuffer")
             return false
         }
-        
-        if let seatView = seatViewList.first(where: { $0.uidLabel.text == self.userId }),
-           let renderView = seatView.canvasView {
-            renderView.render(pixelBuffer: pixelBuffer, width: Int(videoSample.width), height: Int(videoSample.height))
+        var seatView = self.seatViewList.first { $0.uid == self.userId}
+        if seatView == nil {
+            seatView = self.createSeatView(uid: self.userId)
+        }
+        if videoSample.type == .cvPixelBuffer {
+            self.renderCVPixelBuffer(videoSample, on: seatView!)
         }
         return true
-                
     }
     
     func onRemoteVideoSample(_ uid: String, videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
@@ -418,11 +412,14 @@ extension PictureInPictureMainVC: AliRtcEngineDelegate {
             return false
         }
         
-        if let seatView = seatViewList.first(where: { $0.uidLabel.text == uid }),
-           let renderView = seatView.canvasView {
-            renderView.render(pixelBuffer: pixelBuffer, width: Int(videoSample.width), height: Int(videoSample.height))
+        var seatView = self.seatViewList.first { $0.uid == uid}
+        if seatView == nil {
+            seatView = self.createSeatView(uid: uid)
         }
         
+        if videoSample.type == .cvPixelBuffer {
+            self.renderCVPixelBuffer(videoSample, on: seatView!)
+        }
         return true
     }
     
@@ -448,31 +445,31 @@ extension PictureInPictureMainVC: AliRtcEngineDelegate {
         "onRemoteTrackAvailableNotify uid: \(uid) audioTrack: \(audioTrack) videoTrack: \(videoTrack)".printLog()
 
         if audioTrack != .no {
-            let seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+            let seatView = self.seatViewList.first { $0.uid == uid }
             if seatView == nil {
                 _ = self.createSeatView(uid: uid)
             }
         }
-
         if videoTrack != .no {
-            var seatView = self.seatViewList.first { $0.uidLabel.text == uid }
+            var seatView = self.seatViewList.first { $0.uid == uid }
             if seatView == nil {
                 seatView = self.createSeatView(uid: uid)
             }
-
+            
             let canvas = AliVideoCanvas()
-            canvas.view = seatView!.canvasView
+            canvas.view = seatView!.renderingView
             canvas.renderMode = .auto
             canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
             canvas.rotationMode = ._0
-            self.rtcEngine?.setRemoteViewConfig(canvas, uid: uid, for: .camera)
-        } else {
-            self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: .camera)
+            self.rtcEngine?.setRemoteViewConfig(canvas, uid: uid, for: AliRtcVideoTrack.camera)
         }
-
+        else {
+            self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: AliRtcVideoTrack.camera)
+        }
+        
         if audioTrack == .no && videoTrack == .no {
             self.removeSeatView(uid: uid)
-            self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: .camera)
+            self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: AliRtcVideoTrack.camera)
         }
     }
 

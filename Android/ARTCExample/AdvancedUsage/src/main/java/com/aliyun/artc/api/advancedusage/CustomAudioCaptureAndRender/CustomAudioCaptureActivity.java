@@ -8,9 +8,6 @@ import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackNo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Process;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBar;
@@ -38,22 +34,24 @@ import androidx.core.view.WindowInsetsCompat;
 import com.alivc.rtc.AliRtcEngine;
 import com.alivc.rtc.AliRtcEngineEventListener;
 import com.alivc.rtc.AliRtcEngineNotify;
+import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.utils.AudioCaptureCallback;
+import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.utils.FileAudioCaptureThread;
+import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.utils.MicrophoneCaptureThread;
 import com.aliyun.artc.api.keycenter.ARTCTokenHelper;
 import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.aliyun.artc.api.advancedusage.R;
+
 import org.webrtc.alirtcInterface.ErrorCodeEnum;
 
 /**
  * 外部音频采集API调用示例
  */
-public class CustomAudioCaptureActivity extends AppCompatActivity {
+public class CustomAudioCaptureActivity extends AppCompatActivity implements AudioCaptureCallback {
 
     private Handler handler;
     private EditText mChannelEditText;
@@ -67,29 +65,38 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
     private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
 
     // 自定义音频采集相关参数，根据业务场景自行配置
-    public static final int SAMPLE_RATE = 16000;
-    public static final int CHANNEL = 1;
+    public static final int SAMPLE_RATE = 48000;
+    public static final int CHANNEL = 2;
     public static final int BITS_PER_SAMPLE = 16;
     public static final float BYTE_PER_SAMPLE = 1.0f * BITS_PER_SAMPLE / 8 * CHANNEL;
     public static final double SAMPLE_COUNT_PER_MS = SAMPLE_RATE * 1.0f / 1000.0;
-    public static final int BUFFER_DURATION = 20; // 20ms
+    public static final int BUFFER_DURATION = 10; // 10ms
     public static final int BUFFER_FULL_DURATION = 30; // BUFFER FULL, wait for 30ms
-    private static final int BUFFER_SAMPLE_COUNT = (int) (SAMPLE_COUNT_PER_MS * BUFFER_DURATION); // 20ms sample count
+    private static final int BUFFER_SAMPLE_COUNT = (int) (SAMPLE_COUNT_PER_MS * BUFFER_DURATION); // 10ms sample count
     private static final int BUFFER_BYTE_SIZE = (int) (BUFFER_SAMPLE_COUNT * BYTE_PER_SAMPLE); // byte size
-    private static final String AUDIO_FILE = "music.wav";
 
     // 自定义音频采集相关变量
     private int mExternalAudioStreamId;
-    private boolean isPushAudioData = false;
-    private AudioRecord audioRecord;
-    private AudioCaptureThread audioCaptureThread;
+
+    private boolean isPushingAudio = false;
+    // 为麦克风采集和文件读取分别创建线程
+    private MicrophoneCaptureThread microphoneCaptureThread;
+    private FileAudioCaptureThread fileAudioCaptureThread;
+
+    RadioGroup audioSourceRadioGroup;
     // 麦克风采集输入 or 外部文件输入
     private boolean isMicrophoneCapture = false;
 
-    private boolean isLocalPlayout = true;
+    // 本地播放
+    private boolean isLocalPlayout = false;
     private SwitchCompat isLocalPlayoutSwitch;
 
-    RadioGroup audioSourceRadioGroup;
+    // 是否允许录制麦克风采集的数据到文件
+    private SwitchCompat mEnableDumpAudioSwitch;
+    private boolean mEnableDumpAudio = false;
+    private EditText mDumpAudioFileNameEditText;
+    private String dumpAudioFileName = "test.wav";
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -144,6 +151,19 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
         isLocalPlayoutSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isLocalPlayout = isChecked;
         });
+
+        // 音频Dump
+        mEnableDumpAudioSwitch = findViewById(R.id.audio_dump_switch);
+        mEnableDumpAudioSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mEnableDumpAudio = isChecked;
+        });
+
+        // Dump音频保存路径
+        mDumpAudioFileNameEditText = findViewById(R.id.audio_dump_file_name);
+        dumpAudioFileName = mDumpAudioFileNameEditText.getText().toString().trim();
+        if(dumpAudioFileName.isEmpty()) {
+            dumpAudioFileName = mDumpAudioFileNameEditText.getHint().toString().trim();
+        }
     }
 
     public static void startActionActivity(Activity activity) {
@@ -283,9 +303,15 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
     // 开启外部音频采集
     private void startAudioCapture() {
         AliRtcEngine.AliRtcExternalAudioStreamConfig config = new AliRtcEngine.AliRtcExternalAudioStreamConfig();
-        config.sampleRate = SAMPLE_RATE;
+        if(isMicrophoneCapture) {
+            config.sampleRate = SAMPLE_RATE;
+        } else {
+            // 示例音频wav文件的采样率为16000
+            config.sampleRate = 16000;
+        }
         config.channels = CHANNEL;
         config.publishVolume = 100;
+        // 本地播放音量
         config.playoutVolume = isLocalPlayout ? 100 : 0;
         config.enable3A = true;
 
@@ -296,6 +322,7 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
 
         mExternalAudioStreamId = result;
 
+        isPushingAudio = true;
         if (isMicrophoneCapture) {
             // 启动麦克风采集输入
             startMicrophoneCapture();
@@ -306,34 +333,54 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
     }
 
     private void startMicrophoneCapture() {
-        if(audioCaptureThread == null) {
-            audioCaptureThread = new AudioCaptureThread(AudioCaptureThread.SOURCE_MICROPHONE);
-            audioCaptureThread.start();
+        if(microphoneCaptureThread == null) {
+            microphoneCaptureThread = new MicrophoneCaptureThread(
+                    this, // Context
+                    this,
+                    SAMPLE_RATE,
+                    CHANNEL,
+                    BITS_PER_SAMPLE,
+                    mEnableDumpAudio,
+                    dumpAudioFileName
+            );
+            microphoneCaptureThread.start();
         }
     }
 
     private void startFileAudioCapture() {
-        if (audioCaptureThread == null) {
-            audioCaptureThread = new AudioCaptureThread(AudioCaptureThread.SOURCE_FILE);
-            audioCaptureThread.start();
+        if (fileAudioCaptureThread == null) {
+            fileAudioCaptureThread = new FileAudioCaptureThread(
+                    this,
+                    this
+            );
+            fileAudioCaptureThread.start();
         }
     }
 
     private void stopAudioCapture() {
-        isPushAudioData = false;
-        if(audioRecord != null) {
-            audioRecord.stop();
-            audioRecord.release();
-            audioRecord = null;
+
+        isPushingAudio = false;
+        // 停止麦克风采集线程
+        if (microphoneCaptureThread != null) {
+            microphoneCaptureThread.stopCapture();
+            try {
+                microphoneCaptureThread.join(1000); // 1秒超时
+            } catch (InterruptedException e) {
+                Log.e("CustomAudioCapture", "等待麦克风采集线程结束时被中断", e);
+            } finally {
+                microphoneCaptureThread = null;
+            }
         }
 
-        if (audioCaptureThread != null) {
+        // 停止文件音频采集线程
+        if (fileAudioCaptureThread != null) {
+            fileAudioCaptureThread.stopCapture();
             try {
-                audioCaptureThread.join();
+                fileAudioCaptureThread.join(1000); // 1秒超时
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("CustomAudioCapture", "等待文件音频采集线程结束时被中断", e);
             } finally {
-                audioCaptureThread = null;
+                fileAudioCaptureThread = null;
             }
         }
 
@@ -343,91 +390,50 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
         mExternalAudioStreamId = 0;
     }
 
-    private void initAudioRecord() {
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE,
-                CHANNEL == 1 ? AudioFormat.CHANNEL_IN_MONO : AudioFormat.CHANNEL_IN_STEREO,
-                AudioFormat.ENCODING_PCM_16BIT, BUFFER_BYTE_SIZE);
-    }
+    @Override
+    public void onAudioFrameCaptured(byte[] audioData, int bytesRead, int sampleRate, int channels, int bitsPerSample) {
+        if (mAliRtcEngine != null && bytesRead > 0) {
+            // 构造AliRtcAudioFrame对象
+            AliRtcEngine.AliRtcAudioFrame sample = new AliRtcEngine.AliRtcAudioFrame();
+            sample.data = audioData;
+            sample.numSamples = bytesRead / (channels * (bitsPerSample / 8)); // 根据实际读取的字节数计算样本数
+            sample.numChannels = channels;
+            sample.sampleRate = sampleRate;
+            sample.bytesPerSample = bitsPerSample / 8;
 
-    private class AudioCaptureThread extends Thread {
-        public static final int SOURCE_MICROPHONE = 0;
-        public static final int SOURCE_FILE = 1;
+            int ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
 
-        private int sourceType;
-        private InputStream inputStream;
-
-        public AudioCaptureThread(int sourceType) {
-            this.sourceType = sourceType;
-        }
-
-        @Override
-        public void run() {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-            isPushAudioData = true;
-
-            // 根据音频源类型初始化
-            if (sourceType == SOURCE_MICROPHONE) {
-                initAudioRecord();
-                audioRecord.startRecording();
-            } else {
-                try {
-                    inputStream = getAssets().open(AUDIO_FILE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            byte[] buffer = new byte[BUFFER_BYTE_SIZE];
-
-            while (isPushAudioData && mAliRtcEngine != null) {
-                try {
-                    // 根据音频源类型读取数据
-                    if (sourceType == SOURCE_MICROPHONE) {
-                        audioRecord.read(buffer, 0, buffer.length);
-                    } else {
-                        readAudioFile(buffer);
+            if (ret != 0) {
+                if (ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL) {
+                    // 处理缓冲区满的情况, 等待一段时间再重试,一般最多重试几百ms
+                    int retryCount = 0;
+                    final int MAX_RETRY_COUNT = 20;
+                    final int BUFFER_FULL_WAIT_MS = 30;
+                    while (ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL && retryCount < MAX_RETRY_COUNT) {
+                        if(!isPushingAudio) {
+                            break;
+                        }
+                        try {
+                            Thread.sleep(BUFFER_FULL_WAIT_MS);
+                            ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
+                            retryCount++;
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
                     }
 
-                    // 推送音频数据
-                    AliRtcEngine.AliRtcAudioFrame sample = new AliRtcEngine.AliRtcAudioFrame();
-                    sample.data = buffer;
-                    sample.numSamples = BUFFER_SAMPLE_COUNT;
-                    sample.numChannels = CHANNEL;
-                    sample.sampleRate = SAMPLE_RATE;
-                    sample.bytesPerSample = (int) BYTE_PER_SAMPLE;
-
-                    int ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
-
-                    if (ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL == ret) {
-                        Thread.sleep(BUFFER_FULL_DURATION);
-                    } else {
-                        Thread.sleep(BUFFER_DURATION);
+                    // 如果重试后仍然失败，记录日志
+                    if (ret != 0) {
+                        Log.w("CustomAudioCapture", "推送音频数据失败，错误码: " + ret + "，重试次数: " + retryCount);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } else {
+                    // 处理其他错误情况
+                    Log.e("CustomAudioCapture", "推送音频数据失败，错误码: " + ret);
                 }
-            }
-            // 释放资源
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void readAudioFile(byte[] buffer) {
-            try {
-                if (inputStream.read(buffer) < 0) {
-                    inputStream.reset();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
-
 
     private AliRtcEngineEventListener mRtcEngineEventListener = new AliRtcEngineEventListener() {
         @Override
@@ -439,23 +445,22 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
         @Override
         public void onLeaveChannelResult(int result, AliRtcEngine.AliRtcStats stats){
             super.onLeaveChannelResult(result, stats);
-
-
         }
 
         @Override
         public void onAudioPublishStateChanged(AliRtcEngine.AliRtcPublishState oldState , AliRtcEngine.AliRtcPublishState newState, int elapseSinceLastState, String channel){
             super.onAudioPublishStateChanged(oldState, newState, elapseSinceLastState, channel);
+            // 推荐在推流成功后再调用addExternalAudioSource接口
             if(newState == AliRtcEngine.AliRtcPublishState.AliRtcStatsPublished) {
                 startAudioCapture();
             }
         }
 
-
         @Override
         public void onConnectionStatusChange(AliRtcEngine.AliRtcConnectionStatus status, AliRtcEngine.AliRtcConnectionStatusChangeReason reason){
             super.onConnectionStatusChange(status, reason);
         }
+
         @Override
         public void OnLocalDeviceException(AliRtcEngine.AliRtcEngineLocalDeviceType deviceType, AliRtcEngine.AliRtcEngineLocalDeviceExceptionType exceptionType, String msg){
             super.OnLocalDeviceException(deviceType, exceptionType, msg);
@@ -468,7 +473,6 @@ public class CustomAudioCaptureActivity extends AppCompatActivity {
                 }
             });
         }
-
     };
 
     private AliRtcEngineNotify mRtcEngineNotify = new AliRtcEngineNotify() {

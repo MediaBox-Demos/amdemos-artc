@@ -39,12 +39,13 @@
             android:label="@string/audio_basic_usage"
             android:exported="true"/>
 
+        <activity android:name=".VoiceChange.VoiceChangeActivity"
+            android:label="@string/voice_change"
+            android:enabled="true"/>
+
         <activity android:name=".PlayAudioFiles.PlayAudioFilesActivity"
             android:label="@string/play_audio_files"
             android:exported="true"/>
-
-        <service android:name="com.alivc.rtc.share.ForegroundService"
-            android:enabled="true" />
 
     </application>
 
