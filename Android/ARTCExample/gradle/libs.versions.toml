@@ -1,6 +1,7 @@
 [versions]
 agp = "8.6.0"
-alivcsdk_artc = "7.6.0"
+# ARTC版本
+alivcsdk_artc = "7.8.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"

@@ -8,11 +8,11 @@
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9Bi-4i-Chi"; */
 "9Bi-4i-Chi.normalTitle" = "加入频道";
 
-/* Class = "UILabel"; text = "PreEncode Video Frame"; ObjectID = "BuO-oi-zrU"; */
-"BuO-oi-zrU.text" = "编码前数据";
+/* Class = "UILabel"; text = "Remote Video Frame"; ObjectID = "BuO-oi-zrU"; */
+"BuO-oi-zrU.text" = "远端用户数据";
 
-/* Class = "UILabel"; text = "Remote Video Frame"; ObjectID = "DXo-7f-Mtb"; */
-"DXo-7f-Mtb.text" = "远端用户数据";
+/* Class = "UILabel"; text = "PreEncode Video Frame"; ObjectID = "DXo-7f-Mtb"; */
+"DXo-7f-Mtb.text" = "编码前数据";
 
 /* Class = "UILabel"; text = "Video Format"; ObjectID = "E6c-M7-HVC"; */
 "E6c-M7-HVC.text" = "视频格式";

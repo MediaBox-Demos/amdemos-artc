@@ -162,36 +162,36 @@ class PlayAudioFilesMainVC: UIViewController {
     // 音频音效
     let effect1FilePath = Bundle.main.path(forResource: "thunder", ofType: "wav")
     let effect2FilePath = Bundle.main.path(forResource: "applause", ofType: "wav")
-    var currentEffectIndex : Int = 1
+    var currentSoundId : Int = 1
     @IBOutlet weak var audioEffectTextField: UITextField!
     @IBOutlet weak var audioEffectVolumeSlider: UISlider!
     @IBAction func audioEffectVolumeSliderToggled(_ sender: Any) {
         guard let rtcEngine = self.rtcEngine else { return }
         let volume = Int(audioEffectVolumeSlider.value)
-        rtcEngine.setAudioEffectPublishVolumeWithSoundId(self.currentEffectIndex, volume: volume)
-        rtcEngine.setAudioEffectPlayoutVolumeWithSoundId(self.currentEffectIndex, volume: volume)
+        rtcEngine.setAudioEffectPublishVolumeWithSoundId(self.currentSoundId, volume: volume)
+        rtcEngine.setAudioEffectPlayoutVolumeWithSoundId(self.currentSoundId, volume: volume)
     }
     @IBOutlet weak var audioEffectLoopCountTextField: UITextField!
     @IBAction func audioEffectPreloadBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
                 
-        let filePath = self.currentEffectIndex == 1 ? self.effect1FilePath : self.effect2FilePath
+        let filePath = self.currentSoundId == 1 ? self.effect1FilePath : self.effect2FilePath
         guard let filePath = filePath else {
             UIAlertController.showAlertWithMainThread(msg: "音效文件不存在", vc: self)
             return
         }
         // soundId为业务自行组织的音效唯一标识
-        rtcEngine.preloadAudioEffect(withSoundId: self.currentEffectIndex, filePath: filePath)
+        rtcEngine.preloadAudioEffect(withSoundId: self.currentSoundId, filePath: filePath)
     }
     @IBAction func audioEffectUnloadBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
-        rtcEngine.unloadAudioEffect(withSoundId: self.currentEffectIndex)
+        rtcEngine.unloadAudioEffect(withSoundId: self.currentSoundId)
     }
     
     @IBAction func audioEffectStartBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
                 
-        let filePath = self.currentEffectIndex == 1 ? self.effect1FilePath : self.effect2FilePath
+        let filePath = self.currentSoundId == 1 ? self.effect1FilePath : self.effect2FilePath
         guard let filePath = filePath else {
             UIAlertController.showAlertWithMainThread(msg: "音效文件不存在", vc: self)
             return
@@ -204,22 +204,22 @@ class PlayAudioFilesMainVC: UIViewController {
         config.loopCycles = loopCount
         config.publishVolume = volume
         config.playoutVolume = volume
-        let result = rtcEngine.playAudioEffect(withSoundId: self.currentEffectIndex, filePath: filePath, config: config)
+        let result = rtcEngine.playAudioEffect(withSoundId: self.currentSoundId, filePath: filePath, config: config)
         if result != 0 {
             UIAlertController.showAlertWithMainThread(msg: "播放音效失败，错误码: \(result)", vc: self)
         }
     }
     @IBAction func audioEffectPauseBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
-        rtcEngine.pauseAudioEffect(withSoundId: self.currentEffectIndex)
+        rtcEngine.pauseAudioEffect(withSoundId: self.currentSoundId)
     }
     @IBAction func audioEffectResumeBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
-        rtcEngine.resumeAudioEffect(withSoundId: self.currentEffectIndex)
+        rtcEngine.resumeAudioEffect(withSoundId: self.currentSoundId)
     }
     @IBAction func audioEffectStopBtnClicked(_ sender: UIButton) {
         guard let rtcEngine = self.rtcEngine else { return }
-        rtcEngine.stopAudioEffect(withSoundId: self.currentEffectIndex)
+        rtcEngine.stopAudioEffect(withSoundId: self.currentSoundId)
     }
     
     @IBOutlet weak var allAudioEffectsVolumeSlider: UISlider!
@@ -298,18 +298,18 @@ class PlayAudioFilesMainVC: UIViewController {
     
     @objc func donePicker() {
         let row = audioEffectPicker.selectedRow(inComponent: 0)
-        currentEffectIndex = row + 1
+        currentSoundId = row + 1
         updateEffectUI()
         self.view.endEditing(true)
     }
     
     @objc func cancelPicker() {
-        audioEffectPicker.selectRow(currentEffectIndex - 1, inComponent: 0, animated: true)
+        audioEffectPicker.selectRow(currentSoundId - 1, inComponent: 0, animated: true)
         self.view.endEditing(true)
     }
     
     func updateEffectUI() {
-        switch currentEffectIndex {
+        switch currentSoundId {
         case 1:
             audioEffectTextField.text = "音效 1 (thunder.wav)"
         case 2:
@@ -317,7 +317,7 @@ class PlayAudioFilesMainVC: UIViewController {
         default:
             break
         }
-        if let volume = self.rtcEngine?.getAudioEffectPlayoutVolume(withSoundId: self.currentEffectIndex) {
+        if let volume = self.rtcEngine?.getAudioEffectPlayoutVolume(withSoundId: self.currentSoundId) {
             if(volume >= 0 && volume <= 100) {
                 self.audioEffectVolumeSlider.value = Float(volume)
             }
@@ -520,7 +520,7 @@ extension PlayAudioFilesMainVC: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        currentEffectIndex = row + 1
+        currentSoundId = row + 1
         updateEffectUI()
     }
 }
@@ -530,7 +530,7 @@ extension PlayAudioFilesMainVC: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == audioEffectTextField {
             // Set the picker to the current selection
-            audioEffectPicker.selectRow(currentEffectIndex - 1, inComponent: 0, animated: false)
+            audioEffectPicker.selectRow(currentSoundId - 1, inComponent: 0, animated: false)
             return true
         }
         return true

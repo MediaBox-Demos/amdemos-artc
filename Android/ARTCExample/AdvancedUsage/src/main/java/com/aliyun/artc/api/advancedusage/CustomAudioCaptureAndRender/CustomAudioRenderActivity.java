@@ -214,7 +214,8 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
 
         //创建并初始化引擎
         if(mAliRtcEngine == null) {
-            mAliRtcEngine = AliRtcEngine.getInstance(this);
+            String extras = "{\"user_specified_use_external_audio_player\":\"TRUE\"}";
+            mAliRtcEngine = AliRtcEngine.getInstance(this, extras);
         }
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);

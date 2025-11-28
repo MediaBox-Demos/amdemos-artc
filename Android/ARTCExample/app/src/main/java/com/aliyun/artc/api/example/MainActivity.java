@@ -30,7 +30,9 @@ import com.alivc.rtc.AliRtcEngine;
 import com.aliyun.aio.aio_env.AlivcEnv;
 import com.aliyun.artc.api.advancedusage.CustomVideoCaptureAndRender.CustomVideoCaptureActivity;
 import com.aliyun.artc.api.advancedusage.CustomVideoCaptureAndRender.CustomVideoRenderActivity;
+import com.aliyun.artc.api.advancedusage.H265.HEVCActivity;
 import com.aliyun.artc.api.advancedusage.IntelligentDenoise.IntelligentDenoiseActivity;
+import com.aliyun.artc.api.advancedusage.LocalRecord.RecordingActivity;
 import com.aliyun.artc.api.advancedusage.PictureInPicture.PictureInPictureAcitivity;
 import com.aliyun.artc.api.advancedusage.PreJoinChannelTest.PreJoinChannelTestActivity;
 import com.aliyun.artc.api.basicusage.PlayAudioFiles.PlayAudioFilesActivity;
@@ -126,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
                     CustomVideoCaptureActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_render))) {
                     CustomVideoRenderActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.custom_video_process))) {
+
                 } else if(moduleInfo.getModule().equals(getString(R.string.pre_join_channel_test))) {
                     PreJoinChannelTestActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.picture_in_picture))) {
@@ -134,7 +138,11 @@ public class MainActivity extends AppCompatActivity {
                     VoiceChangeActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.intelligent_denoise))) {
                     IntelligentDenoiseActivity.startActionActivity(MainActivity.this);
-                } 
+                }  else if(moduleInfo.getModule().equals(getString(R.string.h265))) {
+                    HEVCActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.local_record))) {
+                    RecordingActivity.startActionActivity(MainActivity.this);
+                }
             } else {
                 Toast.makeText(this, "请允许相关权限", Toast.LENGTH_SHORT).show();
             }
@@ -164,9 +172,12 @@ public class MainActivity extends AppCompatActivity {
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.custom_audio_render)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_capture)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_render)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.custom_video_process)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.pre_join_channel_test)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.picture_in_picture)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.intelligent_denoise)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.h265)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.local_record)));
     }
 
     public boolean checkOrRequestPermission(int code) {

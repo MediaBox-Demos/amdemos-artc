@@ -54,5 +54,12 @@
             android:label="@string/intelligent_denoise"
             android:exported="false" />
 
+        <activity android:name=".H265.HEVCActivity"
+            android:exported="false" />
+
+        <activity android:name=".LocalRecord.RecordingActivity"
+            android:label="@string/local_record"
+            android:exported="false" />
+
     </application>
 </manifest>

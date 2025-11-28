@@ -12,7 +12,7 @@ extension String {
     var localized: String { NSLocalizedString(self, comment: "") }
     
     func printLog(isError: Bool = false) {
-        debugPrint("[\(isError ? "Error" : "Debug")][ARTC-Example] \(self)")
+        debugPrint("[\(Date())][\(isError ? "Error" : "Debug")][ARTC-Example] \(self)")
     }
     
 }

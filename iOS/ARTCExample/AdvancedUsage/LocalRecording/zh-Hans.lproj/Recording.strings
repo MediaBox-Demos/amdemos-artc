@@ -1,0 +1,24 @@
+
+/* Class = "UIButton"; configuration.title = "Stop Button"; ObjectID = "4ZQ-VR-HVZ"; */
+"4ZQ-VR-HVZ.configuration.title" = "停止录制";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "4ZQ-VR-HVZ"; */
+"4ZQ-VR-HVZ.normalTitle" = "停止录制";
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "RvY-CK-qgF"; */
+"RvY-CK-qgF.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "RvY-CK-qgF"; */
+"RvY-CK-qgF.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; configuration.title = "Start Record"; ObjectID = "VoL-Bt-BBK"; */
+"VoL-Bt-BBK.configuration.title" = "开始录制";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VoL-Bt-BBK"; */
+"VoL-Bt-BBK.normalTitle" = "开始录制";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "kdv-0g-Iys"; */
+"kdv-0g-Iys.text" = "如果要和其他用户进行通话，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "sjX-mT-bh6"; */
+"sjX-mT-bh6.placeholder" = "频道ID";

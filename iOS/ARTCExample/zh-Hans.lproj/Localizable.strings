@@ -33,9 +33,12 @@
 "Custom Audio Render" = "自定义音频播放";
 "Custom Video Capture" = "自定义视频采集";
 "Custom Video Render" = "自定义视频渲染";
+"Custom Video Process" = "自定义视频处理";
 "Pre-Join Channel Test" = "通话前质量检测";
 "Picture In Picture" = "画中画";
 "Intelligent Denoise" = "智能降噪";
+"Local Record" = "本地录制";
+"H265" = "H265";
 
 
 // 音频常用操作

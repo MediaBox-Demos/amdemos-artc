@@ -30,5 +30,8 @@
     <string name="custom_video_capture">Custom Video Capture</string>
     <string name="picture_in_picture">Picture in Picture</string>
     <string name="intelligent_denoise">Intelligent Denoise</string>
+    <string name="custom_video_process">Custom Video Process</string>
+    <string name="h265">H265</string>
+    <string name="local_record">Local Record</string>
 
 </resources>

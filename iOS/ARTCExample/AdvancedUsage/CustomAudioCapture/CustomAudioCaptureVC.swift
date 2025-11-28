@@ -153,7 +153,19 @@ class CustomAudioCaptureMainVC: UIViewController {
     func setup() {
         
         // 创建并初始化引擎
-        let engine = AliRtcEngine.sharedInstance(self, extras:nil)
+        var customAudioCaptureConfig: [String: String] = [:]
+        // 使用外部采集
+        if isEnableCustomAudioCapture {
+            customAudioCaptureConfig["user_specified_use_external_audio_record"] = "TRUE"
+        }
+        // 序列化为Json
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: customAudioCaptureConfig, options: []),
+        let extras = String(data: jsonData, encoding: .utf8) else {
+            print("JSON 序列化失败")
+            return
+        }
+        
+        let engine = AliRtcEngine.sharedInstance(self, extras:extras)
         
         // 设置日志级别
         engine.setLogLevel(.info)
@@ -188,12 +200,13 @@ class CustomAudioCaptureMainVC: UIViewController {
         engine.setDefaultSubscribeAllRemoteVideoStreams(true)
         engine.subscribeAllRemoteVideoStreams(true)
         
-        if isEnableCustomAudioCapture {
-            // 关闭SDK内部音频采集
-            engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"FALSE\"}}")
-        } else {
-            engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"TRUE\"}}")
-        }
+        // 如果在通话中需要一直关闭SDK内部采集，推荐在getInstance时传入参数关闭，如果后续需要动态开关，可以调用setParameter接口
+//        if isEnableCustomAudioCapture {
+//            // 关闭SDK内部音频采集
+//            engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"FALSE\"}}")
+//        } else {
+//            engine.setParameter("{\"audio\":{\"enable_system_audio_device_record\":\"TRUE\"}}")
+//        }
         
         self.rtcEngine = engine
     }

@@ -1,0 +1,102 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "4ZQ-VR-HVZ.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"Stop Button\"; ObjectID = \"4ZQ-VR-HVZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stop Button"
+          }
+        }
+      }
+    },
+    "4ZQ-VR-HVZ.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"4ZQ-VR-HVZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "kdv-0g-Iys.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same.\"; ObjectID = \"kdv-0g-Iys\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."
+          }
+        }
+      }
+    },
+    "RvY-CK-qgF.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"Join Channel\"; ObjectID = \"RvY-CK-qgF\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Join Channel"
+          }
+        }
+      }
+    },
+    "RvY-CK-qgF.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"RvY-CK-qgF\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "sjX-mT-bh6.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Channel Id\"; ObjectID = \"sjX-mT-bh6\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Channel Id"
+          }
+        }
+      }
+    },
+    "VoL-Bt-BBK.configuration.title" : {
+      "comment" : "Class = \"UIButton\"; configuration.title = \"Start Record\"; ObjectID = \"VoL-Bt-BBK\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Start Record"
+          }
+        }
+      }
+    },
+    "VoL-Bt-BBK.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"VoL-Bt-BBK\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Button"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

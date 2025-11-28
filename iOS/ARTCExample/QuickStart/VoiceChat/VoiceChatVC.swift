@@ -293,6 +293,10 @@ extension VoiceChatMainVC: AliRtcEngineDelegate {
         /* TODO: 务必处理；Token即将过期，需要业务触发重新获取当前channel，user的鉴权信息，然后设置refreshAuthInfo即可 */
     }
     
+    func onAuthInfoExpired() {
+        "onAuthInfoExpired".printLog()
+    }
+    
     func onBye(_ code: Int32) {
         "onBye code: \(code)".printLog()
         

@@ -27,9 +27,11 @@ Download [address](https://github.com/MediaBox-Demos/amdemos-artc/tree/main/Andr
 │           ├── VideoBasicUsage // Video Basic Usage and Configuration
 │           |—— CameraCommonControl // Camera Common Control
 │           |—— SEIUsage         // SEI Message Sending and Receiving
-            |—— ScreenShareUsage  // Screen Sharing
+│           |—— DataChannelMessage  // Send and Receive Data Channel Messages
+            |—— ScreenShare  // Screen Sharing
             |—— StreamMonitoring // Call-in Quality Monitoring
             |—— PlayAudioFiles    // Play Audio Accompany and Audio Effects
+            |—— VoiceChange   // Voice Change/Reverb/Beautify
         |—— AdvancedUsage // Advanced Function Module
             |—— ProcessAudioRawData // Process Audio Raw Data
             |—— ProcessVideoRawData // Process Video Raw Data
@@ -37,6 +39,9 @@ Download [address](https://github.com/MediaBox-Demos/amdemos-artc/tree/main/Andr
             |—— CustomVideoCaptureAndRender // Custom Video Capture and Render
             |—— PreJoinChannelTest // Network and device check before joining the meeting
             |—— PictureInPicture // Picture In Picture
+            |—— H265                // H.265 Encode
+            |—— IntelligentDenoise // Intelligent Denoise
+            |—— LocalRecord         // Local Record
 │       ├── build.gradle  
 │       └── settings.gradle
 

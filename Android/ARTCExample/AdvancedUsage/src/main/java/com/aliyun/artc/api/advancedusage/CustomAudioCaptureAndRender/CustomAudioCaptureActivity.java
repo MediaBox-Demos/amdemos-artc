@@ -64,34 +64,34 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
     private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
 
-    // 自定义音频采集相关参数，根据业务场景自行配置
-    public static final int SAMPLE_RATE = 48000;
-    public static final int CHANNEL = 2;
-    public static final int BITS_PER_SAMPLE = 16;
-    public static final float BYTE_PER_SAMPLE = 1.0f * BITS_PER_SAMPLE / 8 * CHANNEL;
-    public static final double SAMPLE_COUNT_PER_MS = SAMPLE_RATE * 1.0f / 1000.0;
+    private int mExternalAudioStreamId; // 音频流ID,addExternalAudioStream的返回值
+
+
+    // 麦克风采集参数，用于初始化AudioRecord，请根据您的业务场景配置，并自行实现音屏采集逻辑
+    private final int mAudioMicrophoneSampleRate = 48000;
+    private final int mAudioMicrophoneChannel = 1;
+    private final int mAudioMicrophoneBitsPerSample = 16;  // 对应AudioFormat.ENCODING_PCM_16BIT,大部分场景采用16bit位深就足够了
+
+    // 文件音频采集参数，在此演示assets/music.wav文件的参数
+    String mFileName = "music.wav";
+    private final int mAudioFileSampleRate = 16000;
+    private final int mAudioFileChannel = 1;
+    private final int mAudioFileBitsPerSample = 16; // 位深
+
+    // 默认10ms送一次数据
     public static final int BUFFER_DURATION = 10; // 10ms
-    public static final int BUFFER_FULL_DURATION = 30; // BUFFER FULL, wait for 30ms
-    private static final int BUFFER_SAMPLE_COUNT = (int) (SAMPLE_COUNT_PER_MS * BUFFER_DURATION); // 10ms sample count
-    private static final int BUFFER_BYTE_SIZE = (int) (BUFFER_SAMPLE_COUNT * BYTE_PER_SAMPLE); // byte size
 
-    // 自定义音频采集相关变量
-    private int mExternalAudioStreamId;
-
-    private boolean isPushingAudio = false;
-    // 为麦克风采集和文件读取分别创建线程
-    private MicrophoneCaptureThread microphoneCaptureThread;
-    private FileAudioCaptureThread fileAudioCaptureThread;
-
-    RadioGroup audioSourceRadioGroup;
     // 麦克风采集输入 or 外部文件输入
+    RadioGroup audioSourceRadioGroup;
     private boolean isMicrophoneCapture = false;
+    private MicrophoneCaptureThread microphoneCaptureThread; // 模拟从麦克风采集数据
+    private FileAudioCaptureThread fileAudioCaptureThread;   // 模拟从文件中读取数据
 
-    // 本地播放
+    // 是否需要本地播放
     private boolean isLocalPlayout = false;
     private SwitchCompat isLocalPlayoutSwitch;
 
-    // 是否允许录制麦克风采集的数据到文件
+    // 是否允许录制麦克风采集的数据到文件,主要用于检查传入SDK前采集的数据是否正常
     private SwitchCompat mEnableDumpAudioSwitch;
     private boolean mEnableDumpAudio = false;
     private EditText mDumpAudioFileNameEditText;
@@ -220,7 +220,9 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
     private void initRtcEngine() {
         //创建并初始化引擎
         if(mAliRtcEngine == null) {
-            mAliRtcEngine = AliRtcEngine.getInstance(this);
+            // 通过extras参数设置是否关闭内部音频采集
+            String extras = "{\"user_specified_use_external_audio_record\":\"TRUE\"}";
+            mAliRtcEngine = AliRtcEngine.getInstance(this, extras);
         }
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
@@ -238,8 +240,7 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
 
         //设置视频编码参数
         AliRtcEngine.AliRtcVideoEncoderConfiguration aliRtcVideoEncoderConfiguration = new AliRtcEngine.AliRtcVideoEncoderConfiguration();
-        aliRtcVideoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(
-                720, 1280);
+        aliRtcVideoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(720, 1280);
         aliRtcVideoEncoderConfiguration.frameRate = 20;
         aliRtcVideoEncoderConfiguration.bitrate = 1200;
         aliRtcVideoEncoderConfiguration.keyFrameInterval = 2000;
@@ -257,10 +258,6 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
         mAliRtcEngine.subscribeAllRemoteAudioStreams(true);
         mAliRtcEngine.setDefaultSubscribeAllRemoteVideoStreams(true);
         mAliRtcEngine.subscribeAllRemoteVideoStreams(true);
-
-        //音频自定义采集，需要关闭ARTC SDK内部采集，默认是开启的
-        String parameter = "{\"audio\":{\"enable_system_audio_device_record\":\"FALSE\"}}";
-        mAliRtcEngine.setParameter(parameter);
     }
 
     private void startPreview(){
@@ -302,27 +299,29 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
 
     // 开启外部音频采集
     private void startAudioCapture() {
+        // 根据获取到的音频数据格式配置添加音频流
         AliRtcEngine.AliRtcExternalAudioStreamConfig config = new AliRtcEngine.AliRtcExternalAudioStreamConfig();
         if(isMicrophoneCapture) {
-            config.sampleRate = SAMPLE_RATE;
+            config.sampleRate = mAudioMicrophoneSampleRate;
+            config.channels = mAudioMicrophoneChannel;
         } else {
-            // 示例音频wav文件的采样率为16000
-            config.sampleRate = 16000;
+            config.sampleRate = mAudioFileSampleRate;
+            config.channels = mAudioFileChannel;
         }
-        config.channels = CHANNEL;
+        // 推流音量，如果为0表示不推流
         config.publishVolume = 100;
-        // 本地播放音量
+        // 本地播放音量，如果为0表示本地不播放
         config.playoutVolume = isLocalPlayout ? 100 : 0;
-        config.enable3A = true;
+        config.enable3A = true; // 外采传入音频数据是否经过3A算法，即AEC、ANS、AGC,请根据您的场景来选择
 
+        // 添加音频流，返回值为音频流ID，用于后续的音频数据推送
         int result = mAliRtcEngine.addExternalAudioStream(config);
         if (result <= 0) {
+            Log.e("VideoCallActivity", "addExternalAudioStream failed, result = " + result);
             return;
         }
-
         mExternalAudioStreamId = result;
 
-        isPushingAudio = true;
         if (isMicrophoneCapture) {
             // 启动麦克风采集输入
             startMicrophoneCapture();
@@ -337,9 +336,9 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
             microphoneCaptureThread = new MicrophoneCaptureThread(
                     this, // Context
                     this,
-                    SAMPLE_RATE,
-                    CHANNEL,
-                    BITS_PER_SAMPLE,
+                    mAudioMicrophoneSampleRate,
+                    mAudioMicrophoneChannel,
+                    mAudioMicrophoneBitsPerSample,
                     mEnableDumpAudio,
                     dumpAudioFileName
             );
@@ -349,9 +348,15 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
 
     private void startFileAudioCapture() {
         if (fileAudioCaptureThread == null) {
+            // 从文件中读取，在此演示读取app/assets/music.wav文件，其参数为16k单声道,比特深度为16bit
             fileAudioCaptureThread = new FileAudioCaptureThread(
+                    mFileName,
                     this,
-                    this
+                    this,
+                    mAudioFileSampleRate,
+                    mAudioFileChannel,
+                    mAudioFileBitsPerSample,
+                    BUFFER_DURATION
             );
             fileAudioCaptureThread.start();
         }
@@ -359,7 +364,6 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
 
     private void stopAudioCapture() {
 
-        isPushingAudio = false;
         // 停止麦克风采集线程
         if (microphoneCaptureThread != null) {
             microphoneCaptureThread.stopCapture();
@@ -396,40 +400,48 @@ public class CustomAudioCaptureActivity extends AppCompatActivity implements Aud
             // 构造AliRtcAudioFrame对象
             AliRtcEngine.AliRtcAudioFrame sample = new AliRtcEngine.AliRtcAudioFrame();
             sample.data = audioData;
-            sample.numSamples = bytesRead / (channels * (bitsPerSample / 8)); // 根据实际读取的字节数计算样本数
-            sample.numChannels = channels;
-            sample.sampleRate = sampleRate;
             sample.bytesPerSample = bitsPerSample / 8;
+            sample.numSamples = bytesRead / (channels * sample.bytesPerSample); // 根据实际读取的字节数计算样本数
+            sample.numChannels = channels;
+            sample.samplesPerSec = sampleRate;
 
-            int ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
 
-            if (ret != 0) {
-                if (ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL) {
-                    // 处理缓冲区满的情况, 等待一段时间再重试,一般最多重试几百ms
-                    int retryCount = 0;
-                    final int MAX_RETRY_COUNT = 20;
-                    final int BUFFER_FULL_WAIT_MS = 30;
-                    while (ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL && retryCount < MAX_RETRY_COUNT) {
-                        if(!isPushingAudio) {
-                            break;
-                        }
-                        try {
-                            Thread.sleep(BUFFER_FULL_WAIT_MS);
-                            ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
-                            retryCount++;
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            break;
-                        }
+            // 将获取的数据送入SDK
+            int ret = 0;
+            // 当缓冲区满导致push失败的时候需要进行重试
+            int retryCount = 0;
+            final int MAX_RETRY_COUNT = 20;
+            final int BUFFER_WAIT_MS = 10;
+            do {
+                ret = mAliRtcEngine.pushExternalAudioStreamRawData(mExternalAudioStreamId, sample);
+                if(ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL) {
+                    // 处理缓冲区满的情况，等待一段时间重试，最多重试几百ms
+                    retryCount++;
+                    if(mExternalAudioStreamId <= 0 || retryCount >= MAX_RETRY_COUNT) {
+                        // 已经停止推流或者重试次数过多，退出循环
+                        break;
                     }
 
-                    // 如果重试后仍然失败，记录日志
-                    if (ret != 0) {
-                        Log.w("CustomAudioCapture", "推送音频数据失败，错误码: " + ret + "，重试次数: " + retryCount);
+                    try {
+                        // 暂停一段时间
+                        Thread.sleep(BUFFER_WAIT_MS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
                     }
                 } else {
-                    // 处理其他错误情况
-                    Log.e("CustomAudioCapture", "推送音频数据失败，错误码: " + ret);
+                    // 推送成功或者其他错误直接退出循环
+                    break;
+                }
+            } while (retryCount < MAX_RETRY_COUNT);
+
+            // 推送失败记录日志
+            if(ret != 0) {
+                if(ret == ErrorCodeEnum.ERR_SDK_AUDIO_INPUT_BUFFER_FULL) {
+                    // 如果重试后仍然失败，记录日志
+                    Log.w("CustomAudioCapture", "推送音频数据失败，错误码: " + ret + "，重试次数: " + retryCount);
+                } else {
+                    Log.e("CustomAudioCapture", "推送音频数据失败，错误码：" + ret);
                 }
             }
         }

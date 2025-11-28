@@ -99,7 +99,19 @@ class CustomAudioRenderMainVC: UIViewController {
     func setup() {
         
         // 创建并初始化引擎
-        let engine = AliRtcEngine.sharedInstance(self, extras:nil)
+        var customAudioPlayConfig: [String: String] = [:]
+        // 使用外部播放（停止SDK内部音频播放）,如果通话过程中需要一直关闭SDK播放，推荐在getInstance的时候传入参数配置
+        // 如果通话过程中需要动态开关SDK内部播放，可以调用setParmeter接口 engine.setParameter("{\"audio\":{\"enable_system_audio_device_play\":\"FALSE\"}}")
+        if isCustomAudioRender {
+            customAudioPlayConfig["user_specified_use_external_audio_player"] = "TRUE"
+        }
+        // 序列化为Json
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: customAudioPlayConfig, options: []),
+        let extras = String(data: jsonData, encoding: .utf8) else {
+            print("JSON 序列化失败")
+            return
+        }
+        let engine = AliRtcEngine.sharedInstance(self, extras:extras)
         
         // 设置日志级别
         engine.setLogLevel(.info)
@@ -135,9 +147,9 @@ class CustomAudioRenderMainVC: UIViewController {
         engine.subscribeAllRemoteVideoStreams(true)
         
         if isCustomAudioRender {
-            // 关闭SDK内部播放
-            engine.setParameter("{\"audio\":{\"enable_system_audio_device_play\":\"FALSE\"}}")
             // 开启原始音频数据回调
+            observerConfig.sampleRate = ._Unknown
+            observerConfig.channels = .monoAudio
             engine.enableAudioFrameObserver(true, audioSource: audioSource, config: observerConfig)
             // 注册原始音频数据监听器
             engine.registerAudioFrameObserver(self)

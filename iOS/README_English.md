@@ -39,8 +39,12 @@ Download [address](https://github.com/MediaBox-Demos/amdemos-artc/tree/main/iOS)
 |           |—— CustomAudioRender       // Custom audio render
 |           |—— CustomVideoCapture      // Custom video capture
 |           |—— CustomVideoRender       // Custom video render
+│           ├── CustomVideoProcess      // Custom video processing
 |           |—— PreJoinChannelTest      // Network and Device Check before joining a channel
 |           |—— PictureInPicture        // Picture in Picture
+|           |—— H265                        // H.265Encoding
+|           |—— IntelligentDenoise          // Intelligent Denoise
+|           |—— LocalRecord                 // Local recording
 │       ├── Setting                     // Setting module
 │       ├── ...                         // Other files for the project
 │   ├── ARTCExample.xcodeproj      // Demo's project

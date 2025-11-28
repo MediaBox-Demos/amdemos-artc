@@ -70,11 +70,19 @@
                                 <rect key="frame" x="24" y="83" width="345" height="34.333333333333343"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u2M-QO-yGv">
-                                        <rect key="frame" x="0.0" y="0.0" width="345" height="34.333333333333336"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Enter PIP Mode"/>
                                         <connections>
                                             <action selector="onEnterPIPModeBtnClicked:" destination="fVJ-bn-Mmm" eventType="touchUpInside" id="pk3-24-0Gh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dQA-jo-2eA">
+                                        <rect key="frame" x="172.66666666666663" y="0.0" width="172.33333333333337" height="34.333333333333336"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <connections>
+                                            <action selector="onTogglePIP:" destination="fVJ-bn-Mmm" eventType="touchUpInside" id="Mik-bW-Y1h"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -96,7 +104,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="contentScrollView" destination="IFq-0U-6lE" id="Tiy-Mh-fa1"/>
+                        <outlet property="contentScrollView" destination="IFq-0U-6lE" id="JFg-IY-ftA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zo0-i9-OOE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

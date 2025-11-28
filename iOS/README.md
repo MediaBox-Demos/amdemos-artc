@@ -38,8 +38,12 @@ ARTC SDK iOS平台(Swift语言)的API示例Demo，展示ARTC SDK 的API调用示
 |           |—— CustomAudioRender           // 自定义音频播放
 |           |—— CustomVideoCapture          // 自定义视频采集
 |           |—— CustomVideoRender           // 自定义视频渲染
+│           ├── CustomVideoProcess          // 自定义视频处理
 |           |—— PreJoinChannelTest          // 入会前网络和设备检测
 |           |—— PictureInPicture            // 画中画
+|           |—— H265                        // H.265编码
+|           |—— IntelligentDenoise          // 智能降噪
+|           |—— LocalRecord                 // 本地录制
 │       ├── Setting                     // 设置模块
 │       ├── ...                         // 工程其他文件
 │   ├── ARTCExample.xcodeproj        // Demo的Project

@@ -107,6 +107,18 @@ class CameraCaptureHelper: NSObject {
             return
         }
         
+        if let connection = videoOutput.connection(with: .video) {
+            // 根据当前界面方向设置（默认正竖屏）
+            if connection.isVideoOrientationSupported {
+                connection.videoOrientation = .portrait
+            }
+
+             // 前置摄像头通常需要镜像
+            if connection.isVideoMirroringSupported {
+                connection.isVideoMirrored = true
+            }
+        }
+        
         // 提交配置
         captureSession.commitConfiguration()
         print("Camera session configured")
@@ -177,7 +189,7 @@ class CameraCaptureHelper: NSObject {
     }
 }
 
-// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
+// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate 视频数据回调
 extension CameraCaptureHelper: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput,

@@ -9,14 +9,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * 文件读取类，根据传入的时间间隔和文件参数，从assets文件夹中的指定音频文件中读取音频数据
+ * 数据通过onAudioFrameCaptured回调返回
+ */
 public class FileAudioCaptureThread extends Thread {
     private static final String TAG = "FileAudioCapture";
-    private static final String AUDIO_FILE = "music.wav";
+    private String mAudioFileName;
 
     private AudioCaptureCallback mAudioCaptureCallback;
     private final AtomicBoolean isCapturing = new AtomicBoolean(false);
-
-    private Context context;
     private AssetManager assetManager;
 
     // 音频参数
@@ -28,31 +30,26 @@ public class FileAudioCaptureThread extends Thread {
     private int mBytesPerSample;
     private int mBufferSampleCount;
     private int mBufferByteSize;
-    private static final int DEFAULT_BUFFER_DURATION_MS = 20; // 20ms
 
     private InputStream inputStream;
 
-    public FileAudioCaptureThread(Context context,
+    public FileAudioCaptureThread(String audioFileName,
+                                  Context context,
                                   AudioCaptureCallback callback,
                                   int sampleRate,
                                   int channels,
                                   int bitsPerSample,
-                                  int bufferByteSize) {
-        this.context = context;
+                                  int bufferMs) {
+        this.mAudioFileName = audioFileName;
         this.assetManager = context.getAssets();
         this.mAudioCaptureCallback = callback;
         this.mSampleRate = sampleRate;
         this.mChannels = channels;
-        this.mBitsPerSample = bitsPerSample;
-        this.mBufferByteSize = bufferByteSize;
 
-        this.mBytesPerSample = mBitsPerSample / 8 * mChannels;
-        this.mBufferSampleCount = mBufferByteSize / mBytesPerSample;
-    }
-
-    public FileAudioCaptureThread(Context context,
-                                  AudioCaptureCallback callback) {
-        this(context, callback, 16000, 1, 16, DEFAULT_BUFFER_DURATION_MS);
+        this.mBitsPerSample = bitsPerSample; // 比特深度，通常位16
+        this.mBytesPerSample = mBitsPerSample / 8 * mChannels; // 每个样本字节数，包含多个通道
+        this.mBufferSampleCount =  (sampleRate / 1000); // 每ms有多少样本
+        this.mBufferByteSize = bufferMs * mBufferSampleCount * mBytesPerSample;  // 缓冲区大小(字节)，用于分配缓冲区，公式：时间*每ms样本数*每个样本字节数
     }
 
     @Override
@@ -60,7 +57,7 @@ public class FileAudioCaptureThread extends Thread {
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
 
         try {
-            inputStream = assetManager.open(AUDIO_FILE);
+            inputStream = assetManager.open(mAudioFileName);
         } catch (IOException e) {
             Log.e(TAG, "打开音频文件失败", e);
             return;

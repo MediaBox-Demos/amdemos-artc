@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "7Rj-ko-dhO"; */
+"7Rj-ko-dhO.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "7Rj-ko-dhO"; */
+"7Rj-ko-dhO.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "H265"; ObjectID = "OBR-ku-0ZT"; */
+"OBR-ku-0ZT.text" = "H265";
+
+/* Class = "UILabel"; text = "If you want to talk to other users, you need to join the same room, which means that the ChannelIDs of both parties should be the same."; ObjectID = "XOA-oc-OXp"; */
+"XOA-oc-OXp.text" = "如果要和其他用户加入同一个语聊房，需要加入到同一个频道里，即保证双方的 ChannelID 相同。";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "cz1-kF-yGK"; */
+"cz1-kF-yGK.placeholder" = "频道 Id";

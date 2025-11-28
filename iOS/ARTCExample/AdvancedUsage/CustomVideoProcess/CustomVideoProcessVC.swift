@@ -1,30 +1,31 @@
 //
-//  CustomVideoCpature.swift
+//  ProcessVideoRawData.swift
 //  ARTCExample
 //
-//  Created by wy on 2025/8/27.
+//  Created by wy on 2025/7/17.
 //
 
 import Foundation
-import UIKit
-import AVFoundation
 import AliVCSDK_ARTC
 
-class CustomVideoCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
+// 自定义视频处理
+// 当前示例主要演示获取原始视频数据并对原始视频数据进行美颜处理
 
+class CustomVideoProcessSetParamsVC: UIViewController, UITextFieldDelegate {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.title = "Custom Video Capture".localized
+        self.title = "Custom Video Process".localized
         
         self.channelIdTextField.delegate = self
     }
-    
+    @IBOutlet weak var textureModeSwitch: UISwitch!
+    @IBOutlet weak var enableBeautifySwitch: UISwitch!
+    // join channel
     @IBOutlet weak var channelIdTextField: UITextField!
-    @IBOutlet weak var customVideoCaptureSwitch: UISwitch!
-    
-    @IBAction func onJoinChannelBtnClicked(_ sender: Any) {
+    @IBAction func onJoinChannelBtnClicked(_ sender: UIButton) {
         guard let channelId = self.channelIdTextField.text, channelId.isEmpty == false else {
             return
         }
@@ -34,11 +35,14 @@ class CustomVideoCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
         let timestamp = Int64(Date().timeIntervalSince1970 + 24 * 60 * 60)
         let joinToken = helper.generateJoinToken(channelId: channelId, userId: userId, timestamp: timestamp)
         
-        let vc = self.presentVC(storyboardName: "CustomVideoCapture", storyboardId: "MainVC") as? CustomVideoCaptureMainVC
-        vc?.channelId = channelId
-        vc?.userId = userId
-        vc?.joinToken = joinToken
-        vc?.isEnableCustomVideoCapture = customVideoCaptureSwitch.isOn
+        let vc = self.presentVC(storyboardName: "CustomVideoProcess", storyboardId: "MainVC") as? CustomVideoProcessMainVC
+        guard let vc = vc else { return }
+        vc.channelId = channelId
+        vc.userId = userId
+        vc.joinToken = joinToken
+        
+        vc.isTextureMode = textureModeSwitch.isOn
+        vc.isEnableBeautify = enableBeautifySwitch.isOn
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -58,18 +62,13 @@ class CustomVideoCaptureSetParamsVC: UIViewController, UITextFieldDelegate {
 
 }
 
-
-
-class CustomVideoCaptureMainVC: UIViewController {
+class CustomVideoProcessMainVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.title = self.channelId
-        
-        capturer.delegate = self
-        capturer.startCapture()
         
         self.setup()
         self.startPreview()
@@ -87,8 +86,9 @@ class CustomVideoCaptureMainVC: UIViewController {
         
         self.leaveAnddestroyEngine()
     }
-    
+
     @IBOutlet weak var contentScrollView: UIScrollView!
+    
     var seatViewList: [SeatView] = []
     
     var channelId: String = ""
@@ -98,9 +98,8 @@ class CustomVideoCaptureMainVC: UIViewController {
 
     var joinToken: String? = nil
     
-    // 自定义采集
-    var isEnableCustomVideoCapture: Bool = true
-    let capturer = CameraCaptureHelper()
+    var isEnableBeautify: Bool = false
+    var isTextureMode: Bool = true
     
     func setup() {
         
@@ -117,6 +116,9 @@ class CustomVideoCaptureMainVC: UIViewController {
         
         // 设置音频Profile，默认使用高音质模式AliRtcEngineHighQualityMode及音乐模式AliRtcSceneMusicMode
         engine.setAudioProfile(AliRtcAudioProfile.engineHighQualityMode, audio_scene: AliRtcAudioScenario.sceneMusicMode)
+        
+        // 注册视频数据回调
+        engine.registerVideoSampleObserver()
         
         // 设置视频编码参数
         let config = AliRtcVideoEncoderConfiguration()
@@ -140,13 +142,14 @@ class CustomVideoCaptureMainVC: UIViewController {
         engine.setDefaultSubscribeAllRemoteVideoStreams(true)
         engine.subscribeAllRemoteVideoStreams(true)
         
-        // 关闭或开启SDK内部采集
-        engine.enableLocalVideo(isEnableCustomVideoCapture)
-        // 关闭或开启外部视频流，默认替换相机流
-        engine.setExternalVideoSource(isEnableCustomVideoCapture, sourceType: .videosourceCameraType, renderMode: .auto)
+        // 纹理数据回调
+        if(isTextureMode) {
+            engine.registerLocalVideoTexture()
+        }
         
         self.rtcEngine = engine
     }
+
     
     func joinChannel() {
         
@@ -185,8 +188,6 @@ class CustomVideoCaptureMainVC: UIViewController {
     }
     
     func leaveAnddestroyEngine() {
-        self.capturer.stopCapture()
-        
         self.rtcEngine?.stopPreview()
         self.rtcEngine?.leaveChannel()
         AliRtcEngine.destroy()
@@ -238,11 +239,65 @@ class CustomVideoCaptureMainVC: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
 }
 
-extension CustomVideoCaptureMainVC: AliRtcEngineDelegate {
+extension CustomVideoProcessMainVC: AliRtcEngineDelegate {
     
+    // MARK: Video Sample Raw Frame Callback
+    // 数据期望的输出格式
+    func onGetVideoFormatPreference() -> AliRtcVideoFormat {
+        return .I420
+    }
+    
+    // 返回位置，默认全部不返回
+    func onGetVideoObservedFramePosition() -> Int {
+        let captureFlag = AliRtcVideoObserPosition.positionPostCapture.rawValue
+        let preEncoderFlag = AliRtcVideoObserPosition.positionPreEncoder.rawValue
+        let preRenderFlag = AliRtcVideoObserPosition.positionPreRender.rawValue
+        var ret = 0
+        // 美颜需要获取采集的视频数据
+        ret |= captureFlag
+        return ret
+    }
+    // 输出是否镜像
+    func onGetObserverDataMirrorApplied() -> Bool {
+        return true
+    }
+    // 本地采集视频数据
+    func onCaptureVideoSample(_ videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
+        let message = "onCaptureVideoSample: timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(videoSample.width), height: \(videoSample.height), dataLength: \(videoSample.dataLength)"
+        message.printLog()
+        return true
+    }
+    // 编码前视频数据
+    func onPreEncodeVideoSample(_ videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
+        let message = "onPreEncodeVideoSample: timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(videoSample.width), height: \(videoSample.height), dataLength: \(videoSample.dataLength)"
+        message.printLog()
+        return true
+    }
+    // 远端视频数据
+    func onRemoteVideoSample(_ uid: String, videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
+        let message = "onRemoteVideoSample: uid: \(uid), timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(videoSample.width), height: \(videoSample.height), dataLength: \(videoSample.dataLength)"
+        message.printLog()
+        return true
+    }
+    // 纹理数据
+    func onTextureCreate(_ context: UnsafeMutableRawPointer?) {
+        let message = "onTextureCreate"
+        message.printLog()
+    }
+    
+    func onTextureUpdate(_ textureId: Int32, width: Int32, height: Int32, videoSample: AliRtcVideoDataSample) -> Int32 {
+        let message = "onTextureUpdate: textureId: \(textureId), timestamp: \(videoSample.timeStamp), format: \(videoSample.format), width: \(width), height: \(height)"
+        message.printLog()
+        return textureId
+    }
+    
+    func onTextureDestory() {
+        let message = "onTextureDestroy"
+        message.printLog()
+    }
+    // MARK: Other Callback
     func onJoinChannelResult(_ result: Int32, channel: String, elapsed: Int32) {
         "onJoinChannelResult1 result: \(result)".printLog()
     }
@@ -328,68 +383,5 @@ extension CustomVideoCaptureMainVC: AliRtcEngineDelegate {
             /* TODO: 可选处理；增加业务代码，一般用于数据统计、UI变化 */
         }
     }
-}
-
-extension CustomVideoCaptureMainVC: CameraCaptureHelperDelegate {
-    // pixelbuffer 转为NV12
-    func copyNV12Data(from pixelBuffer: CVPixelBuffer) -> (UnsafeMutablePointer<UInt8>, Int, Int, Int)? {
-        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
-        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
-
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-
-        // Y 平面
-        guard let baseY = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0) else { return nil }
-        let strideY = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
-
-        // UV 平面
-        guard let baseUV = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1) else { return nil }
-        let strideUV = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
-
-        // 分配连续内存存储 NV12 数据
-        let totalSize = strideY * height + strideUV * height / 2
-        let rawPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: totalSize)
-
-        // 复制 Y
-        for row in 0..<height {
-            let src = baseY.advanced(by: row * strideY)
-            let dst = rawPtr.advanced(by: row * strideY)
-            memcpy(dst, src, strideY)
-        }
-
-        // 复制 UV
-        for row in 0..<(height/2) {
-            let src = baseUV.advanced(by: row * strideUV)
-            let dst = rawPtr.advanced(by: strideY*height + row * strideUV)
-            memcpy(dst, src, strideUV)
-        }
-
-        return (rawPtr, width, height, totalSize)
-    }
-    
-    // 相机采集的视频传入SDK
-    func videoCapture(_ capture: CameraCaptureHelper, didCaptureOutputBuffer sampleBuffer: CMSampleBuffer) {
-        guard let engine = self.rtcEngine else {return}
-        
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {return}
-
-        let dataSample = AliRtcVideoDataSample()
-        let retainedPixelBuffer = Unmanaged<CVPixelBuffer>.passRetained(pixelBuffer) // 用于增加引用计数，放置sampleBuffer释放后pixelbuffer无效
-        dataSample.pixelBuffer = pixelBuffer
-        dataSample.format = .cvPixelBuffer
-        dataSample.type = .cvPixelBuffer
-        dataSample.width = Int32(CVPixelBufferGetWidth(pixelBuffer))
-        dataSample.height = Int32(CVPixelBufferGetHeight(pixelBuffer))
-        dataSample.dataLength = Int(CVPixelBufferGetDataSize(pixelBuffer));
-        // 向SDK输入外部视频源
-        let ret = engine.pushExternalVideoFrame(dataSample, sourceType: .videosourceCameraType)
-        if ret != 0 {
-            // 接口调用失败需要release
-            "CVPixelBuffer Input Error!".printLog()
-            retainedPixelBuffer.release()
-        }
-    }
-        
 }
 

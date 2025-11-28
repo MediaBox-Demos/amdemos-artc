@@ -44,3 +44,10 @@
 * Android&iOS：变声/混响/美声
 * Android&iOS：智能降噪
   
+## v1.6.0
+发布时间：2025-11-27
+* Android&iOS：本地录制
+* Android&iOS：H265
+* Android&iOS：自定义音频采集、自定义音频播放优化
+* iOS:修复画中画bug
+  

@@ -27,7 +27,8 @@ ARTC SDK Android平台(Java语言)的API示例Demo，展示ARTC SDK 的API调用
 │           ├── VideoBasicUsage // 常用视频操作和配置
 │           |—— CameraCommonControl //摄像头常规配置
 │           |—— SEIUsage         //SEI消息发送和接收
-│           |—— ScreenShareUsage  //屏幕共享
+│           |—— DataChannelMessage //自定义消息发送和接收
+│           |—— ScreenShare  //屏幕共享
 │           |—— StreamMonitoring //通话中推拉流质量监测  
             |—— PlayAudioFiles    // 播放音频伴奏和音效
         |—— AdvancedUsage //进阶功能模块
@@ -37,6 +38,9 @@ ARTC SDK Android平台(Java语言)的API示例Demo，展示ARTC SDK 的API调用
             |—— CustomVideoCaptureAndRender //自定义视频采集和渲染
             |—— PreJoinChannelTest //入会前质量检测（设备+网络）
             |—— PictureInPicture //画中画
+            |—— H265 // H.265编码
+            |—— IntelligentDenoise // 智能降噪
+            |—— LocalRecord     // 本地录制
 │       ├── build.gradle  
 │       └── settings.gradle
 

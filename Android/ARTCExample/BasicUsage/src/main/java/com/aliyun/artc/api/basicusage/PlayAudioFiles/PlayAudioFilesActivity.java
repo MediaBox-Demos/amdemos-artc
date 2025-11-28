@@ -48,7 +48,9 @@ import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * 播放或推流本地的伴奏和音效，当前示例主要演示本地文件的播放
+ */
 public class PlayAudioFilesActivity extends AppCompatActivity {
     private static final String TAG = "PlayAudioFilesActivity";
 
@@ -71,16 +73,20 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
     private EditText mMixingLoopCountEditText;
     private Integer mMixingMusicLoopCount = -1; // 默认无限循环
     private SeekBar mMixingPlayPositionSeekBar;
-    // 音效管理——可以同时有多个
+    // 音效——可以同时有多个
     private String mAudioEffectFilePath1 = "/assets/thunder.wav";
     private String mAudioEffectFilePath2 = "/assets/applause.wav";
 
-    private int mCurrEffect = 1;
+    private int mCurrSoundID = 1;
     private SeekBar mEffectVolumeSeekBar;
     private Spinner mAudioEffectSpinner;
     private SeekBar mAudioEffectVolumeSeekBar;
     private EditText mAudioEffectLoopCountEditText;
     private SeekBar mAudioEffectVolumeAllSeekBar;
+
+    // 演示根据音频文件路径获取音频文件的时长
+    private TextView mAudioFilePathTextView;
+    private Button mGetAudioFileDurationBtn;
 
 
     @Override
@@ -97,6 +103,20 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         setTitle(getString(R.string.play_audio_files));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // 获取音频文件时长
+        mAudioFilePathTextView = findViewById(R.id.tv_audio_file_path);
+        mAudioFilePathTextView.setText(mMixingMusicFilepath);
+        mGetAudioFileDurationBtn = findViewById(R.id.btn_get_audio_file_info);
+        mGetAudioFileDurationBtn.setOnClickListener(v -> {
+            // 获取音频文件时长,结果通过onAudioFileInfo返回
+            if(mAliRtcEngine != null) {
+                mAliRtcEngine.getAudioFileInfo(mMixingMusicFilepath);
+            } else {
+                ToastHelper.showToast(this, "请先初始化AliRtcEngine", Toast.LENGTH_SHORT);
+            }
+        });
+
+        // 处理音频伴奏和音效的相关UI
         initUI();
 
         gridVideoContainer = findViewById(R.id.grid_video_container);
@@ -113,6 +133,12 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
                 startRTCCall();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyRtcEngine();
     }
 
     public static void startActionActivity(Activity activity) {
@@ -351,6 +377,21 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onAudioPublishStateChanged(AliRtcEngine.AliRtcPublishState oldState , AliRtcEngine.AliRtcPublishState newState, int elapseSinceLastState, String channel, AliRtcEngine.AliRtcPublishStateChangedReason reason){
+            super.onAudioPublishStateChanged(oldState, newState, elapseSinceLastState, channel, reason);
+            // 已经推流之后才能开始播放伴奏或者音效
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(newState == AliRtcEngine.AliRtcPublishState.AliRtcStatsPublished) {
+                        ToastHelper.showToast(PlayAudioFilesActivity.this, "Audio Stream has been published!", Toast.LENGTH_SHORT);
+                    }
+                }
+            });
+        }
+
+
+        @Override
         public void onLeaveChannelResult(int result, AliRtcEngine.AliRtcStats stats){
             super.onLeaveChannelResult(result, stats);
         }
@@ -438,6 +479,51 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             });
         }
 
+
+        public void onAudioAccompanyStateChanged(AliRtcEngine.AliRtcAudioAccompanyStateCode playState, AliRtcEngine.AliRtcAudioAccompanyErrorCode errorCode){
+            // 本地播放伴奏状态变化 Started、Stopped、Paused、Resumed、Ended、Buffering、BufferingEnd、Failed
+            handler.post(() -> {
+                String msg = "onAudioAccompanyStateChanged playState:" + playState + " errorCode:" + errorCode;
+                ToastHelper.showToast(PlayAudioFilesActivity.this, msg, Toast.LENGTH_SHORT);
+            });
+        }
+
+        @Override
+        public void onAudioFileInfo(AliRtcEngine.AliRtcAudioFileInfo info, AliRtcEngine.AliRtcAudioAccompanyErrorCode errorCode) {
+
+            handler.post(() -> {
+                String msg = "onAudioFileInfo.file:" + info.filePath + "duration:" + info.durationMs + "audioPlayingErrorCode=" + errorCode;
+                ToastHelper.showToast(PlayAudioFilesActivity.this, msg, Toast.LENGTH_SHORT);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioAccompanyStarted(String uid) {
+            // 远端用户uid开始播放伴奏时触发
+            handler.post(() -> {
+                String msg = "onRemoteAudioAccompanyStarted.uid:" + uid;
+                ToastHelper.showToast(PlayAudioFilesActivity.this, msg, Toast.LENGTH_SHORT);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioAccompanyFinished(String uid) {
+            // 远端用户uid停止播放伴奏时触发
+            handler.post(() -> {
+                String msg = "onRemoteAudioAccompanyFinished.uid:" + uid;
+                ToastHelper.showToast(PlayAudioFilesActivity.this, msg, Toast.LENGTH_SHORT);
+            });
+        }
+
+        @Override
+        public void onAudioEffectFinished(int soundId) {
+            // 本地播放的音效播放完毕时触发
+            handler.post(() -> {
+                String msg = "onAudioEffectFinished.soundId:" + soundId;
+                ToastHelper.showToast(PlayAudioFilesActivity.this, msg, Toast.LENGTH_SHORT);
+            });
+        }
+
     };
 
     private void destroyRtcEngine() {
@@ -479,10 +565,17 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         mMixingMusicFileTextView = findViewById(R.id.tv_mixing_music_file);
         mMixingMusicFileTextView.setText(mMixingMusicFilepath);
         mMixingVolumeSeekBar = findViewById(R.id.seekbar_mixing_music_volume);
+        mMixingVolumeSeekBar.setMax(100);
+        mMixingVolumeSeekBar.setProgress(60);
         mMixingPublishVolumeSeekBar = findViewById(R.id.seekbar_mixing_music_publish_volume);
+        mMixingPublishVolumeSeekBar.setMax(100);
+        mMixingPublishVolumeSeekBar.setProgress(60);
         mMixingPlaybackVolumeSeekBar = findViewById(R.id.seekbar_mixing_music_play_volume);
+        mMixingPlaybackVolumeSeekBar.setMax(100);
+        mMixingPlaybackVolumeSeekBar.setProgress(60);
         mMixingLoopCountEditText = findViewById(R.id.et_mixing_music_loop_count);
         mMixingPlayPositionSeekBar = findViewById(R.id.seekbar_mixing_music_play_position);
+        mMixingPlayPositionSeekBar.setProgress(0);
 
         TextView mMixingStartBtn = findViewById(R.id.mixing_start);
         TextView mMixingStopBtn = findViewById(R.id.mixing_stop);
@@ -499,16 +592,22 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         mMixingVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && mAliRtcEngine != null) {
-                    mAliRtcEngine.setAudioAccompanyVolume(progress);
-                }
+                // 音量进度条改变
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // 开始拖动
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // 拖动结束设置音量，或者onProgressChanged时设置
+                if(mAliRtcEngine != null) {
+                    int volume = seekBar.getProgress();
+                    mAliRtcEngine.setAudioAccompanyVolume(volume); // 音量要求[0-100]
+                }
+            }
         });
 
         // 推流音量控制
@@ -543,11 +642,39 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
+        mMixingPlayPositionSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(mAliRtcEngine != null && hasJoined) {
+                    int duration = seekBar.getProgress();
+                    if(duration >= 0 && duration <= mAliRtcEngine.getAudioAccompanyDuration()) {
+                        mAliRtcEngine.setAudioAccompanyPosition(duration);
+                        mMixingPlayPositionSeekBar.setProgress(duration);
+                    }
+                }
+            }
+        });
+
         // 音效相关UI
         mAudioEffectSpinner = findViewById(R.id.spinner_audio_effect);
         mAudioEffectVolumeSeekBar = findViewById(R.id.seekbar_audio_effect_volume);
+        mAudioEffectVolumeSeekBar.setMax(100);
+        mAudioEffectVolumeSeekBar.setProgress(60);
         mAudioEffectLoopCountEditText = findViewById(R.id.edittext_audio_effect_loop_count);
         mAudioEffectVolumeAllSeekBar = findViewById(R.id.seekbar_audio_effect_volume_all);
+        mAudioEffectVolumeAllSeekBar.setMax(100);
+        mAudioEffectVolumeAllSeekBar.setProgress(60);
 
         // 设置音效选择Spinner
         String[] audioEffects = {"音效 1 (effect1.wav)", "音效 2 (effect2.wav)"};
@@ -557,12 +684,12 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         mAudioEffectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mCurrEffect = position + 1;
+                mCurrSoundID = position + 1;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mCurrEffect = 1;
+                mCurrSoundID = 1;
             }
         });
 
@@ -579,9 +706,9 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         effectPreloadBtn.setOnClickListener(v -> preloadAudioEffect());
         effectUnloadBtn.setOnClickListener(v -> unloadAudioEffect());
         effectStartBtn.setOnClickListener(v -> playAudioEffect());
-        effectPauseBtn.setOnClickListener(v -> pauseAudioEffect(mCurrEffect));
-        effectResumeBtn.setOnClickListener(v -> resumeAudioEffect(mCurrEffect));
-        effectStopBtn.setOnClickListener(v -> stopAudioEffect(mCurrEffect));
+        effectPauseBtn.setOnClickListener(v -> pauseAudioEffect(mCurrSoundID));
+        effectResumeBtn.setOnClickListener(v -> resumeAudioEffect(mCurrSoundID));
+        effectStopBtn.setOnClickListener(v -> stopAudioEffect(mCurrSoundID));
         effectStopAllBtn.setOnClickListener(v -> stopAllAudioEffect());
         effectPauseAllBtn.setOnClickListener(v -> pauseAllAudioEffects());
         effectResumeAllBtn.setOnClickListener(v -> resumeAllAudioEffects());
@@ -591,8 +718,8 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser && mAliRtcEngine != null) {
-                    mAliRtcEngine.setAudioEffectPublishVolume(mCurrEffect, progress);
-                    mAliRtcEngine.setAudioEffectPlayoutVolume(mCurrEffect, progress);
+                    mAliRtcEngine.setAudioEffectPublishVolume(mCurrSoundID, progress);
+                    mAliRtcEngine.setAudioEffectPlayoutVolume(mCurrSoundID, progress);
                 }
             }
 
@@ -657,6 +784,10 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             config.playoutVolume = playbackVolume;
             config.startPosMs = 0;
             mAliRtcEngine.startAudioAccompany(mMixingMusicFilepath, config);
+
+            // 更新进度条UI
+            int audioDuration = mAliRtcEngine.getAudioAccompanyDuration(); // ms
+            mMixingPlayPositionSeekBar.setMax(audioDuration);
         } catch (Exception e) {
             ToastHelper.showToast(this, "播放背景音乐异常", Toast.LENGTH_SHORT);
         }
@@ -698,9 +829,9 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             return;
         }
 
-        String filePath = mCurrEffect == 1 ? mAudioEffectFilePath1 : mAudioEffectFilePath2;
-        mAliRtcEngine.preloadAudioEffect(mCurrEffect, filePath);
-        ToastHelper.showToast(this, "预加载音效 " + mCurrEffect, Toast.LENGTH_SHORT);
+        String filePath = mCurrSoundID == 1 ? mAudioEffectFilePath1 : mAudioEffectFilePath2;
+        mAliRtcEngine.preloadAudioEffect(mCurrSoundID, filePath);
+        ToastHelper.showToast(this, "预加载音效 " + mCurrSoundID, Toast.LENGTH_SHORT);
     }
 
     private void unloadAudioEffect() {
@@ -709,8 +840,8 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
             return;
         }
 
-        mAliRtcEngine.unloadAudioEffect(mCurrEffect);
-        ToastHelper.showToast(this, "取消加载音效 " + mCurrEffect, Toast.LENGTH_SHORT);
+        mAliRtcEngine.unloadAudioEffect(mCurrSoundID);
+        ToastHelper.showToast(this, "取消加载音效 " + mCurrSoundID, Toast.LENGTH_SHORT);
     }
 
     private void playAudioEffect() {
@@ -725,7 +856,7 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
         }
 
         try {
-            String filePath = mCurrEffect == 1 ? mAudioEffectFilePath1 : mAudioEffectFilePath2;
+            String filePath = mCurrSoundID == 1 ? mAudioEffectFilePath1 : mAudioEffectFilePath2;
 
             // 获取循环次数
             String loopCountStr = mAudioEffectLoopCountEditText.getText().toString();
@@ -733,11 +864,12 @@ public class PlayAudioFilesActivity extends AppCompatActivity {
 
             AliRtcEngine.AliRtcAudioEffectConfig config = new AliRtcEngine.AliRtcAudioEffectConfig();
             config.loopCycles = loopCount;
+            config.startPosMs = 0;
             config.publishVolume = mAudioEffectVolumeSeekBar.getProgress();
             config.playoutVolume = mAudioEffectVolumeSeekBar.getProgress();
 
-            mAliRtcEngine.playAudioEffect(mCurrEffect, filePath, config);
-            ToastHelper.showToast(this, "播放音效 " + mCurrEffect, Toast.LENGTH_SHORT);
+            mAliRtcEngine.playAudioEffect(mCurrSoundID, filePath, config);
+            ToastHelper.showToast(this, "播放音效 " + mCurrSoundID, Toast.LENGTH_SHORT);
         } catch (Exception e) {
             ToastHelper.showToast(this, "播放音效异常: " + e.getMessage(), Toast.LENGTH_SHORT);
         }

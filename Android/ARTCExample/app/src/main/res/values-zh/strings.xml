@@ -30,4 +30,7 @@
     <string name="custom_video_capture">自定义视频采集</string>
     <string name="picture_in_picture">画中画</string>
     <string name="intelligent_denoise">智能降噪</string>
+    <string name="custom_video_process">自定义视频处理</string>
+    <string name="h265">H265</string>
+    <string name="local_record">本地录制</string>
 </resources>

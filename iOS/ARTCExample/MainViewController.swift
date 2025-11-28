@@ -54,9 +54,12 @@ class MainViewController: UIViewController {
             ActionItem(name: "Custom Audio Render".localized, detail: "".localized, sbName: "CustomAudioRender"),
             ActionItem(name: "Custom Video Capture".localized, detail: "".localized, sbName: "CustomVideoCapture"),
             ActionItem(name: "Custom Video Render".localized, detail: "".localized, sbName: "CustomVideoRender"),
+            ActionItem(name: "Custom Video Process".localized, detail: "".localized, sbName: "CustomVideoProcess"),
             ActionItem(name: "Pre-Join Channel Test".localized, detail: "".localized, sbName: "PreJoinChannelTest"),
             ActionItem(name: "Picture In Picture".localized, detail: "".localized, sbName: "PictureInPicture"),
-            ActionItem(name: "Intelligent Denoise".localized, detail: "".localized, sbName: "IntelligentDenoise")
+            ActionItem(name: "Intelligent Denoise".localized, detail: "".localized, sbName: "IntelligentDenoise"),
+            ActionItem(name: "H265".localized, detail: "".localized, sbName: "H265"),
+            ActionItem(name: "Local Record".localized, detail: "".localized, sbName: "Recording")
         ]),
     ]
 }

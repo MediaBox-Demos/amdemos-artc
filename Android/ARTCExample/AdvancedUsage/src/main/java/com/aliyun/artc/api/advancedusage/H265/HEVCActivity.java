@@ -1,121 +1,96 @@
-package com.aliyun.artc.api.basicusage.DataChannelMessage;
-import static android.view.View.VISIBLE;
+package com.aliyun.artc.api.advancedusage.H265;
+
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoEncoderOrientationMode.AliRtcVideoEncoderOrientationModeAdaptive;
+import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackBoth;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackCamera;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackNo;
-import android.annotation.SuppressLint;
+import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackScreen;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.alivc.rtc.AliRtcEngine;
 import com.alivc.rtc.AliRtcEngineEventListener;
 import com.alivc.rtc.AliRtcEngineNotify;
-import com.aliyun.artc.api.basicusage.R;
+import com.aliyun.artc.api.advancedusage.R;
 import com.aliyun.artc.api.keycenter.ARTCTokenHelper;
 import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-/**
- * data channel message API调用示例
- * 参考文档： <a href="https://help.aliyun.com/zh/live/customize-message-sending-and-receiving?spm=a2c4g.11186623.help-menu-29949.d_4_4_11.686b636buwu7GM">...</a>
- *
- */
-public class DataChannelMessageActivity extends AppCompatActivity {
-    private static final String TAG = "DataChannelMessage";
+
+public class HEVCActivity extends AppCompatActivity {
     private Handler handler;
     private EditText mChannelEditText;
     private TextView mJoinChannelTextView;
     private boolean hasJoined = false;
-    private FrameLayout fl_local, fl_remote;
+
     private AliRtcEngine mAliRtcEngine = null;
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
-    private Map<String, ViewGroup> remoteViews = new ConcurrentHashMap<String, ViewGroup>();
-    private EditText mEditText;
-    private TextView mSendButton;
-    private TextView mReceiveTextView; // 显示接收到的消息
+    private GridLayout gridVideoContainer;
+    private SwitchCompat mEnableH265Switch;
+    private final Map<String, FrameLayout> remoteViews = new ConcurrentHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_data_channel_msg);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.custom_msg), (v, insets) -> {
+        setContentView(R.layout.activity_h265);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.h265), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setTitle(getString(R.string.custom_msg_Title));
+        setTitle(getString(R.string.h265));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mEditText= findViewById(R.id.et_message_input);
-        mSendButton= findViewById(R.id.btn_message_send);
-        fl_local = findViewById(R.id.fl_local);
-        fl_remote = findViewById(R.id.fl_remote);
+        gridVideoContainer = findViewById(R.id.grid_video_container);
+
         mChannelEditText = findViewById(R.id.channel_id_input);
         mChannelEditText.setText(GlobalConfig.getInstance().gerRandomChannelId());
         mJoinChannelTextView = findViewById(R.id.join_room_btn);
         mJoinChannelTextView.setOnClickListener(v -> {
             if(hasJoined) {
                 destroyRtcEngine();
-                mJoinChannelTextView.setText(R.string.video_chat_join_room);
+                mJoinChannelTextView.setText(R.string.video_chat_join_channel);
             } else {
                 startRTCCall();
             }
         });
 
-        mSendButton.setOnClickListener(v -> {
-            String msgtext = mEditText.getText().toString();
-            if (TextUtils.isEmpty(msgtext)) {
-                return;
-            }
-            if(mAliRtcEngine == null) {
-                return;
-            }
-
-            AliRtcEngine.AliRtcDataChannelMsg msg = new AliRtcEngine.AliRtcDataChannelMsg();
-            msg.type = AliRtcEngine.AliRtcDataMsgType.AliEngineDataMsgCustom;
-            /* data为二进制数据，可以是任意数据(文字、图片等) */
-            msg.data =  msgtext.getBytes();
-            // 发送消息，频道内开启sub通道的远端用户会触发onDataChannelMessage回调，返回值为0仅代表消息已经添加到底层队列，不代表成功发送
-            int res = mAliRtcEngine.sendDataChannelMsg(msg);
-            Log.i(TAG, "sendDataChannelMsg: " + msgtext + ", result: " + res);
-        });
-
-        mReceiveTextView = findViewById(R.id.tv_receive_message);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mAliRtcEngine != null) {
-            destroyRtcEngine();
-        }
+        // 启动H265开关
+        mEnableH265Switch = findViewById(R.id.enable_h265_switch);
     }
 
     public static void startActionActivity(Activity activity) {
-        Intent intent = new Intent(activity, DataChannelMessageActivity.class);
+        Intent intent = new Intent(activity, HEVCActivity.class);
         activity.startActivity(intent);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -126,13 +101,7 @@ public class DataChannelMessageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private FrameLayout getAvailableView() {
-        if (fl_remote.getChildCount() == 0) {
-            return fl_remote;
-        }  else {
-            return null;
-        }
-    }
+
     private void handleJoinResult(int result, String channel, String userId) {
         handler.post(() -> {
             String  str = null;
@@ -142,9 +111,10 @@ public class DataChannelMessageActivity extends AppCompatActivity {
                 str = "User " + userId + " Join " + channel + " Failed！， error：" + result;
             }
             ToastHelper.showToast(this, str, Toast.LENGTH_SHORT);
-            ((TextView)findViewById(R.id.join_room_btn)).setText(R.string.leave_channel_msg);
+            ((TextView)findViewById(R.id.join_room_btn)).setText(R.string.leave_channel);
         });
     }
+
     private void startRTCCall() {
         if(hasJoined) {
             return;
@@ -152,15 +122,18 @@ public class DataChannelMessageActivity extends AppCompatActivity {
         initAndSetupRtcEngine();
         startPreview();
         joinChannel();
-        enableCustomMsgChannel();
     }
+
     private void initAndSetupRtcEngine() {
+
         //创建并初始化引擎
         if(mAliRtcEngine == null) {
             mAliRtcEngine = AliRtcEngine.getInstance(this);
         }
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
+
+
         // 设置频道模式为互动模式,RTC下都使用AliRTCSdkInteractiveLive
         mAliRtcEngine.setChannelProfile(AliRtcEngine.AliRTCSdkChannelProfile.AliRTCSdkInteractiveLive);
         // 设置用户角色，既需要推流也需要拉流使用AliRTCSdkInteractive， 只拉流不推流使用AliRTCSdkLive
@@ -168,6 +141,7 @@ public class DataChannelMessageActivity extends AppCompatActivity {
         //设置音频Profile，默认使用高音质模式AliRtcEngineHighQualityMode及音乐模式AliRtcSceneMusicMode
         mAliRtcEngine.setAudioProfile(AliRtcEngine.AliRtcAudioProfile.AliRtcEngineHighQualityMode, AliRtcEngine.AliRtcAudioScenario.AliRtcSceneMusicMode);
         mAliRtcEngine.setCapturePipelineScaleMode(AliRtcEngine.AliRtcCapturePipelineScaleMode.AliRtcCapturePipelineScaleModePost);
+
         //设置视频编码参数
         AliRtcEngine.AliRtcVideoEncoderConfiguration aliRtcVideoEncoderConfiguration = new AliRtcEngine.AliRtcVideoEncoderConfiguration();
         aliRtcVideoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(720, 1280);
@@ -175,49 +149,49 @@ public class DataChannelMessageActivity extends AppCompatActivity {
         aliRtcVideoEncoderConfiguration.bitrate = 1200;
         aliRtcVideoEncoderConfiguration.keyFrameInterval = 2000;
         aliRtcVideoEncoderConfiguration.orientationMode = AliRtcVideoEncoderOrientationModeAdaptive;
+        // 是否允许HEVC编码
+        if(mEnableH265Switch.isChecked()) {
+            aliRtcVideoEncoderConfiguration.encodeCodecType = AliRtcEngine.AliRtcVideoEncodeCodecType.AliRtcVideoEncodeCodecTypeHevc;
+        }
+
         mAliRtcEngine.setVideoEncoderConfiguration(aliRtcVideoEncoderConfiguration);
+
         //SDK默认会publish音频，publishLocalAudioStream可以不调用
         mAliRtcEngine.publishLocalAudioStream(true);
         //如果是视频通话，publishLocalVideoStream(true)可以不调用，SDK默认会publish视频
         //如果是纯语音通话 则需要设置publishLocalVideoStream(false)设置不publish视频
         mAliRtcEngine.publishLocalVideoStream(true);
+
         //设置默认订阅远端的音频和视频流
         mAliRtcEngine.setDefaultSubscribeAllRemoteAudioStreams(true);
         mAliRtcEngine.subscribeAllRemoteAudioStreams(true);
         mAliRtcEngine.setDefaultSubscribeAllRemoteVideoStreams(true);
         mAliRtcEngine.subscribeAllRemoteVideoStreams(true);
+
     }
 
-    // 开启自定义消息通道
-    private void enableCustomMsgChannel() {
-        // 调用setParameter接口设置自定义消息通道，包括pub和sub，入会前后均可调用
-        String param = "{\"data\":{\"enablePubDataChannel\":true" + ",\"enableSubDataChannel\":true}}";
-        if (mAliRtcEngine != null){
-            mAliRtcEngine.setParameter(param);
-            Log.i(TAG, "setParameter, parameter: " + param);
-        }
-    }
-
-    // 启动本地预览
     private void startPreview(){
         if (mAliRtcEngine != null) {
-            if (fl_local.getChildCount() > 0) {
-                fl_local.removeAllViews();
-            }
-            findViewById(R.id.ll_video_layout).setVisibility(VISIBLE);
-            ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            if(mLocalVideoCanvas == null) {
-                mLocalVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
-                SurfaceView localSurfaceView = mAliRtcEngine.createRenderSurfaceView(DataChannelMessageActivity.this);
-                localSurfaceView.setZOrderOnTop(true);
-                localSurfaceView.setZOrderMediaOverlay(true);
-                fl_local.addView(localSurfaceView, layoutParams);
-                mLocalVideoCanvas.view = localSurfaceView;
-                mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, AliRtcVideoTrackCamera);
-                mAliRtcEngine.startPreview();
-            }
+            FrameLayout localVideoFrame = createVideoView("local");
+            gridVideoContainer.addView(localVideoFrame);
+            SurfaceView localSurfaceView = mAliRtcEngine.createRenderSurfaceView(this);
+            localSurfaceView.setZOrderOnTop(true);
+            localSurfaceView.setZOrderMediaOverlay(true);
+
+            localVideoFrame.addView(localSurfaceView, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+
+            // 添加标签
+            addUserIdLabel(localVideoFrame, "local");
+
+            mLocalVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+            mLocalVideoCanvas.view = localSurfaceView;
+            mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, AliRtcVideoTrackCamera);
+            mAliRtcEngine.startPreview();
         }
     }
+
     private void joinChannel() {
         String channelId = mChannelEditText.getText().toString();
         if(!TextUtils.isEmpty(channelId)) {
@@ -229,28 +203,143 @@ public class DataChannelMessageActivity extends AppCompatActivity {
             mAliRtcEngine.joinChannel(token, null, null, null);
             hasJoined = true;
         } else {
-            Log.e("CustomMsg", "channelId is empty");
+            Log.e("VideoCallActivity", "channelId is empty");
         }
     }
+
+    /**
+     * 根据用户 ID 和流类型生成唯一标识
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     * @return 视频流标识符
+     */
+    private String getStreamKey(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        return uid + "_" + videoTrack.name();
+    }
+
+    private FrameLayout createVideoView(String tag) {
+        FrameLayout view = new FrameLayout(this);
+        int sizeInDp = 180;
+        int sizeInPx = (int) (getResources().getDisplayMetrics().density * sizeInDp);
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.width = 0;
+        params.height = sizeInPx;
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f); // 自动分两列
+        params.setMargins(8, 8, 8, 8);
+
+        view.setLayoutParams(params);
+        view.setTag(tag);
+        view.setBackgroundColor(Color.BLACK);
+        return view;
+    }
+
+    /**
+     * 添加用户ID标签到视频视图
+     * @param layoutView 视频视图容器
+     * @param userId 用户ID
+     */
+    private void addUserIdLabel(FrameLayout layoutView, String userId) {
+        TextView userIdTextView = new TextView(this);
+        userIdTextView.setText(userId);
+        userIdTextView.setTextColor(Color.WHITE);
+        userIdTextView.setBackgroundColor(Color.parseColor("#80000000")); // 半透明黑色背景
+        userIdTextView.setPadding(10, 10, 10, 10); // 设置内边距
+
+        FrameLayout.LayoutParams textParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        textParams.leftMargin = 20;
+        textParams.topMargin = 20;
+        textParams.gravity = Gravity.TOP | Gravity.START;
+
+        // 通过添加顺序确保标签在最上层显示
+        layoutView.addView(userIdTextView, textParams);
+    }
+
+    /**
+     * 显示远端流（包括摄像头流和屏幕共享流）
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     */
+    private void viewRemoteVideo(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        String streamKey = getStreamKey(uid, videoTrack);
+        FrameLayout view;
+        if (remoteViews.containsKey(streamKey)) {
+            view = remoteViews.get(streamKey);
+            if (view != null) {
+                view.removeAllViews();
+            } else {
+                view = createVideoView(streamKey);
+                gridVideoContainer.addView(view);
+                remoteViews.put(streamKey, view);
+            }
+        } else {
+            view = createVideoView(streamKey);
+            gridVideoContainer.addView(view);
+            remoteViews.put(streamKey, view);
+        }
+        // 创建 SurfaceView 并设置渲染
+        SurfaceView surfaceView = mAliRtcEngine.createRenderSurfaceView(this);
+        surfaceView.setZOrderMediaOverlay(true);
+        view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        String trackName = videoTrack == AliRtcVideoTrackScreen ? "Screen" : "Camera";
+        addUserIdLabel(view, uid + " - " + trackName);
+        // 配置画布
+        AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+        videoCanvas.view = surfaceView;
+        mAliRtcEngine.setRemoteViewConfig(videoCanvas, uid, videoTrack);
+    }
+
+    /**
+     * 移除指定用户视频流的画面
+     * @param uid 远端用户 ID
+     * @param videoTrack 视频流类型
+     */
+    private void removeRemoteVideo(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        String streamKey = getStreamKey(uid, videoTrack);
+
+        // 找到对应的 FrameLayout 容器并移除视图
+        FrameLayout frameLayout = remoteViews.remove(streamKey);
+        if(frameLayout != null) {
+            frameLayout.removeAllViews();
+            gridVideoContainer.removeView(frameLayout);
+            Log.d("RemoveRemoteVideo", "Removed video stream for: " + streamKey);
+        }
+    }
+
+    /**
+     * 移除指定用户的所有视频
+     * @param uid 远端用户 ID
+     */
+    private void removeAllRemoteVideo(String uid) {
+        removeRemoteVideo(uid, AliRtcVideoTrackCamera);
+        removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+    }
+
+
     private AliRtcEngineEventListener mRtcEngineEventListener = new AliRtcEngineEventListener() {
         @Override
         public void onJoinChannelResult(int result, String channel, String userId, int elapsed) {
             super.onJoinChannelResult(result, channel, userId, elapsed);
             handleJoinResult(result, channel, userId);
         }
+
         @Override
         public void onLeaveChannelResult(int result, AliRtcEngine.AliRtcStats stats){
             super.onLeaveChannelResult(result, stats);
         }
+
         @Override
         public void onConnectionStatusChange(AliRtcEngine.AliRtcConnectionStatus status, AliRtcEngine.AliRtcConnectionStatusChangeReason reason){
             super.onConnectionStatusChange(status, reason);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     if(status == AliRtcEngine.AliRtcConnectionStatus.AliRtcConnectionStatusFailed) {
                         /* TODO: 务必处理；建议业务提示客户，此时SDK内部已经尝试了各种恢复策略已经无法继续使用时才会上报 */
-                        ToastHelper.showToast(DataChannelMessageActivity.this, R.string.basic_usage, Toast.LENGTH_SHORT);
+                        ToastHelper.showToast(HEVCActivity.this, R.string.video_chat_connection_failed, Toast.LENGTH_SHORT);
                     } else {
                         /* TODO: 可选处理；增加业务代码，一般用于数据统计、UI变化 */
                     }
@@ -264,58 +353,54 @@ public class DataChannelMessageActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    String str = "recv msg: " + msg;
-                    ToastHelper.showToast(DataChannelMessageActivity.this, str, Toast.LENGTH_SHORT);
+                    String str = "OnLocalDeviceException deviceType: " + deviceType + " exceptionType: " + exceptionType + " msg: " + msg;
+                    ToastHelper.showToast(HEVCActivity.this, str, Toast.LENGTH_SHORT);
                 }
             });
         }
+
     };
+
     private AliRtcEngineNotify mRtcEngineNotify = new AliRtcEngineNotify() {
         @Override
         public void onAuthInfoWillExpire() {
             super.onAuthInfoWillExpire();
             /* TODO: 务必处理；Token即将过期，需要业务触发重新获取当前channel，user的鉴权信息，然后设置refreshAuthInfo即可 */
         }
+
         @Override
         public void onRemoteUserOnLineNotify(String uid, int elapsed){
             super.onRemoteUserOnLineNotify(uid, elapsed);
         }
+
         //在onRemoteUserOffLineNotify回调中解除远端视频流渲染控件的设置
         @Override
         public void onRemoteUserOffLineNotify(String uid, AliRtcEngine.AliRtcUserOfflineReason reason){
             super.onRemoteUserOffLineNotify(uid, reason);
         }
+
         //在onRemoteTrackAvailableNotify回调中设置远端视频流渲染控件
         @Override
         public void onRemoteTrackAvailableNotify(String uid, AliRtcEngine.AliRtcAudioTrack audioTrack, AliRtcEngine.AliRtcVideoTrack videoTrack){
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(videoTrack == AliRtcVideoTrackCamera) {
-                        SurfaceView surfaceView = mAliRtcEngine.createRenderSurfaceView(DataChannelMessageActivity.this);
-                        surfaceView.setZOrderMediaOverlay(true);
-                        FrameLayout view = getAvailableView();
-                        if (view == null) {
-                            return;
-                        }
-                        remoteViews.put(uid, view);
-                        view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                        AliRtcEngine.AliRtcVideoCanvas remoteVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
-                        remoteVideoCanvas.view = surfaceView;
-                        mAliRtcEngine.setRemoteViewConfig(remoteVideoCanvas, uid, AliRtcVideoTrackCamera);
+                    if(videoTrack == AliRtcVideoTrackCamera){
+                        viewRemoteVideo(uid, AliRtcVideoTrackCamera);
+                        removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+                    } else if(videoTrack == AliRtcVideoTrackScreen) {
+                        viewRemoteVideo(uid, AliRtcVideoTrackScreen);
+                        removeRemoteVideo(uid, AliRtcVideoTrackCamera);
+                    } else if (videoTrack == AliRtcVideoTrackBoth) {
+                        viewRemoteVideo(uid, AliRtcVideoTrackCamera);
+                        viewRemoteVideo(uid, AliRtcVideoTrackScreen);
                     } else if(videoTrack == AliRtcVideoTrackNo) {
-                        if(remoteViews.containsKey(uid)) {
-                            ViewGroup view = remoteViews.get(uid);
-                            if(view != null) {
-                                view.removeAllViews();
-                                remoteViews.remove(uid);
-                                mAliRtcEngine.setRemoteViewConfig(null, uid, AliRtcVideoTrackCamera);
-                            }
-                        }
+                        removeAllRemoteVideo(uid);
                     }
                 }
             });
         }
+
         /* 业务可能会触发同一个UserID的不同设备抢占的情况，所以这个地方也需要处理 */
         @Override
         public void onBye(int code){
@@ -323,41 +408,13 @@ public class DataChannelMessageActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     String msg = "onBye code:" + code;
-                    ToastHelper.showToast(DataChannelMessageActivity.this, msg, Toast.LENGTH_SHORT);
-                }
-            });
-        }
-        @Override
-        public void onRemoteUserSubscribedDataChannel(String uid) {
-            super.onRemoteUserSubscribedDataChannel(uid);
-            // 注意，当前回调仅在AI场景下有效，普通场景不会触发
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ToastHelper.showToast(DataChannelMessageActivity.this, "onRemoteUserSubscribedDataChannel", Toast.LENGTH_SHORT);
+                    ToastHelper.showToast(HEVCActivity.this, msg, Toast.LENGTH_SHORT);
                 }
             });
         }
 
-        @Override
-        public void onDataChannelMessage(String uid, AliRtcEngine.AliRtcDataChannelMsg msg) {
-            super.onDataChannelMessage(uid, msg);
-            // 收到远端用户发送的消息
-            handler.post(() -> {
-                String receivedMsg = new String(msg.data);
-                // TODO 业务实现对接收到的消息进行处理
-                Log.i(TAG, "onDataChannelMessage: received msg from " + uid + ": " + receivedMsg);
-
-                // 显示到TextView
-                String currentText = mReceiveTextView.getText().toString();
-                if (!currentText.isEmpty()) {
-                    currentText += "\n";
-                }
-                currentText += "User " + uid + ": " + receivedMsg;
-                mReceiveTextView.setText(currentText);
-            });
-        }
     };
+
     private void destroyRtcEngine() {
         if( mAliRtcEngine != null) {
             mAliRtcEngine.stopPreview();
@@ -365,6 +422,7 @@ public class DataChannelMessageActivity extends AppCompatActivity {
             mAliRtcEngine.leaveChannel();
             mAliRtcEngine.destroy();
             mAliRtcEngine = null;
+
             handler.post(() -> {
                 ToastHelper.showToast(this, "Leave Channel", Toast.LENGTH_SHORT);
             });
@@ -374,8 +432,7 @@ public class DataChannelMessageActivity extends AppCompatActivity {
             value.removeAllViews();
         }
         remoteViews.clear();
-        findViewById(R.id.ll_video_layout).setVisibility(View.GONE);
-        fl_local.removeAllViews();
+        gridVideoContainer.removeAllViews();
         mLocalVideoCanvas = null;
     }
 }
