@@ -1,0 +1,7 @@
+{
+  "src": [
+    "pages/VideoCall",
+    "pages/VoiceChat",
+    "pages/TokenGenerate"
+  ]
+}

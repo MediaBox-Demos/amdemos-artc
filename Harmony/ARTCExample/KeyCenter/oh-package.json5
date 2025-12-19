@@ -1,0 +1,11 @@
+{
+  "name": "keycenter",
+  "version": "1.0.0",
+  "description": "KeyCenter module for token generation",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "packageType": "InterfaceHar",
+  "dependencies": {
+  }
+}

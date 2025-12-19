@@ -562,4 +562,11 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             mAliRtcEngine.setVideoEncoderConfiguration(config);
         }
     }
+
+    @Override
+    public void onVideoDecoderConfiguration(AliRtcEngine.AliRtcVideoDecoderConfiguration config) {
+        if(mAliRtcEngine != null) {
+            mAliRtcEngine.setVideoDecoderConfiguration(config);
+        }
+    }
 }

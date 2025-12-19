@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "ARTCExample"
+    },
+    {
+      "name": "reason_camera",
+      "value": "应用需要相机权限用于拍照和视频录制"
+    },
+    {
+      "name": "reason_microphone",
+      "value": "应用需要麦克风权限用于录音"
+    }
+  ]
+}

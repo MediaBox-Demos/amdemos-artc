@@ -91,6 +91,7 @@
     <string name="camera_capture_texture_capture">Camera Texture Capture</string>
 
     <string name="video_encoder_config">Video Encoder Configuration</string>
+    <string name="video_decoder_config">Video Decoder Configuration</string>
     <string name="video_encoder_resolution_width">Width</string>
     <string name="video_encoder_resolution_height">Height</string>
     <string name="video_encoder_frame_rate">Frame Rate</string>
@@ -115,6 +116,11 @@
     <string name="video_encoder_enable_downgrade">Enable Resolution/Bitrate Downgrade</string>
     <string name="video_encoder_enable_H264_B_frame">Enable H264 B-frame</string>
     <string name="video_encoder_enable_H265_B_frame">Enable H265 B-frame</string>
+
+    <string name="video_decoder_codec_type">Decode Mode</string>
+    <string name="video_decoder_software_decode">Software Encoding</string>
+    <string name="video_decoder_hardware_decode">Hardware Encoding</string>
+    <string name="video_decoder_hardware_texture_decode">Hardware Texture Encoding</string>
 
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>

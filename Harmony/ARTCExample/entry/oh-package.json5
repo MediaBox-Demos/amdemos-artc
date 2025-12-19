@@ -1,0 +1,15 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "quickstart": "file:../QuickStart",
+    "common": "file:../Common",
+    "keycenter": "file:../KeyCenter",
+    "@aliyun_video_cloud/alivcsdk_artc":"7.6.0"
+  }
+}
+

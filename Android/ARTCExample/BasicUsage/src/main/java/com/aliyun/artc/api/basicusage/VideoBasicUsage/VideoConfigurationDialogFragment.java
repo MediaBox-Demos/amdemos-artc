@@ -27,6 +27,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
         void onCameraCaptureConfiguration(AliRtcEngine.AliEngineCameraCapturerConfiguration config);
 
         void onVideoEncoderConfiguraion(AliRtcEngine.AliRtcVideoEncoderConfiguration config);
+
+        void onVideoDecoderConfiguration(AliRtcEngine.AliRtcVideoDecoderConfiguration config);
     }
 
     private List<VideoConfigurationItem> configItems;
@@ -36,6 +38,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
 
     private AliRtcEngine.AliEngineCameraCapturerConfiguration  videoCaptureConfiguration;
     private AliRtcEngine.AliRtcVideoEncoderConfiguration videoEncoderConfiguration;
+
+    private AliRtcEngine.AliRtcVideoDecoderConfiguration videoDecoderConfiguration;
 
     private boolean isCameraOn = false;
 
@@ -70,13 +74,16 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
             // 构建对象
             videoCaptureConfiguration = new AliRtcEngine.AliEngineCameraCapturerConfiguration();
             videoEncoderConfiguration = new AliRtcEngine.AliRtcVideoEncoderConfiguration();
+            videoDecoderConfiguration = new AliRtcEngine.AliRtcVideoDecoderConfiguration();
             // 收集配置
             getCameraCapturerConfiguration();
             getVideoEncoderConfiguration();
+            getVideoDecoderConfiguration();
             // 触发回调
             if(listener != null) {
                 listener.onCameraCaptureConfiguration(videoCaptureConfiguration);
                 listener.onVideoEncoderConfiguraion(videoEncoderConfiguration);
+                listener.onVideoDecoderConfiguration(videoDecoderConfiguration);
             }
             // 隐藏dialog
             if(getDialog() != null && getDialog().isShowing()) {
@@ -274,6 +281,26 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
         }
     }
 
+    private void getVideoDecoderConfiguration() {
+        VideoConfigurationItem codecModeItem = configItems.get(17);
+        if (codecModeItem.type == VideoConfigurationItem.TYPE_SPINNER) {
+            int index = codecModeItem.spinnerIndex;
+            switch (index) {
+                case 0:
+                    videoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeSoftware;
+                    break;
+                case 1:
+                    videoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardware;
+                    break;
+                case 2:
+                    videoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardwareTexture;
+                    break;
+                default:
+                    videoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeDefault;
+            }
+        }
+    }
+
 
     public void setOnItemCommitListener(VideoConfigurationAppliedListener listener) {
         this.listener = listener;
@@ -322,6 +349,11 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
         configItems.add(VideoConfigurationItem.createSpinnerItem(getString(R.string.video_encoder_encode_codec_type), 0, encodeCodecTypeOptions));
         List<String> codecTypeOptions = Arrays.asList(getString(R.string.video_encoder_software_encode), getString(R.string.video_encoder_hardware_encode), getString(R.string.video_encoder_hardware_texture_encode));
         configItems.add(VideoConfigurationItem.createSpinnerItem(getString(R.string.video_encoder_codec_type), 0, codecTypeOptions));
+
+        configItems.add(VideoConfigurationItem.createHeaderItem(getString(R.string.video_decoder_config)));
+
+        List<String> decoderCodecTypeOptions = Arrays.asList(getString(R.string.video_decoder_software_decode), getString(R.string.video_decoder_hardware_decode), getString(R.string.video_decoder_hardware_texture_decode));
+        configItems.add(VideoConfigurationItem.createSpinnerItem(getString(R.string.video_encoder_codec_type), 0, decoderCodecTypeOptions));
 
         this.configItems = configItems;
     }

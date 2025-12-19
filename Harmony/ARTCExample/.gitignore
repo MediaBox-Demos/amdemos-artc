@@ -1,0 +1,22 @@
+# 构建输出目录
+/build
+
+# 依赖包目录
+/node_modules
+/oh_modules
+
+# 预览目录
+/.preview
+
+# C++编译中间文件
+/.cxx
+
+# 测试目录
+/.test
+
+# IDE相关文件
+*.iml
+.idea/
+
+# Hvigor相关
+.hvigor/

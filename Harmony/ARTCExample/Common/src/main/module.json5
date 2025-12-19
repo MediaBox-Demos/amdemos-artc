@@ -1,0 +1,12 @@
+{
+  "module": {
+    "name": "Common",
+    "type": "shared",
+    "description": "Common shared module",
+    "deviceTypes": [
+      "phone"
+    ],
+    "deliveryWithInstall": true,
+    "pages": "$profile:main_pages"
+  }
+}

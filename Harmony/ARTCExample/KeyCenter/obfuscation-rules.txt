@@ -1,0 +1,4 @@
+-keep-global-name
+-keep-property-name
+# 保留 ARTCTokenHelper 类及其所有公开方法
+-keep class ** { *; }

@@ -91,6 +91,7 @@
     <string name="camera_capture_texture_capture">摄像头纹理采集</string>
 
     <string name="video_encoder_config">视频编码配置</string>
+    <string name="video_decoder_config">视频解码配置</string>
     <string name="video_encoder_resolution_width">宽度</string>
     <string name="video_encoder_resolution_height">高度</string>
     <string name="video_encoder_frame_rate">帧率</string>
@@ -115,6 +116,11 @@
     <string name="video_encoder_enable_downgrade">允许分辨率/码流降级</string>
     <string name="video_encoder_enable_H264_B_frame">允许H264 B帧</string>
     <string name="video_encoder_enable_H265_B_frame">允许H265 B帧</string>
+
+    <string name="video_decoder_codec_type">解码模式</string>
+    <string name="video_decoder_software_decode">软件解码</string>
+    <string name="video_decoder_hardware_decode">硬件解码</string>
+    <string name="video_decoder_hardware_texture_decode">硬件纹理解码</string>
 
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
