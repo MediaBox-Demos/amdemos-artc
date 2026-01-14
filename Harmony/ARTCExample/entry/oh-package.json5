@@ -6,10 +6,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "quickstart": "file:../QuickStart",
-    "common": "file:../Common",
-    "keycenter": "file:../KeyCenter",
-    "@aliyun_video_cloud/alivcsdk_artc":"7.6.0"
+    "@aliyun_video_cloud/alivcsdk_artc":"7.9.1",
+    "libadvancedusage.so": "file:./src/main/cpp/types/libadvancedusage"
   }
 }
 

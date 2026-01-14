@@ -1,22 +1,28 @@
 # 构建输出目录
-/build
+**/build
 
 # 依赖包目录
-/node_modules
-/oh_modules
+**/node_modules
+**/oh_modules
 
 # 预览目录
-/.preview
+**/.preview
 
 # C++编译中间文件
-/.cxx
+**/.cxx
 
 # 测试目录
-/.test
+**/.test
 
 # IDE相关文件
-*.iml
-.idea/
+**/*.iml
+**/.idea/
 
 # Hvigor相关
-.hvigor/
+**/.hvigor/
+
+# lock.json5相关
+**/*-lock.json5
+
+.clangd
+.clang-tidy

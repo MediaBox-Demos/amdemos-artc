@@ -1,12 +1,14 @@
 import { ModuleManager } from '../model/ModuleManager';
 import { ModuleInfo } from '../model/ModuleInfo';
-import { SettingsDialog } from '../components/SettingsDialog';
-import { LightStorage } from 'common/src/main/ets/components/LightStorage';
-import { FunctionItemParam, SettingsData } from 'common/src/main/ets/common/Constants';
+import { SettingsDialog } from './SettingsDialog';
+import { FunctionItemParam } from '../common/Constants';
 import { common } from '@kit.AbilityKit';
-import { PermissionManager } from 'common/src/main/ets/utils/PermissionManager';
+import { PermissionManager } from '../common/utils/PermissionManager';
+import { ConstantsData } from '../common/ConstantsData';
 import { PageMap, PageStackCenter } from '../manager/PageStackCenter';
-import { ConstantsData } from 'common/src/main/ets/common/ConstantsData';
+import { ARTCTokenHelper } from '../common/keycenter/ARTCTokenHelper';
+import { promptAction } from '@kit.ArkUI';
+import { GlobalConfig } from '../common/keycenter/GlobalConfig';
 
 @Entry
 @ComponentV2
@@ -14,12 +16,10 @@ struct Index {
   @Local level1Modules: ModuleInfo[] = []; // 一级标题
   @Local level2Modules: ModuleInfo[] = []; // 二级标题
   @Local level3Modules: ModuleInfo[] = []; // 功能项
-  // 按照实际进行替换
   @Local appId: string = '';
   @Local appKey: string = '';
-
-  @Local userId: string = '3562365';
-  @Local sdkVersion: string = '7.8.121292131';
+  @Local userId: string = '';
+  @Local sdkVersion: string = '';
   @Local sdkRegion: number = 0;
   @Provider('pageInfo') pageStack: NavPathStack = PageStackCenter.getInstance().getStack()
   // 权限管理器实例
@@ -33,25 +33,10 @@ struct Index {
 
   async aboutToAppear(): Promise<void> {
     this.loadModules();
-
-    const settings: SettingsData = {
-      appId: this.appId,
-      appKey: this.appKey,
-      userId: this.userId,
-      sdkVersion: this.sdkVersion,
-      sdkRegion: this.sdkRegion.toString()
-    };
-
-    try {
-      await LightStorage.instance?.putObject('settingData', settings);
-    } catch (error) {
-      console.error('Failed to load settings:', error);
-    }
-
     try {
       AppStorage.SetOrCreate('pageInfo', this.pageStack)
-    } catch (error) {
-      console.error('Failed to load settings:', error);
+    } catch (err) {
+      console.error('Failed to load settings:', err);
     }
 
   }
@@ -117,6 +102,7 @@ struct Index {
     .mode(NavigationMode.Stack)
     .width('100%')
     .height('100%')
+    .id('mainNav')
   }
 
   // 获取相关的模块
@@ -163,7 +149,7 @@ struct Index {
   BasicFunctionsSection() {
     Column() {
       // 一级标题
-      Text('基础功能（未实现）')
+      Text('基础功能')
         .fontSize(14)
         .fontColor('#a6a6a6')
         .width('100%')
@@ -196,7 +182,7 @@ struct Index {
   AdvancedFunctionsSection() {
     Column() {
       // 一级标题
-      Text('进阶功能（未实现）')
+      Text('进阶功能')
         .fontSize(14)
         .fontColor('#a6a6a6')
         .width('100%')
@@ -260,12 +246,6 @@ struct Index {
    * 使用权限管理工具类处理权限检查
    */
   async navigateToModule(module: FunctionItemParam): Promise<void> {
-    // 检查 targetPage 是否存在
-    if (!module.targetPage) {
-      console.error('无法跳转：目标页面未定义');
-      return;
-    }
-
     const context = getContext() as common.UIAbilityContext;
     const validPageNames: Set<string> = new Set([
       ConstantsData.TokenGenerate,
@@ -283,27 +263,54 @@ struct Index {
       ConstantsData.StreamMonitoringPage,
       ConstantsData.VoiceChangePage,
       ConstantsData.PlayAudioFilesPage,
+      ConstantsData.ScreenSharePage,
+      ConstantsData.CustomVideoCapturePage,
+      ConstantsData.CustomVideoRenderPage,
+      ConstantsData.PictureInPicturePage,
+      ConstantsData.RecordingPage,
+      ConstantsData.PreJoinChannelTestPage,
+      ConstantsData.HEVCPage,
+      ConstantsData.PublishLiveStreamPage,
+      ConstantsData.LiveLinkMicPage,
+      ConstantsData.OriginAudioDataWrap,
+      ConstantsData.OriginVideoDataWrap,
     ]);
 
-    if (!validPageNames.has(module.targetPage)) {
+    if (!module.targetPage || !validPageNames.has(module.targetPage)) {
       console.error(`无法跳转：未知的目标页面 "${module.targetPage}"`);
       return;
     }
+
+    // 确保 targetPage 不为 undefined
+    const targetPage: string = module.targetPage;
+
+    // 新增：检查 AppId 和 AppKey 是否为空
+    const global: GlobalConfig = GlobalConfig.getInstance();
+    const appId: string = await global.getAppId();
+    const appKey: string = await global.getAppKey();
+    if (!appId || appId.trim().length === 0 || !appKey || appKey.trim().length === 0) {
+      promptAction.showToast({
+        message: '请点击右上角设置，填写 AppId 和 AppKey 参数',
+        duration: 2000
+      });
+      return;
+    }
+
     try {
       // 使用权限管理器的综合方法检查并申请权限
-      const hasPermission = await this.permissionManager.checkAndRequestMicrophoneAndCameraPermission(context);
+      const hasPermission: boolean = await this.permissionManager.checkAndRequestMicrophoneAndCameraPermission(context);
 
       if (hasPermission) {
         // 权限已授权，跳转到目标页面
         PageStackCenter.getInstance().pushPath({
-          name: module.targetPage,
+          name: targetPage,
         })
       } else {
         // 权限被拒绝，显示提示
         this.permissionManager.showPermissionDeniedToast();
       }
-    } catch (error) {
-      console.error('权限处理失败:', error);
+    } catch (err) {
+      console.error('权限处理失败:', err);
       this.permissionManager.showPermissionDeniedToast();
     }
   }

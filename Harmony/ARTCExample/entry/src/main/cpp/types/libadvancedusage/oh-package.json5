@@ -1,0 +1,8 @@
+{
+  "name": "libadvancedusage.so",
+  "version": "1.0.0",
+  "description": "ARTC Advanced Usage Native Module",
+  "main": "index.d.ts",
+  "author": "",
+  "license": ""
+}

@@ -27,6 +27,7 @@ import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -61,6 +62,8 @@ import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -82,7 +85,15 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
     private SwitchCompat mCustomVideoCaptureSwitch;
     private boolean isCustomVideoCapture = true;
 
-    // 控制YUV和纹理输入的选项
+    // 数据源选择：相机 / 文件
+    private RadioGroup mVideoSourceTypeGroup;
+    private RadioButton mCameraSourceRadio;
+    private RadioButton mFileSourceRadio;
+    private static final int SOURCE_CAMERA = 0;
+    private static final int SOURCE_FILE = 1;
+    private int mCurrentSourceType = SOURCE_CAMERA;
+
+    // 输入格式选择：YUV / 纹理
     private RadioGroup mVideoInputTypeGroup;
     private RadioButton mYuvInputRadio;
     private RadioButton mTextureInputRadio;
@@ -117,6 +128,56 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
     private String mCameraId;
 
     private EGLConfig mEGLConfig;
+
+    // 相机 OES → Texture2D 转换相关
+    private int mCameraShaderProgram = -1;
+    private int mCameraAPositionHandle;
+    private int mCameraATexCoordHandle;
+    private int mCameraUTexMatrixHandle;
+    private int mCameraUTextureHandle;
+    private int mCameraFboId = -1;
+    private int mCameraTexture2DId = -1;
+
+    // 全屏四边形顶点坐标
+    private static final float[] CAMERA_VERTEX_COORDS = {
+            -1.0f, -1.0f,
+             1.0f, -1.0f,
+            -1.0f,  1.0f,
+             1.0f,  1.0f,
+    };
+
+    // 纹理坐标
+    private static final float[] CAMERA_TEXTURE_COORDS = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+    };
+
+    // OES 顶点着色器
+    private static final String CAMERA_VERTEX_SHADER =
+            "attribute vec4 aPosition;\n" +
+            "attribute vec4 aTexCoord;\n" +
+            "uniform mat4 uTexMatrix;\n" +
+            "varying vec2 vTexCoord;\n" +
+            "void main() {\n" +
+            "    gl_Position = aPosition;\n" +
+            "    vTexCoord = (uTexMatrix * aTexCoord).xy;\n" +
+            "}\n";
+
+    // OES 片段着色器
+    private static final String CAMERA_FRAGMENT_SHADER =
+            "#extension GL_OES_EGL_image_external : require\n" +
+            "precision mediump float;\n" +
+            "varying vec2 vTexCoord;\n" +
+            "uniform samplerExternalOES uTexture;\n" +
+            "void main() {\n" +
+            "    gl_FragColor = texture2D(uTexture, vTexCoord);\n" +
+            "}\n";
+
+    // Mp4 播放器（YUV 和 Texture2D 两种模式）
+    private Mp4TexturePlayer mp4YuvPlayer;           // YUV 模式
+    private Mp4Texture2DPlayer mp4Texture2DPlayer;   // Texture2D 模式
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -159,7 +220,8 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
             isCustomVideoCapture = isChecked;
         });
 
-        initVideoInputTypeControl();
+        initVideoSourceControl();    // 数据源选择：相机/文件
+        initVideoInputTypeControl(); // 输入格式：YUV/纹理
 
         // 请求相机权限
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -193,16 +255,40 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 初始化数据源选择控件（相机 / 文件）
+     */
+    private void initVideoSourceControl() {
+        mVideoSourceTypeGroup = findViewById(R.id.video_source_type_group);
+        mCameraSourceRadio = findViewById(R.id.camera_source_radio_button);
+        mFileSourceRadio = findViewById(R.id.file_source_radio_button);
+
+        mVideoSourceTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.camera_source_radio_button) {
+                mCurrentSourceType = SOURCE_CAMERA;
+                Log.d("CustomVideoCapture", "Source switched to: CAMERA");
+            } else if (checkedId == R.id.file_source_radio_button) {
+                mCurrentSourceType = SOURCE_FILE;
+                Log.d("CustomVideoCapture", "Source switched to: FILE(mp4)");
+            }
+        });
+    }
+
+    /**
+     * 初始化输入格式选择控件（YUV / 纹理）
+     */
     private void initVideoInputTypeControl() {
-        mVideoInputTypeGroup = findViewById(R.id.videoSourceRadioGroup);
-        mYuvInputRadio = findViewById(R.id.yuv_radio_button);
-        mTextureInputRadio = findViewById(R.id.texture_radio_button);
+        mVideoInputTypeGroup = findViewById(R.id.video_input_type_group);
+        mYuvInputRadio = findViewById(R.id.yuv_input_radio_button);
+        mTextureInputRadio = findViewById(R.id.texture_input_radio_button);
 
         mVideoInputTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.yuv_radio_button) {
+            if (checkedId == R.id.yuv_input_radio_button) {
                 mCurrentInputType = INPUT_TYPE_YUV;
-            } else if (checkedId == R.id.texture_radio_button) {
+                Log.d("CustomVideoCapture", "Input type switched to: YUV");
+            } else if (checkedId == R.id.texture_input_radio_button) {
                 mCurrentInputType = INPUT_TYPE_TEXTURE;
+                Log.d("CustomVideoCapture", "Input type switched to: TEXTURE");
             }
         });
     }
@@ -213,13 +299,40 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         }
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
+        // 外部视频采集相关配置放在真正开始通话前（startRTCCall），
+        // 以便根据当前的 YUV/Texture 选择进行准确设置。
+    }
 
-        if (isCustomVideoCapture) {
-            mAliRtcEngine.setExternalVideoSource(true,
-                    mCurrentInputType == INPUT_TYPE_TEXTURE,
+    private void setupExternalVideoSourceIfNeeded() {
+        if (mAliRtcEngine == null) {
+            return;
+        }
+
+        if (!isCustomVideoCapture) {
+            mAliRtcEngine.setExternalVideoSource(false,
+                    false,
                     AliRtcVideoTrackCamera,
                     AliRtcRenderModeAuto);
+            Log.d("CustomVideoCapture", "setExternalVideoSource disabled");
+            mAliRtcEngine.enableLocalVideo(true);
+            return;
         }
+
+        mAliRtcEngine.enableLocalVideo(false);
+
+        boolean useTexture = (mCurrentInputType == INPUT_TYPE_TEXTURE);
+
+        // 【外部视频采集关键 API 1】声明使用外部视频源：
+        // 参数说明：
+        //  - enable           : true 表示开启外部视频源模式，由应用侧负责采集并推送视频
+        //  - useTexture       : true=纹理输入(Texture2D)，false=YUV/I420数据
+        //  - videoTrack       : 选择替换的轨道，这里替换相机流 AliRtcVideoTrackCamera
+        //  - renderMode       : 本地预览渲染模式，这里使用 AliRtcRenderModeAuto
+        mAliRtcEngine.setExternalVideoSource(true,
+                useTexture,
+                AliRtcVideoTrackCamera,
+                AliRtcRenderModeAuto);
+        Log.d("CustomVideoCapture", "setExternalVideoSource enable=true, useTexture=" + useTexture);
     }
 
     private void setupRtcEngineForCall() {
@@ -246,13 +359,19 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
 
     private void startRTCCall() {
         if (hasJoined) return;
-        setupRtcEngineForCall();
-        startPreview();
-        if (isCustomVideoCapture) {
-            mAliRtcEngine.enableLocalVideo(false);
-        }
 
-        startCustomCapture();  // 原 startYuvCapture → 改名
+        setupRtcEngineForCall();
+
+        // 根据当前是否开启自定义采集以及 YUV/纹理选择，配置外部视频源。
+        setupExternalVideoSourceIfNeeded();
+
+        // 此时 SDK 已处于外部采集模式，startPreview 会绑定本地渲染视图。
+        startPreview();
+
+        // 启动自定义采集（Camera + ImageReader / SurfaceTexture）
+        startCustomCapture();
+
+        // 加入频道
         joinChannel();
     }
 
@@ -292,11 +411,124 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         }
     }
 
-    // 改名：startYuvCapture → startCustomCapture
+    /**
+     * 启动自定义采集
+     * 
+     * 根据“数据源 + 输入格式”两个维度决定路径：
+     * 
+     * 数据源：
+     *  - SOURCE_CAMERA：从相机采集
+     *  - SOURCE_FILE：从 mp4 文件采集
+     * 
+     * 输入格式：
+     *  - INPUT_TYPE_YUV：YUV Buffer (I420)
+     *  - INPUT_TYPE_TEXTURE：纹理（Texture2D 或 OES）
+     * 
+     * 4 种组合：
+     *  1. 相机 + YUV    → ImageReader + pushYuvDataToSDK
+     *  2. 相机 + 纹理   → GLThread + OES 纹理 + pushTextureFrameToSDK
+     *  3. 文件 + YUV    → Mp4TexturePlayer (YUV 回调)
+     *  4. 文件 + 纹理   → Mp4Texture2DPlayer (Texture2D 回调)
+     */
     private void startCustomCapture() {
         isPushingVideoData = true;
-        initCamera();
-        openCamera();
+
+        if (mCurrentSourceType == SOURCE_FILE) {
+            // ===== 数据源 = 文件(mp4) =====
+            // 根据输入类型选择 YUV 播放器 / Texture2D 播放器
+            startMp4TextureCapture();
+            Log.d("CustomVideoCapture", "Started FILE capture, inputType=" + 
+                (mCurrentInputType == INPUT_TYPE_TEXTURE ? "TEXTURE" : "YUV"));
+        } else {
+            // ===== 数据源 = 相机 =====
+            // 根据输入类型选择 YUV 相机路径 / 纹理相机路径
+            initCamera();
+            openCamera();
+            Log.d("CustomVideoCapture", "Started CAMERA capture, inputType=" + 
+                (mCurrentInputType == INPUT_TYPE_TEXTURE ? "TEXTURE(OES)" : "YUV"));
+        }
+    }
+
+    /**
+     * 启动 Mp4 视频采集
+     * 
+     * 根据当前选择的输入类型（YUV/Texture），启动对应的播放器：
+     *  - YUV 模式：使用 Mp4TexturePlayer，在回调中推送 YUV 数据
+     *  - Texture 模式：使用 Mp4Texture2DPlayer，在回调中推送 Texture2D
+     * 
+     * 关键 API 集中在此方法的回调中：
+     *  【外部视频采集关键 API】mAliRtcEngine.pushExternalVideoFrame(...)
+     */
+    private void startMp4TextureCapture() {
+        // 停止旧的播放器
+        if (mp4YuvPlayer != null) {
+            mp4YuvPlayer.stop();
+            mp4YuvPlayer = null;
+        }
+        if (mp4Texture2DPlayer != null) {
+            mp4Texture2DPlayer.stop();
+            mp4Texture2DPlayer = null;
+        }
+
+        // 根据当前配置决定使用哪种播放器
+        boolean useTexture = (mCurrentInputType == INPUT_TYPE_TEXTURE);
+        if (useTexture) {
+            // ===== 纹理模式：使用 Texture2D 播放器 =====
+            mp4Texture2DPlayer = new Mp4Texture2DPlayer(
+                    getAssets(),
+                    "video.mp4",
+                    (textureId, width, height, texMatrix, eglContext) -> {
+                        if (!isPushingVideoData || mAliRtcEngine == null) {
+                            return;
+                        }
+
+                        // 【外部视频采集关键 API】构造 Texture2D 格式的帧数据
+                        AliRtcEngine.AliRtcRawDataFrame frame = new AliRtcEngine.AliRtcRawDataFrame(
+                                textureId,
+                                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatTexture2D,
+                                width, height,
+                                texMatrix,
+                                0, 0, width, height,
+                                eglContext
+                        );
+
+                        // 【外部视频采集关键 API】推送纹理帧给 SDK
+                        int ret = mAliRtcEngine.pushExternalVideoFrame(frame, AliRtcVideoTrackCamera);
+                        if (ret != 0) {
+                            Log.e("CustomVideoCapture", "pushExternalVideoFrame (Texture2D) failed: " + ret);
+                        }
+                    }
+            );
+            mp4Texture2DPlayer.start();
+            Log.d("CustomVideoCapture", "Started Mp4Texture2DPlayer (Texture2D mode)");
+        } else {
+            // ===== YUV 模式：使用 YUV 播放器 =====
+            mp4YuvPlayer = new Mp4TexturePlayer(
+                    getAssets(),
+                    "video.mp4",
+                    (data, width, height, lineSize) -> {
+                        if (!isPushingVideoData || mAliRtcEngine == null) {
+                            return;
+                        }
+
+                        // 【外部视频采集关键 API】构造 I420 格式的帧数据
+                        AliRtcEngine.AliRtcVideoFormat format =
+                                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatI420;
+
+                        AliRtcEngine.AliRtcRawDataFrame frame = new AliRtcEngine.AliRtcRawDataFrame(
+                                data, format, width, height, lineSize, 0, data.length
+                        );
+
+                        // 【外部视频采集关键 API】推送 YUV 帧给 SDK
+                        int ret = mAliRtcEngine.pushExternalVideoFrame(frame, AliRtcVideoTrackCamera);
+                        if (ret != 0) {
+                            Log.e("CustomVideoCapture", "pushExternalVideoFrame (YUV) failed: " + ret);
+                        }
+                    }
+            );
+            mp4YuvPlayer.start();
+            Log.d("CustomVideoCapture", "Started Mp4TexturePlayer (YUV mode)");
+        }
     }
 
     private void initCamera() {
@@ -447,7 +679,7 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
             return;
         }
 
-        // 5. ✅ 绑定上下文到当前线程
+        // 5. 绑定上下文到当前线程
         if (!EGL14.eglMakeCurrent(mEGLDisplay, mEGLSurface, mEGLSurface, mEGLContext)) {
             Log.e("GLThread", "eglMakeCurrent failed: " + EGL14.eglGetError());
             return;
@@ -468,6 +700,99 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         mSurfaceTexture.setOnFrameAvailableListener(tex -> {
             mGlHandler.post(this::processNewFrameFromTexture);
         });
+
+        // 9. 创建相机用的 Texture2D + FBO + shader（用于 OES → Texture2D 转换）
+        initCameraTexture2DAndFBO();
+
+        Log.d("GLThread", "GL environment initialized with Texture2D conversion support");
+    }
+
+    /**
+     * 初始化相机 OES → Texture2D 转换所需的 shader、FBO 和 Texture2D
+     */
+    private void initCameraTexture2DAndFBO() {
+        // 1. 编译 shader 程序
+        int vertexShader = loadCameraShader(GLES20.GL_VERTEX_SHADER, CAMERA_VERTEX_SHADER);
+        int fragmentShader = loadCameraShader(GLES20.GL_FRAGMENT_SHADER, CAMERA_FRAGMENT_SHADER);
+        if (vertexShader == 0 || fragmentShader == 0) {
+            Log.e("GLThread", "Failed to compile camera shaders");
+            return;
+        }
+
+        mCameraShaderProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(mCameraShaderProgram, vertexShader);
+        GLES20.glAttachShader(mCameraShaderProgram, fragmentShader);
+        GLES20.glLinkProgram(mCameraShaderProgram);
+
+        int[] linkStatus = new int[1];
+        GLES20.glGetProgramiv(mCameraShaderProgram, GLES20.GL_LINK_STATUS, linkStatus, 0);
+        if (linkStatus[0] != GLES20.GL_TRUE) {
+            Log.e("GLThread", "Could not link camera program: "
+                    + GLES20.glGetProgramInfoLog(mCameraShaderProgram));
+            GLES20.glDeleteProgram(mCameraShaderProgram);
+            mCameraShaderProgram = -1;
+            return;
+        }
+
+        // 获取 shader 变量句柄
+        mCameraAPositionHandle  = GLES20.glGetAttribLocation(mCameraShaderProgram, "aPosition");
+        mCameraATexCoordHandle  = GLES20.glGetAttribLocation(mCameraShaderProgram, "aTexCoord");
+        mCameraUTexMatrixHandle = GLES20.glGetUniformLocation(mCameraShaderProgram, "uTexMatrix");
+        mCameraUTextureHandle   = GLES20.glGetUniformLocation(mCameraShaderProgram, "uTexture");
+
+        // 2. 创建 Texture2D
+        int[] textures = new int[1];
+        GLES20.glGenTextures(1, textures, 0);
+        mCameraTexture2DId = textures[0];
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mCameraTexture2DId);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
+                VIDEO_WIDTH, VIDEO_HEIGHT,
+                0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
+        // 3. 创建 FBO 并把 Texture2D 挂上去作为颜色附件
+        int[] fbos = new int[1];
+        GLES20.glGenFramebuffers(1, fbos, 0);
+        mCameraFboId = fbos[0];
+
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mCameraFboId);
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D,
+                mCameraTexture2DId,
+                0);
+
+        int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+        if (status != GLES20.GL_FRAMEBUFFER_COMPLETE) {
+            Log.e("GLThread", "Camera FBO not complete: " + status);
+        } else {
+            Log.d("GLThread", "Camera Texture2D(" + mCameraTexture2DId + ") and FBO(" + mCameraFboId + ") created");
+        }
+    }
+
+    /**
+     * 加载并编译 shader
+     */
+    private int loadCameraShader(int type, String shaderCode) {
+        int shader = GLES20.glCreateShader(type);
+        GLES20.glShaderSource(shader, shaderCode);
+        GLES20.glCompileShader(shader);
+
+        int[] compiled = new int[1];
+        GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+        if (compiled[0] == 0) {
+            Log.e("GLThread", "Camera shader compile error: " + GLES20.glGetShaderInfoLog(shader));
+            GLES20.glDeleteShader(shader);
+            return 0;
+        }
+        return shader;
     }
 
     private int createOESTexture() {
@@ -485,11 +810,14 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         return textureId;
     }
 
-    // ✅ 在 GL 线程中处理帧
+    //  在 GL 线程中处理帧
+    /**
+     * 相机纹理数据回调：从 SurfaceTexture 获取新帧，并推送到 SDK
+     * 将 OES 纹理转换为 Texture2D 后再推送
+     */
     private void processNewFrameFromTexture() {
         if (mSurfaceTexture == null || mOESTextureId == -1 || !isPushingVideoData) return;
 
-        // ✅ 确保当前上下文绑定
         if (EGL14.eglGetCurrentContext() != mEGLContext) {
             if (!EGL14.eglMakeCurrent(mEGLDisplay, mEGLSurface, mEGLSurface, mEGLContext)) {
                 Log.e("GLThread", "eglMakeCurrent failed in processNewFrame: " + EGL14.eglGetError());
@@ -497,30 +825,103 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
             }
         }
 
+        // 更新 SurfaceTexture，从相机拉取最新帧到 OES 纹理
         mSurfaceTexture.updateTexImage();
         float[] transformMatrix = new float[16];
         mSurfaceTexture.getTransformMatrix(transformMatrix);
 
-        pushTextureFrameToSDK(mOESTextureId, transformMatrix);
+        // 将 OES 纹理转换为 Texture2D 并推送到 SDK
+        convertOesToTexture2DAndPush(transformMatrix);
     }
 
-    private void pushTextureFrameToSDK(int textureId, float[] transformMatrix) {
+    /**
+     * 将相机 OES 纹理转换为 Texture2D 并推送到 SDK
+     * 
+     * @param oesTransformMatrix OES 纹理的变换矩阵（包含相机旋转、镜像等信息）
+     */
+    private void convertOesToTexture2DAndPush(float[] oesTransformMatrix) {
+        if (mCameraFboId == -1 || mCameraTexture2DId == -1 || mCameraShaderProgram == -1) {
+            Log.e("GLThread", "Camera Texture2D conversion resources not ready");
+            return;
+        }
+
+        // 1. 绑定 FBO，渲染目标设为 mCameraTexture2DId
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mCameraFboId);
+        GLES20.glViewport(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
+
+        // 2. 使用 shader 程序
+        GLES20.glUseProgram(mCameraShaderProgram);
+
+        // 3. 绑定 OES 纹理作为输入
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mOESTextureId);
+        GLES20.glUniform1i(mCameraUTextureHandle, 0);
+
+        // 4. 传递变换矩阵
+        GLES20.glUniformMatrix4fv(mCameraUTexMatrixHandle, 1, false, oesTransformMatrix, 0);
+
+        // 5. 设置顶点坐标
+        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(CAMERA_VERTEX_COORDS.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer()
+                .put(CAMERA_VERTEX_COORDS);
+        vertexBuffer.position(0);
+        GLES20.glEnableVertexAttribArray(mCameraAPositionHandle);
+        GLES20.glVertexAttribPointer(mCameraAPositionHandle, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+
+        // 6. 设置纹理坐标
+        FloatBuffer texCoordBuffer = ByteBuffer.allocateDirect(CAMERA_TEXTURE_COORDS.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer()
+                .put(CAMERA_TEXTURE_COORDS);
+        texCoordBuffer.position(0);
+        GLES20.glEnableVertexAttribArray(mCameraATexCoordHandle);
+        GLES20.glVertexAttribPointer(mCameraATexCoordHandle, 2, GLES20.GL_FLOAT, false, 0, texCoordBuffer);
+
+        // 7. 绘制四边形（将 OES 纹理渲染到 Texture2D）
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        // 8. 清理状态
+        GLES20.glDisableVertexAttribArray(mCameraAPositionHandle);
+        GLES20.glDisableVertexAttribArray(mCameraATexCoordHandle);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
+
+        // 9. 推送 Texture2D 到 SDK
+        // 注意：Texture2D 不需要变换矩阵，传递单位矩阵
+        float[] identityMatrix = new float[16];
+        Matrix.setIdentityM(identityMatrix, 0);
+        pushTexture2DFrameToSDK(mCameraTexture2DId, identityMatrix);
+    }
+
+    /**
+     * 推送 Texture2D 帧到 SDK（相机采集的纹理路径）
+     * 
+     * @param textureId      Texture2D ID
+     * @param transformMatrix 变换矩阵（Texture2D 通常使用单位矩阵）
+     */
+    private void pushTexture2DFrameToSDK(int textureId, float[] transformMatrix) {
         if (mAliRtcEngine == null) return;
 
         AliRtcEngine.AliRtcRawDataFrame frame = new AliRtcEngine.AliRtcRawDataFrame(
                 textureId,
-                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatTextureOES,
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatTexture2D,  // 使用 Texture2D 格式
                 VIDEO_WIDTH, VIDEO_HEIGHT,
                 transformMatrix,
                 0, 0, VIDEO_WIDTH, VIDEO_HEIGHT,
-                mEGLContext  // ✅ 安全传入共享上下文
+                mEGLContext
         );
 
+        // 【外部视频采集关键 API 3（纹理模式）】
+        // 使用 Texture2D 方式将自定义采集的视频帧推送给 SDK：
+        //  - textureId 为 Texture2D ID（从 OES 转换而来）
+        //  - format 为 AliRtcVideoFormatTexture2D，标识 2D 纹理输入
+        //  - eglContext 用于让 SDK 在共享 GL 上下文中访问该纹理
         int ret = mAliRtcEngine.pushExternalVideoFrame(frame, AliRtcVideoTrackCamera);
         if (ret != 0) {
-            Log.e("Texture", "push frame failed: " + ret);
+            Log.e("Texture", "push Texture2D frame failed: " + ret);
         } else {
-            Log.d("Texture", "Pushed texture frame with context: " + textureId);
+            Log.d("Texture", "Pushed Texture2D frame: " + textureId);
         }
     }
 
@@ -593,6 +994,17 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 从 Camera2 ImageReader 中提取 YUV 数据并推送给 SDK
+     * 
+     * 【外部视频采集关键 API 2】mAliRtcEngine.pushExternalVideoFrame(...)
+     * 
+     * 流程：
+     *  1. 从 Image.Plane 中分别提取 Y/U/V 三个平面的数据
+     *  2. 根据 stride 和 pixelStride 将数据拷贝为连续的 I420 格式
+     *  3. 构造 AliRtcRawDataFrame（I420格式）
+     *  4. 调用 pushExternalVideoFrame 推送给 SDK
+     */
     private void pushYuvDataToSDK(Image image) {
         if (image == null || !isPushingVideoData || mAliRtcEngine == null) return;
 
@@ -664,9 +1076,11 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
             AliRtcEngine.AliRtcVideoFormat format = AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatI420;
             int[] lineSize = {width, width / 2, width / 2};
 
+            // 【外部视频采集关键 API 2】构造 I420 格式的帧数据
             AliRtcEngine.AliRtcRawDataFrame frame = new AliRtcEngine.AliRtcRawDataFrame(
-                    yuvData, format, width, height, lineSize, 0, yuvData.length);
+                    yuvData, format, width, height, lineSize, 90, yuvData.length);
 
+            // 【外部视频采集关键 API 2】推送 YUV 帧给 SDK
             int ret = mAliRtcEngine.pushExternalVideoFrame(frame, AliRtcVideoTrackCamera);
             if (ret != 0) {
                 Log.e("YUV", "pushExternalVideoFrame failed: " + ret);
@@ -731,6 +1145,17 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
     private void stopCustomCapture() {
         isPushingVideoData = false;
 
+        // 停止 Mp4 播放器
+        if (mp4YuvPlayer != null) {
+            mp4YuvPlayer.stop();
+            mp4YuvPlayer = null;
+        }
+        if (mp4Texture2DPlayer != null) {
+            mp4Texture2DPlayer.stop();
+            mp4Texture2DPlayer = null;
+        }
+
+        // 停止相机采集
         if (mCaptureSession != null) {
             mCaptureSession.close();
             mCaptureSession = null;
@@ -754,7 +1179,8 @@ public class CustomVideoCaptureActivity extends AppCompatActivity {
             mBackgroundHandler = null;
         }
 
-        if (mCurrentInputType == INPUT_TYPE_TEXTURE) {
+        // 停止旧的 GL 线程（如果之前用相机纹理模式）
+        if (mCurrentInputType == INPUT_TYPE_TEXTURE && mGlThread != null) {
             stopGlThread();
         }
     }

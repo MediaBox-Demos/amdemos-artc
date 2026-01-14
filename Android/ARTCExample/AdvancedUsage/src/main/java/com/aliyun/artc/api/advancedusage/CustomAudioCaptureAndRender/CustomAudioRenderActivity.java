@@ -50,7 +50,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * 外部音频渲染API调用示例
+ * 自定义音频渲染API调用示例
  */
 public class CustomAudioRenderActivity extends AppCompatActivity {
     private static final String TAG = CustomAudioRenderActivity.class.getSimpleName();
@@ -130,6 +130,8 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
                     if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcAudioSourcePlayback, config) == 0){
                         String parameter = "{\"audio\":{\"enable_system_audio_device_play\":\"FALSE\"}}";
                         mAliRtcEngine.setParameter(parameter);
+                        // 启动自定义播放线程（内部会先安全停止旧线程）
+                        startAudioPlayerThread();
                         ToastHelper.showToast(CustomAudioRenderActivity.this, getString(R.string.start_raw_data_callback), Toast.LENGTH_SHORT);
 
                     } else {
@@ -141,15 +143,8 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
                         ToastHelper.showToast(CustomAudioRenderActivity.this, getString(R.string.stop_External_playback), Toast.LENGTH_SHORT);
                         String parameter = "{\"audio\":{\"enable_system_audio_device_play\":\"TRUE\"}}";
                         mAliRtcEngine.setParameter(parameter);
-                        if (mAudioTrack != null) {
-                            try {
-                                mAudioTrack.stop();
-                                mAudioTrack.release();
-                                mAudioTrack = null;
-                            } catch (Exception e) {
-                                Log.e("AudioCapture", "释放AudioTrack失败: " + e.getMessage());
-                            }
-                        }
+                        // 彻底停掉自定义播放线程和 AudioTrack 资源
+                        stopAudioPlayerThread();
                     } else {
                         ToastHelper.showToast(CustomAudioRenderActivity.this, getString(R.string.stop_raw_data_failed), Toast.LENGTH_SHORT);
                         mCustomAudioRenderSwitch.setChecked(true);
@@ -205,13 +200,13 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
             return;
         }
         startPreview();
-        // 初始化音频播放线程
-        startAudioPlayerThread();
+        // 自定义音频播放由开关控制，在打开外部播放时再初始化播放线程
         joinChannel();
     }
 
     private void initAndSetupRtcEngine() {
 
+        // Step1: 通过 getInstance extras 关闭 SDK 内部播放，启用外部音频播放器模式
         //创建并初始化引擎
         if(mAliRtcEngine == null) {
             String extras = "{\"user_specified_use_external_audio_player\":\"TRUE\"}";
@@ -220,6 +215,7 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
 
+        // Step2: 注册播放前音频原始数据回调接口，获取混音后的原始音频数据
         //添加音频帧原始数据回调监听器
         mAliRtcEngine.registerAudioFrameObserver(aliRtcAudioFrameObserver);
 
@@ -298,6 +294,27 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
         public void onJoinChannelResult(int result, String channel, String userId, int elapsed) {
             super.onJoinChannelResult(result, channel, userId, elapsed);
             handleJoinResult(result, channel, userId);
+            
+            // 入会成功后，如果开关是打开状态，自动启用外部播放链路
+            if (result == 0 && mCustomAudioRenderSwitch != null && mCustomAudioRenderSwitch.isChecked()) {
+                handler.post(() -> {
+                    AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
+                    config.sampleRate = AliRtcAudioSampleRate_48000;
+                    config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
+                    
+                    if(mAliRtcEngine.enableAudioFrameObserver(true, AliRtcAudioSourcePlayback, config) == 0){
+                        String parameter = "{\"audio\":{\"enable_system_audio_device_play\":\"FALSE\"}}";
+                        mAliRtcEngine.setParameter(parameter);
+                        // 启动自定义播放线程
+                        startAudioPlayerThread();
+                        Log.d(TAG, "入会成功，自动启用外部音频播放");
+                    } else {
+                        // 如果启用失败，把开关改回关闭状态
+                        mCustomAudioRenderSwitch.setChecked(false);
+                        Log.e(TAG, "启用外部音频播放失败");
+                    }
+                });
+            }
         }
 
         @Override
@@ -476,6 +493,7 @@ public class CustomAudioRenderActivity extends AppCompatActivity {
         }
     }
 
+    // Step3: 调用自定义播放逻辑（AudioTrack 播放线程），从回调获取的原始音频数据中进行播放
     // 启动音频播放线程
     private void startAudioPlayerThread() {
         stopAudioPlayerThread(); // 确保之前的线程已停止

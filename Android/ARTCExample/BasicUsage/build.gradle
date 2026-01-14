@@ -34,4 +34,5 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation libs.alivcsdk.artc
     implementation project(path: ':KeyCenter')
+    implementation project(path: ':Common')
 }

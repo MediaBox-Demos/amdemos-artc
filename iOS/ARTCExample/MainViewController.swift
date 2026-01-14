@@ -59,7 +59,9 @@ class MainViewController: UIViewController {
             ActionItem(name: "Picture In Picture".localized, detail: "".localized, sbName: "PictureInPicture"),
             ActionItem(name: "Intelligent Denoise".localized, detail: "".localized, sbName: "IntelligentDenoise"),
             ActionItem(name: "H265".localized, detail: "".localized, sbName: "H265"),
-            ActionItem(name: "Local Record".localized, detail: "".localized, sbName: "Recording")
+            ActionItem(name: "Local Record".localized, detail: "".localized, sbName: "Recording"),
+            ActionItem(name: "Publish Live Stream".localized, detail: "".localized, sbName: "PublishLiveStream"),
+            ActionItem(name: "Live Link Mic".localized, detail: "".localized, sbName: "LiveLinkMic")
         ]),
     ]
 }
@@ -101,8 +103,33 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 检查 AppId 和 AppKey 是否已配置
+        if !GlobalConfig.shared.isAppConfigured() {
+            self.showAppConfigRequiredAlert()
+            return
+        }
+        
         let action = self.actionList[indexPath.section].actions[indexPath.row]
         self.presentVC(storyboardName: action.sbName, storyboardId: action.sbId)
+    }
+    
+    /**
+     * 弹窗提示用户配置 AppId 和 AppKey
+     */
+    private func showAppConfigRequiredAlert() {
+        let alert = UIAlertController(
+            title: "提示",
+            message: "请点击右上角设置，填写 AppId 和 AppKey 参数",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "去设置", style: .default) { [weak self] _ in
+            self?.presentVC(storyboardName: "Setting")
+        })
+        
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+        
+        self.present(alert, animated: true)
     }
 }
 

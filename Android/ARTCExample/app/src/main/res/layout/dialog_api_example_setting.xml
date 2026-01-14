@@ -48,13 +48,14 @@
                 style="@style/layout_base_text_style_12"
                 android:text="AppId:"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/app_id_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@style/layout_base_text_style_12"
                 android:text=""
+                android:hint="Enter AppId..."
                 android:textColorHint="@color/layout_base_gray"
                 android:backgroundTint="@color/layout_base_iv_border"
                 />
@@ -81,13 +82,14 @@
                 style="@style/layout_base_text_style_12"
                 android:text="AppKey:"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/app_key_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@style/layout_base_text_style_12"
                 android:text=""
+                android:hint="Enter AppKey..."
                 android:textColorHint="@color/layout_base_gray"
                 android:backgroundTint="@color/layout_base_iv_border"
                 />

@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import MetalKit
 import AliVCSDK_ARTC
+import OpenGLES
 
 class CustomVideoRenderSetParamsVC: UIViewController, UITextFieldDelegate {
     
@@ -111,6 +112,11 @@ class CustomVideoRenderMainVC: UIViewController {
     var isEnableTextureCallback: Bool = false
     var aliRtcVideoFormat: AliRtcVideoFormat = .I420
     
+    // OpenGL 纹理渲染相关属性
+    private var glContext: EAGLContext?
+    private var glFramebuffer: GLuint = 0
+    private var textureCache: CVOpenGLESTextureCache?
+    
     func setup() {
         // 创建引擎对象时控制是否开启自定义视频渲染
         var customVideoRenderConfig: [String: String] = [:]
@@ -199,13 +205,16 @@ class CustomVideoRenderMainVC: UIViewController {
     func startPreview() {
         let seatView = self.createSeatView(uid: self.userId)
         
-        let canvas = AliVideoCanvas()
-        canvas.view = seatView.renderingView
-        canvas.renderMode = .auto
-        canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
-        canvas.rotationMode = ._0
-        
-        self.rtcEngine?.setLocalViewConfig(canvas, for: AliRtcVideoTrack.camera)
+        // 只有在非自定义渲染模式下才设置 SDK 的 canvas
+        if !isEnableCustomVideoRender {
+            let canvas = AliVideoCanvas()
+            canvas.view = seatView.renderingView
+            canvas.renderMode = .auto
+            canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
+            canvas.rotationMode = ._0
+            
+            self.rtcEngine?.setLocalViewConfig(canvas, for: AliRtcVideoTrack.camera)
+        }
         self.rtcEngine?.startPreview()
     }
     
@@ -214,6 +223,29 @@ class CustomVideoRenderMainVC: UIViewController {
         self.rtcEngine?.leaveChannel()
         AliRtcEngine.destroy()
         self.rtcEngine = nil
+        
+        // 清理 OpenGL 资源
+        self.cleanupOpenGLResources()
+    }
+    
+    // 清理 OpenGL 资源
+    private func cleanupOpenGLResources() {
+        if let context = glContext {
+            EAGLContext.setCurrent(context)
+            
+            if glFramebuffer != 0 {
+                var fbo = glFramebuffer
+                glDeleteFramebuffers(1, &fbo)
+                glFramebuffer = 0
+            }
+            
+            if textureCache != nil {
+                textureCache = nil
+            }
+            
+            EAGLContext.setCurrent(nil)
+            glContext = nil
+        }
     }
     
     // 创建一个视频通话渲染视图，并加入到contentScrollView中
@@ -286,6 +318,10 @@ extension CustomVideoRenderMainVC: AliRtcEngineDelegate {
         if isEnableTextureCallback {
             return false
         }
+        
+        // 添加调试日志
+        print("[Local] type: \(videoSample.type.rawValue), format: \(videoSample.format.rawValue), size: \(videoSample.width)x\(videoSample.height)")
+        
         var seatView = self.seatViewList.first { $0.uid == self.userId}
         if seatView == nil {
             seatView = self.createSeatView(uid: self.userId)
@@ -311,7 +347,8 @@ extension CustomVideoRenderMainVC: AliRtcEngineDelegate {
     
     // 远端视频数据回调
     func onRemoteVideoSample(_ uid: String, videoSource: AliRtcVideoSource, videoSample: AliRtcVideoDataSample) -> Bool {
-        "onRemoteVideoSample".printLog()
+        // 添加调试日志
+        print("[Remote \(uid)] type: \(videoSample.type.rawValue), format: \(videoSample.format.rawValue), size: \(videoSample.width)x\(videoSample.height)")
         
         var seatView = self.seatViewList.first { $0.uid == uid}
         if seatView == nil {
@@ -339,22 +376,177 @@ extension CustomVideoRenderMainVC: AliRtcEngineDelegate {
     // 本地采集纹理回调
     func onTextureCreate(_ context: UnsafeMutableRawPointer?) {
         "onTextureCreate".printLog()
+        
+        // 初始化 OpenGL 上下文
+        if let ctx = context {
+            // SDK 传入的是 EAGLContext 指针
+            glContext = Unmanaged<EAGLContext>.fromOpaque(ctx).takeUnretainedValue()
+        } else {
+            // 如果 SDK 没有传入，创建一个新的
+            glContext = EAGLContext(api: .openGLES2)
+        }
+        
+        guard let glContext = glContext else {
+            print("Failed to create OpenGL ES context")
+            return
+        }
+        
+        EAGLContext.setCurrent(glContext)
+        
+        // 创建 Framebuffer
+        if glFramebuffer == 0 {
+            var fbo: GLuint = 0
+            glGenFramebuffers(1, &fbo)
+            glFramebuffer = fbo
+        }
+        
+        // 创建纹理缓存
+        if textureCache == nil {
+            var cache: CVOpenGLESTextureCache?
+            let result = CVOpenGLESTextureCacheCreate(
+                kCFAllocatorDefault,
+                nil,
+                glContext,
+                nil,
+                &cache
+            )
+            if result == kCVReturnSuccess {
+                textureCache = cache
+            }
+        }
+        
+        print("OpenGL context initialized successfully")
     }
     
     func onTextureUpdate(_ textureId: Int32, width: Int32, height: Int32, videoSample: AliRtcVideoDataSample) -> Int32 {
-        "onTextureUpdate".printLog()
-        // 这里可以进行美颜等逻辑处理
+        print("[Texture] textureId: \(textureId), size: \(width)x\(height)")
         
-        // 自定义渲染，ios 12.0开始废弃了opengl，推荐使用Metal，这里演示使用pixelbuffer桥接
-        if self.isEnableTextureCallback {
-            
+        guard isEnableTextureCallback,
+              let glContext = glContext else {
+            return textureId
         }
+        
+        // 使用 OpenGL 渲染纹理
+        self.renderTexture(textureId: textureId, width: width, height: height)
         
         return textureId
     }
     
+    // 使用 OpenGL 渲染纹理数据
+    private func renderTexture(textureId: Int32, width: Int32, height: Int32) {
+        guard let glContext = glContext else { return }
+        
+        EAGLContext.setCurrent(glContext)
+        
+        let w = Int(width)
+        let h = Int(height)
+        
+        // 绑定 FBO 并附加纹理
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), glFramebuffer)
+        glFramebufferTexture2D(
+            GLenum(GL_FRAMEBUFFER),
+            GLenum(GL_COLOR_ATTACHMENT0),
+            GLenum(GL_TEXTURE_2D),
+            GLuint(textureId),
+            0
+        )
+        
+        // 检查 FBO 状态
+        let status = glCheckFramebufferStatus(GLenum(GL_FRAMEBUFFER))
+        if status != GL_FRAMEBUFFER_COMPLETE {
+            print("FBO not complete: \(status)")
+            glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
+            return
+        }
+        
+        // 从 FBO 读取像素数据（RGBA 格式）
+        let bytesPerPixel = 4
+        let dataSize = w * h * bytesPerPixel
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: dataSize)
+        defer { buffer.deallocate() }
+        
+        glReadPixels(
+            0,
+            0,
+            GLsizei(width),
+            GLsizei(height),
+            GLenum(GL_RGBA),
+            GLenum(GL_UNSIGNED_BYTE),
+            buffer
+        )
+        
+        // 解绑 FBO
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
+        
+        // 创建 CVPixelBuffer
+        var pixelBuffer: CVPixelBuffer?
+        let attrs: [CFString: Any] = [
+            kCVPixelBufferCGImageCompatibilityKey: true,
+            kCVPixelBufferCGBitmapContextCompatibilityKey: true,
+            kCVPixelBufferIOSurfacePropertiesKey: [:] as CFDictionary
+        ]
+        
+        let createStatus = CVPixelBufferCreate(
+            kCFAllocatorDefault,
+            w,
+            h,
+            kCVPixelFormatType_32BGRA,
+            attrs as CFDictionary,
+            &pixelBuffer
+        )
+        
+        guard createStatus == kCVReturnSuccess, let pixelBuffer = pixelBuffer else {
+            print("Failed to create CVPixelBuffer: \(createStatus)")
+            return
+        }
+        
+        // 锁定 PixelBuffer 并拷贝数据
+        CVPixelBufferLockBaseAddress(pixelBuffer, [])
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+        
+        guard let dest = CVPixelBufferGetBaseAddress(pixelBuffer) else {
+            print("Failed to get pixel buffer base address")
+            return
+        }
+        
+        let destBytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        
+        // 将 UnsafeMutableRawPointer 转换为可以下标访问的类型
+        let destPtr = dest.assumingMemoryBound(to: UInt8.self)
+        
+        // 逐行拷贝数据（处理可能的行对齐差异）
+        // OpenGL 读取的数据原点在左下角，iOS 在左上角，所以需要垂直翻转
+        for y in 0..<h {
+            // 从 OpenGL 底部开始读（翻转）
+            let srcRow = buffer.advanced(by: y * w * bytesPerPixel)
+            let destRow = destPtr.advanced(by: y * destBytesPerRow)
+            
+            // RGBA -> BGRA 转换
+            for x in 0..<w {
+                let srcPixel = srcRow.advanced(by: x * bytesPerPixel)
+                let destPixel = destRow.advanced(by: x * bytesPerPixel)
+                
+                destPixel[0] = srcPixel[2] // B
+                destPixel[1] = srcPixel[1] // G
+                destPixel[2] = srcPixel[0] // R
+                destPixel[3] = srcPixel[3] // A
+            }
+        }
+        
+        // 在主线程更新 UI
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if let seatView = self.seatViewList.first(where: { $0.uid == self.userId }) {
+                seatView.renderPixelBuffer(pixelBuffer)
+            }
+        }
+    }
+    
     func onTextureDestory() {
         "onTextureDestory".printLog()
+        
+        // 清理 OpenGL 资源
+        self.cleanupOpenGLResources()
     }
     
     func onJoinChannelResult(_ result: Int32, channel: String, elapsed: Int32) {
@@ -391,12 +583,15 @@ extension CustomVideoRenderMainVC: AliRtcEngineDelegate {
                 seatView = self.createSeatView(uid: uid)
             }
             
-            let canvas = AliVideoCanvas()
-            canvas.view = seatView!.renderingView
-            canvas.renderMode = .auto
-            canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
-            canvas.rotationMode = ._0
-            self.rtcEngine?.setRemoteViewConfig(canvas, uid: uid, for: AliRtcVideoTrack.camera)
+            // 只有在非自定义渲染模式下才设置 SDK 的 canvas
+            if !isEnableCustomVideoRender {
+                let canvas = AliVideoCanvas()
+                canvas.view = seatView!.renderingView
+                canvas.renderMode = .auto
+                canvas.mirrorMode = .onlyFrontCameraPreviewEnabled
+                canvas.rotationMode = ._0
+                self.rtcEngine?.setRemoteViewConfig(canvas, uid: uid, for: AliRtcVideoTrack.camera)
+            }
         }
         else {
             self.rtcEngine?.setRemoteViewConfig(nil, uid: uid, for: AliRtcVideoTrack.camera)
@@ -443,72 +638,74 @@ extension CustomVideoRenderMainVC: AliRtcEngineDelegate {
         }
     }
     
+    // 渲染 I420 格式视频数据（使用 SDK 实际回调的数据）
     private func renderI420Data(_ videoSample: AliRtcVideoDataSample, on seatView: CustomVideoRenderSeatView) {
-        let width = 640
-        let height = 480
-        let ySize = width * height
-        let uvSize = (width / 2) * (height / 2)
-        
-        // 分配内存：Y + U + V
-        var testData = [UInt8](repeating: 0, count: ySize + uvSize * 2)
-        
-        // 填充 Y 平面：红色亮度 Y ≈ 76
-        for i in 0..<ySize {
-            testData[i] = 76
+        // 从 sample 中取出 Y / U / V 平面指针
+        guard let dataY = videoSample.dataYPtr,
+              let dataU = videoSample.dataUPtr,
+              let dataV = videoSample.dataVPtr else {
+            return
         }
-        
-        // 填充 U 平面：U ≈ 149
-        for i in 0..<uvSize {
-            testData[ySize + i] = 149  // U
-        }
-        
-        // 填充 V 平面：V ≈ 226
-        for i in 0..<uvSize {
-            testData[ySize + uvSize + i] = 226  // V
-        }
-        
-        // 转为指针并调用渲染
-        testData.withUnsafeBytes { buffer in
-            let base = buffer.baseAddress!
-            let dataY = base.assumingMemoryBound(to: UInt8.self)
-            let dataU = (base + ySize).assumingMemoryBound(to: UInt8.self)
-            let dataV = (base + ySize + uvSize).assumingMemoryBound(to: UInt8.self)
-            
-            DispatchQueue.global().async {
-                seatView.renderI420Data(
-                    width: width,
-                    height: height,
-                    dataY: dataY,
-                    dataU: dataU,
-                    dataV: dataV,
-                    strideY: width,
-                    strideU: width / 2,
-                    strideV: width / 2
-                )
-            }
+
+        let width   = Int(videoSample.width)
+        let height  = Int(videoSample.height)
+        let strideY = Int(videoSample.strideY)
+        let strideU = Int(videoSample.strideU)
+        let strideV = Int(videoSample.strideV)
+
+        // UI 渲染必须在主线程
+        DispatchQueue.main.async {
+            seatView.renderI420Data(
+                width:   width,
+                height:  height,
+                dataY:   dataY,
+                dataU:   dataU,
+                dataV:   dataV,
+                strideY: strideY,
+                strideU: strideU,
+                strideV: strideV
+            )
         }
     }
     
-    // 渲染NV12格式视频数据
+    // 渲染 NV12 格式视频数据（使用 SDK 实际回调的数据）
     private func renderNV12Data(_ videoSample: AliRtcVideoDataSample, on seatView: CustomVideoRenderSeatView) {
+        // NV12: Y 在 dataYPtr，UV 在 dataUPtr
         guard let dataY = videoSample.dataYPtr,
-              let dataUV = videoSample.dataUPtr else { // NV12格式中，U和V数据在同一个平面
+              let dataUV = videoSample.dataUPtr else {
             return
         }
-        
-        let width = Int(videoSample.width)
-        let height = Int(videoSample.height)
-        let strideY = Int(videoSample.strideY)
-        let strideUV = Int(videoSample.strideU) // NV12格式中，UV平面的步长
-        
-        seatView.renderNV12Data(width: width, height: height, dataY: dataY, dataUV: dataUV, strideY: strideY, strideUV: strideUV)
+
+        let width    = Int(videoSample.width)
+        let height   = Int(videoSample.height)
+        let strideY  = Int(videoSample.strideY)
+        let strideUV = Int(videoSample.strideU)
+
+        // UI 渲染必须在主线程
+        DispatchQueue.main.async {
+            seatView.renderNV12Data(
+                width:   width,
+                height:  height,
+                dataY:   dataY,
+                dataUV:  dataUV,
+                strideY: strideY,
+                strideUV: strideUV
+            )
+        }
     }
     
     // 渲染CVPixelBuffer格式视频数据
     private func renderCVPixelBuffer(_ videoSample: AliRtcVideoDataSample, on seatView: CustomVideoRenderSeatView) {
         guard let pixelBuffer = videoSample.pixelBuffer else {
+            print("CVPixelBuffer is nil")
             return
         }
+        
+        // 输出 pixelBuffer 信息
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let format = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        print("Rendering CVPixelBuffer: \(width)x\(height), format: \(format)")
         
         // 直接在主线程更新UI
         DispatchQueue.main.async {

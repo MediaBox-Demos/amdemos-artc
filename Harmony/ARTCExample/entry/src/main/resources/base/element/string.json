@@ -19,6 +19,10 @@
     {
       "name": "reason_microphone",
       "value": "应用需要麦克风权限用于录音"
+    },
+    {
+      "name": "keep_background",
+      "value": "开启后台播放任务"
     }
   ]
 }

@@ -58,6 +58,13 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
     private SwitchCompat mPlaybackAudioFrame;
     private SwitchCompat mRemoteUserAudioFrame;
 
+    // 音频原始数据回调信息展示（仿照 iOS 顶部多行 Label）
+    private TextView mCaptureInfoTextView;
+    private TextView mProcessInfoTextView;
+    private TextView mPublishInfoTextView;
+    private TextView mPlaybackInfoTextView;
+    private TextView mRemoteUserInfoTextView;
+
     private boolean hasJoined = false;
     private FrameLayout fl_local, fl_remote;
 
@@ -82,6 +89,13 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         // 视频显示视图
         fl_local = findViewById(R.id.fl_local);
         fl_remote = findViewById(R.id.fl_remote);
+
+        // 音频原始数据信息展示 TextView
+        mCaptureInfoTextView = findViewById(R.id.tv_capture_info);
+        mProcessInfoTextView = findViewById(R.id.tv_process_info);
+        mPublishInfoTextView = findViewById(R.id.tv_publish_info);
+        mPlaybackInfoTextView = findViewById(R.id.tv_playback_info);
+        mRemoteUserInfoTextView = findViewById(R.id.tv_remote_user_info);
 
         mChannelEditText = findViewById(R.id.channel_id_input);
         mChannelEditText.setText(GlobalConfig.getInstance().gerRandomChannelId());
@@ -119,6 +133,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
                 config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
 
+                // 【关键步骤2】开启/关闭本地采集前（Captured）音频源的原始数据回调，并配置采样率/声道/读写模式
                 mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceCaptured, config);
             }
         });
@@ -139,6 +154,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadWrite;
                 config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
 
+                // 【关键步骤2】开启/关闭 3A 后（ProcessCaptured）音频源的原始数据回调
                 mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceProcessCaptured, config);
             }
         });
@@ -158,6 +174,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly; // 只能设置为ReadOnly
                 config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
 
+                // 【关键步骤2】开启/关闭推流前（Pub）音频源的原始数据回调，模式固定 ReadOnly
                 mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePub, config);
             }
         });
@@ -177,6 +194,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
                 config.channels = AliRtcEngine.AliRtcAudioNumChannel.AliRtcMonoAudio;
 
+                // 【关键步骤2】开启/关闭播放前（Playback，混音后）音频源的原始数据回调
                 mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourcePlayback, config);
             }
         });
@@ -195,6 +213,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
                 AliRtcEngine.AliRtcAudioFrameObserverConfig config = new AliRtcEngine.AliRtcAudioFrameObserverConfig();
                 config.mode = AliRtcEngine.AliRtcAudioFrameObserverOperationMode.AliRtcAudioDataObserverOperationModeReadOnly;
 
+                // 【关键步骤2】开启/关闭远端单用户（RemoteUser）音频源的原始数据回调
                 mAliRtcEngine.enableAudioFrameObserver(isChecked, AliRtcEngine.AliRtcAudioSource.AliRtcAudioSourceRemoteUser, config);
             }
         });
@@ -237,6 +256,16 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 在主线程更新音频原始数据信息 TextView
+     */
+    private void updateAudioInfo(TextView textView, String message) {
+        if (textView == null) {
+            return;
+        }
+        handler.post(() -> textView.setText(message));
+    }
+
     private void startRTCCall() {
         if(hasJoined) {
             return;
@@ -245,6 +274,13 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         joinChannel();
     }
 
+    /**
+     * 创建并初始化 AliRtcEngine，并注册音频原始数据回调监听器。
+     * 【核心 API】获取原始音频数据的主流程入口：
+     *   1. registerAudioFrameObserver(observer) - 注册音频帧观察者
+     *   2. enableAudioFrameObserver(enable, audioSource, config) - 启用/配置指定音频源的回调
+     *   3. 在 observer 回调中获取 AliRtcAudioFrame 数据
+     */
     private void initAndSetupRtcEngine() {
 
         //创建并初始化引擎
@@ -254,7 +290,7 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
 
-        //添加音频帧原始数据回调监听器
+        // 【关键步骤1】注册音频帧原始数据回调监听器（SDK 通过 rtcAudioFrameObserver 返回各类音频源的原始数据）
         mAliRtcEngine.registerAudioFrameObserver(rtcAudioFrameObserver);
 
         // 设置频道模式为互动模式,RTC下都使用AliRTCSdkInteractiveLive
@@ -374,32 +410,52 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
 
     };
 
+    /**
+     * 【关键步骤3】AliRtcAudioFrameObserver：SDK 通过该回调返回各类音频源的原始数据
+     * frame 中包含：numOfSamples（采样数）、numOfChannels（声道数）、samplesPerSec（采样率）、data（音频 PCM 数据）等
+     */
     private final AliRtcEngine.AliRtcAudioFrameObserver rtcAudioFrameObserver = new AliRtcEngine.AliRtcAudioFrameObserver() {
         @Override
         public boolean onCapturedAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
             // 本地采集音频数据回调，根据业务场景进行处理
-            Log.i(TAG, "onCaptureAudioFrame");
+            String message = "onCapturedAudioFrame: samples=" + frame.numSamples
+                    + ", channels=" + frame.numChannels
+                    + ", sampleRate=" + frame.samplesPerSec;
+            Log.i(TAG, message);
+            updateAudioInfo(mCaptureInfoTextView, message);
             return true;
         }
 
         @Override
         public boolean onProcessCapturedAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
             // 3A后数据回调，根据业务场景进行处理
-            Log.i(TAG, "onProcessCaptureAudioFrame");
+            String message = "onProcessCapturedAudioFrame: samples=" + frame.numSamples
+                    + ", channels=" + frame.numChannels
+                    + ", sampleRate=" + frame.samplesPerSec;
+            Log.i(TAG, message);
+            updateAudioInfo(mProcessInfoTextView, message);
             return true;
         }
 
         @Override
         public boolean onPublishAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
             // 推流音频数据回调，根据业务场景进行处理
-            Log.i(TAG, "onPublishAudioFrame");
+            String message = "onPublishAudioFrame: samples=" + frame.numSamples
+                    + ", channels=" + frame.numChannels
+                    + ", sampleRate=" + frame.samplesPerSec;
+            Log.i(TAG, message);
+            updateAudioInfo(mPublishInfoTextView, message);
             return true;
         }
 
         @Override
         public boolean onPlaybackAudioFrame(AliRtcEngine.AliRtcAudioFrame frame) {
             // 播放数据（混音后），根据业务场景进行处理
-            Log.i(TAG, "onPlaybackAudioFrame");
+            String message = "onPlaybackAudioFrame: samples=" + frame.numSamples
+                    + ", channels=" + frame.numChannels
+                    + ", sampleRate=" + frame.samplesPerSec;
+            Log.i(TAG, message);
+            updateAudioInfo(mPlaybackInfoTextView, message);
             return true;
         }
 
@@ -413,7 +469,12 @@ public class ProcessAudioRawDataActivity extends AppCompatActivity {
         @Override
         public boolean onRemoteUserAudioFrame(String uid, AliRtcEngine.AliRtcAudioFrame frame) {
             // 远端用户拉流音频数据，根据业务场景进行处理
-            Log.i(TAG, "onRemoteUserAudioFrame");
+            String message = "onRemoteUserAudioFrame: uid=" + uid
+                    + ", samples=" + frame.numSamples
+                    + ", channels=" + frame.numChannels
+                    + ", sampleRate=" + frame.samplesPerSec;
+            Log.i(TAG, message);
+            updateAudioInfo(mRemoteUserInfoTextView, message);
             return true;
         }
     };

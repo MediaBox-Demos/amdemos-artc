@@ -36,6 +36,10 @@ import com.alivc.rtc.AliRtcEngine;
 import com.alivc.rtc.AliRtcEngineEventListener;
 import com.alivc.rtc.AliRtcEngineNotify;
 import com.aliyun.artc.api.basicusage.R;
+import com.aliyun.artc.api.common.utils.UserSeatHelper;
+import com.aliyun.artc.api.common.videoview.OnUserSeatActionListener;
+import com.aliyun.artc.api.common.videoview.UserSeatState;
+import com.aliyun.artc.api.common.videoview.UserSeatView;
 import com.aliyun.artc.api.keycenter.ARTCTokenHelper;
 import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
@@ -49,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 视频常用操作和配置
  */
-public class VideoBasicUsageActivity extends AppCompatActivity implements VideoConfigurationDialogFragment.VideoConfigurationAppliedListener{
+public class VideoBasicUsageActivity extends AppCompatActivity implements VideoConfigurationDialogFragment.VideoConfigurationAppliedListener, OnUserSeatActionListener {
     private Handler handler;
     private EditText mChannelEditText;
     private TextView mJoinChannelTextView;
@@ -69,6 +73,11 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
     private AliRtcEngine mAliRtcEngine = null;
     private AliRtcEngine.AliRtcVideoCanvas mLocalVideoCanvas = null;
     private Map<String, FrameLayout> remoteViews = new ConcurrentHashMap<>();
+    // 统一管理所有麦位的状态（key = userId_trackType）
+    private final Map<String, UserSeatState> mSeatStateMap = new ConcurrentHashMap<>();
+    // 记录每个远端用户当前的视频轨状态（Camera/Screen/Both/No）
+    private final Map<String, AliRtcEngine.AliRtcVideoTrack> mUserVideoTrackMap = new ConcurrentHashMap<>();
+
     private GridLayout mGridVideoContainer;
 
     @Override
@@ -106,7 +115,10 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
                 if(mAliRtcEngine == null) {
                     initAndSetupRtcEngine();
                 }
-                startPreview();
+                // 如果已经在预览，就不要再创建本地预览视图
+                if (!isLocalPreviewing) {
+                    startPreview();
+                }
                 joinChannel();
             }
         });
@@ -295,17 +307,42 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
     private void startPreview() {
         if (mAliRtcEngine != null) {
             FrameLayout localVideoFrame = createVideoView("local");
+            String localUserId = GlobalConfig.getInstance().getUserId();
+            String localStreamKey = getStreamKey(localUserId, AliRtcVideoTrackCamera);
+            
+            // 创建本地流的状态对象
+            UserSeatState localState = new UserSeatState(localUserId, AliRtcVideoTrackCamera, true);
+            localState.hasVideoStream = true;
+            localState.isCameraOn = true;
+            // 本地流默认镜像：仅前置
+            localState.mirrorMode = AliRtcEngine.AliRtcRenderMirrorMode.AliRtcRenderMirrorModeOnlyFront;
+            mSeatStateMap.put(localStreamKey, localState);
+            
+            if (localVideoFrame instanceof UserSeatView) {
+                ((UserSeatView) localVideoFrame).applyState(localState);
+            }
             mGridVideoContainer.addView(localVideoFrame);
             SurfaceView localSurfaceView = mAliRtcEngine.createRenderSurfaceView(this);
-            localSurfaceView.setZOrderOnTop(true);
-            localSurfaceView.setZOrderMediaOverlay(true);
+            // 注释掉 ZOrderOnTop 和 ZOrderMediaOverlay，避免与远端屏幕共享流冲突
+            // localSurfaceView.setZOrderOnTop(true);
+            // localSurfaceView.setZOrderMediaOverlay(true);
 
-            localVideoFrame.addView(localSurfaceView, new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
+            if (localVideoFrame instanceof UserSeatView) {
+                ((UserSeatView) localVideoFrame).getVideoContainer().addView(localSurfaceView,
+                        new FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT));
+            } else {
+                localVideoFrame.addView(localSurfaceView, new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+            }
 
             mLocalVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
             mLocalVideoCanvas.view = localSurfaceView;
+            mLocalVideoCanvas.renderMode = localState.renderMode;
+            mLocalVideoCanvas.mirrorMode = localState.mirrorMode;
+            mLocalVideoCanvas.rotationMode = localState.rotationMode;
             mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, AliRtcVideoTrackCamera);
             mAliRtcEngine.startPreview();
         }
@@ -331,7 +368,7 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
     }
 
     private FrameLayout createVideoView(String tag) {
-        FrameLayout view = new FrameLayout(this);
+        UserSeatView view = new UserSeatView(this);
         int sizeInDp = 180;
         int sizeInPx = (int) (getResources().getDisplayMetrics().density * sizeInDp);
 
@@ -344,6 +381,10 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         view.setLayoutParams(params);
         view.setTag(tag);
         view.setBackgroundColor(Color.BLACK);
+        
+        // 设置操作回调监听器
+        view.setOnActionListener(this);
+        
         return view;
     }
 
@@ -369,13 +410,35 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             mGridVideoContainer.addView(view);
             remoteViews.put(streamKey, view);
         }
+        
+        // 创建或获取该流的状态对象
+        UserSeatState state = mSeatStateMap.get(streamKey);
+        if (state == null) {
+            state = new UserSeatState(uid, videoTrack, false);
+            state.hasVideoStream = true;
+            mSeatStateMap.put(streamKey, state);
+        } else {
+            state.hasVideoStream = true;
+        }
+        
+        if (view instanceof UserSeatView) {
+            ((UserSeatView) view).applyState(state);
+        }
+        
         // 创建 SurfaceView 并设置渲染
         SurfaceView surfaceView = mAliRtcEngine.createRenderSurfaceView(this);
         surfaceView.setZOrderMediaOverlay(true);
-        view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if (view instanceof UserSeatView) {
+            ((UserSeatView) view).getVideoContainer().addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        } else {
+            view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
         // 配置画布
         AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
         videoCanvas.view = surfaceView;
+        videoCanvas.renderMode = state.renderMode;
+        videoCanvas.mirrorMode = state.mirrorMode;
+        videoCanvas.rotationMode = state.rotationMode;
         mAliRtcEngine.setRemoteViewConfig(videoCanvas, uid, videoTrack);
     }
 
@@ -394,6 +457,9 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             mGridVideoContainer.removeView(frameLayout);
             Log.d("RemoveRemoteVideo", "Removed video stream for: " + streamKey);
         }
+        
+        // 移除该流的状态对象
+        mSeatStateMap.remove(streamKey);
     }
 
     /**
@@ -403,6 +469,59 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
     private void removeAllRemoteVideo(String uid) {
         removeRemoteVideo(uid, AliRtcVideoTrackCamera);
         removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+        // 移除音频占位视图
+        removeRemoteVideo(uid, AliRtcVideoTrackNo);
+    }
+
+    /**
+     * 根据当前远端用户的视频轨状态，统一更新相机流 / 屏幕流视图
+     * 采用增量更新策略：只处理发生变化的流，避免重复创建导致黑屏
+     *
+     * @param uid        远端用户 ID
+     * @param videoTrack 当前视频轨状态（Camera/Screen/Both/No）
+     */
+    private void updateRemoteUserViews(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
+        // 获取上一次该用户的视频轨状态
+        AliRtcEngine.AliRtcVideoTrack prevTrack = mUserVideoTrackMap.get(uid);
+        
+        // 上一次的流状态
+        boolean hadCameraBefore = (prevTrack == AliRtcVideoTrackCamera || prevTrack == AliRtcVideoTrackBoth);
+        boolean hadScreenBefore = (prevTrack == AliRtcVideoTrackScreen || prevTrack == AliRtcVideoTrackBoth);
+        
+        // 本次需要的流状态
+        boolean needCamera = (videoTrack == AliRtcVideoTrackCamera || videoTrack == AliRtcVideoTrackBoth);
+        boolean needScreen = (videoTrack == AliRtcVideoTrackScreen || videoTrack == AliRtcVideoTrackBoth);
+        
+        // 相机流：按"增删 diff"处理
+        if (!hadCameraBefore && needCamera) {
+            // 之前没有相机流，现在需要 -> 创建相机画面
+            viewRemoteVideo(uid, AliRtcVideoTrackCamera);
+            Log.d("VideoBasicUsage", "Create camera view for " + uid);
+        } else if (hadCameraBefore && !needCamera) {
+            // 之前有相机流，现在不需要 -> 移除相机画面
+            removeRemoteVideo(uid, AliRtcVideoTrackCamera);
+            Log.d("VideoBasicUsage", "Remove camera view for " + uid);
+        }
+        // hadCameraBefore && needCamera 的情况：相机流保持不变，不做任何操作，避免重建导致黑屏
+        
+        // 屏幕流：按"增删 diff"处理
+        if (!hadScreenBefore && needScreen) {
+            // 之前没有屏幕流，现在需要 -> 创建屏幕画面
+            viewRemoteVideo(uid, AliRtcVideoTrackScreen);
+            Log.d("VideoBasicUsage", "Create screen view for " + uid);
+        } else if (hadScreenBefore && !needScreen) {
+            // 之前有屏幕流，现在不需要 -> 移除屏幕画面
+            removeRemoteVideo(uid, AliRtcVideoTrackScreen);
+            Log.d("VideoBasicUsage", "Remove screen view for " + uid);
+        }
+        // hadScreenBefore && needScreen 的情况：屏幕流保持不变，不做任何操作
+        
+        // 记录最新状态
+        if (videoTrack == AliRtcVideoTrackNo) {
+            mUserVideoTrackMap.remove(uid);
+        } else {
+            mUserVideoTrackMap.put(uid, videoTrack);
+        }
     }
 
     /**
@@ -413,6 +532,21 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
      */
     private String getStreamKey(String uid, AliRtcEngine.AliRtcVideoTrack videoTrack) {
         return uid + "_" + videoTrack.name();
+    }
+
+    /**
+     * 获取用户的静音状态（从该用户的任意一个 Seat 查找）
+     * @param userId 用户 ID
+     * @return 静音状态
+     */
+    private boolean getUserMutedState(String userId) {
+        for (Map.Entry<String, UserSeatState> entry : mSeatStateMap.entrySet()) {
+            UserSeatState state = entry.getValue();
+            if (state != null && userId.equals(state.userId)) {
+                return state.isMicMuted;
+            }
+        }
+        return false; // 默认不静音
     }
 
 
@@ -482,6 +616,10 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
             handler.post(() -> {
                 String msg = "User "+ uid + " offline";
                 ToastHelper.showToast(VideoBasicUsageActivity.this, msg, Toast.LENGTH_SHORT);
+                // 用户下线时，移除该用户所有视频画面
+                removeAllRemoteVideo(uid);
+                // 同步清理该用户的轨状态
+                mUserVideoTrackMap.remove(uid);
             });
         }
 
@@ -489,17 +627,45 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         @Override
         public void onRemoteTrackAvailableNotify(String uid, AliRtcEngine.AliRtcAudioTrack audioTrack, AliRtcEngine.AliRtcVideoTrack videoTrack){
             handler.post(() -> {
-                if(videoTrack == AliRtcVideoTrackCamera){
-                    viewRemoteVideo(uid, AliRtcVideoTrackCamera);
-                    removeRemoteVideo(uid, AliRtcVideoTrackScreen);
-                } else if(videoTrack == AliRtcVideoTrackScreen) {
-                    viewRemoteVideo(uid, AliRtcVideoTrackScreen);
-                    removeRemoteVideo(uid, AliRtcVideoTrackCamera);
-                } else if (videoTrack == AliRtcVideoTrackBoth) {
-                    viewRemoteVideo(uid, AliRtcVideoTrackCamera);
-                    viewRemoteVideo(uid, AliRtcVideoTrackScreen);
-                } else if(videoTrack == AliRtcVideoTrackNo) {
-                    removeAllRemoteVideo(uid);
+                Log.d("VideoBasicUsage", "onRemoteTrackAvailableNotify uid=" + uid + " audioTrack=" + audioTrack + " videoTrack=" + videoTrack);
+                
+                // 先按视频轨状态增删相机/屏幕画面
+                updateRemoteUserViews(uid, videoTrack);
+                
+                // 如果没有视频但有音频，创建一个占位视图
+                if (videoTrack == AliRtcVideoTrackNo && 
+                    audioTrack != AliRtcEngine.AliRtcAudioTrack.AliRtcAudioTrackNo) {
+                    
+                    String streamKey = getStreamKey(uid, AliRtcVideoTrackNo);
+                    FrameLayout view = remoteViews.get(streamKey);
+                    if (view == null) {
+                        view = createVideoView(streamKey);
+                        mGridVideoContainer.addView(view);
+                        remoteViews.put(streamKey, view);
+                    }
+                    
+                    // 创建音频占位状态
+                    UserSeatState audioState = mSeatStateMap.get(streamKey);
+                    if (audioState == null) {
+                        audioState = new UserSeatState(uid, AliRtcVideoTrackNo, false);
+                        audioState.hasVideoStream = false;
+                        audioState.isCameraOn = false;
+                        mSeatStateMap.put(streamKey, audioState);
+                    }
+                    // 同步静音状态（从该用户其他 Seat 查找）
+                    audioState.isMicMuted = getUserMutedState(uid);
+                    
+                    if (view instanceof UserSeatView) {
+                        ((UserSeatView) view).applyState(audioState);
+                        Log.d("VideoBasicUsage", "Create audio-only placeholder for " + uid);
+                    }
+                } else if (videoTrack != AliRtcVideoTrackNo) {
+                    // 如果有视频了，移除音频占位视图
+                    String audioOnlyKey = getStreamKey(uid, AliRtcVideoTrackNo);
+                    if (remoteViews.containsKey(audioOnlyKey)) {
+                        removeRemoteVideo(uid, AliRtcVideoTrackNo);
+                        Log.d("VideoBasicUsage", "Remove audio-only placeholder for " + uid);
+                    }
                 }
             });
         }
@@ -546,6 +712,27 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         remoteViews.clear();
         mGridVideoContainer.removeAllViews();
         mLocalVideoCanvas = null;
+        
+        // 清理所有麦位状态
+        mSeatStateMap.clear();
+        // 清理每个用户的视频轨状态
+        mUserVideoTrackMap.clear();
+        
+        // 重置本地预览相关状态
+        isLocalPreviewing = false;
+        isEnableCamera = true;
+        isMutedCamera = false;
+        handler.post(() -> {
+            if (mPreviewBtn != null) {
+                mPreviewBtn.setText(R.string.start_preview);
+            }
+            if (mCameraSwitchBtn != null) {
+                mCameraSwitchBtn.setText(R.string.camera_off);
+            }
+            if (mPublishVideoBtn != null) {
+                mPublishVideoBtn.setText(R.string.stop_pub_video);
+            }
+        });
     }
 
     @Override
@@ -568,5 +755,189 @@ public class VideoBasicUsageActivity extends AppCompatActivity implements VideoC
         if(mAliRtcEngine != null) {
             mAliRtcEngine.setVideoDecoderConfiguration(config);
         }
+    }
+
+    // ==================== UserSeatView.OnUserSeatActionListener 接口实现 ====================
+
+    /**
+     * 切换渲染模式
+     */
+    @Override
+    public void onRenderModeChange(String userId, AliRtcEngine.AliRtcVideoTrack trackType) {
+        handler.post(() -> {
+            if (mAliRtcEngine != null) {
+                // 获取当前流的 streamKey
+                String streamKey = getStreamKey(userId, trackType);
+                UserSeatState state = mSeatStateMap.get(streamKey);
+                if (state == null) return;
+                
+                FrameLayout view = remoteViews.get(streamKey);
+                if (view == null && userId.equals(GlobalConfig.getInstance().getUserId())) {
+                    // 本地预览，查找第一个视图
+                    if (mGridVideoContainer.getChildCount() > 0) {
+                        View firstChild = mGridVideoContainer.getChildAt(0);
+                        if (firstChild instanceof UserSeatView) {
+                            view = (FrameLayout) firstChild;
+                        }
+                    }
+                }
+                
+                if (view instanceof UserSeatView) {
+                    UserSeatView userSeatView = (UserSeatView) view;
+                    
+                    // 计算下一个渲染模式（基于当前状态循环）
+                    AliRtcEngine.AliRtcRenderMode nextMode = UserSeatHelper.getNextRenderMode(state.renderMode);
+                    state.renderMode = nextMode;
+                    
+                    // 更新 SDK 配置
+                    if (userId.equals(GlobalConfig.getInstance().getUserId()) && mLocalVideoCanvas != null) {
+                        // 本地预览
+                        mLocalVideoCanvas.renderMode = nextMode;
+                        mLocalVideoCanvas.mirrorMode = state.mirrorMode;
+                        mLocalVideoCanvas.rotationMode = state.rotationMode;
+                        mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, trackType);
+                    } else {
+                        // 远端画面
+                        AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+                        videoCanvas.renderMode = nextMode;
+                        videoCanvas.mirrorMode = state.mirrorMode;
+                        videoCanvas.rotationMode = state.rotationMode;
+                        // 保持原有的 view
+                        ViewGroup container = userSeatView.getVideoContainer();
+                        if (container.getChildCount() > 0 && container.getChildAt(0) instanceof SurfaceView) {
+                            videoCanvas.view = (SurfaceView) container.getChildAt(0);
+                        }
+                        mAliRtcEngine.setRemoteViewConfig(videoCanvas, userId, trackType);
+                    }
+                    
+                    // 更新 UI 显示（使用统一的 applyState 刷新汇总文本）
+                    userSeatView.applyState(state);
+                    
+                    ToastHelper.showToast(this, "渲染模式: " + UserSeatHelper.getRenderModeName(nextMode), Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    /**
+     * 切换镜像状态
+     */
+    @Override
+    public void onMirrorToggle(String userId, AliRtcEngine.AliRtcVideoTrack trackType) {
+        handler.post(() -> {
+            if (mAliRtcEngine != null) {
+                String streamKey = getStreamKey(userId, trackType);
+                UserSeatState state = mSeatStateMap.get(streamKey);
+                if (state == null) return;
+                
+                // 获取当前镜像模式并切换
+                AliRtcEngine.AliRtcRenderMirrorMode nextMode = UserSeatHelper.toggleMirrorMode(state.mirrorMode);
+                state.mirrorMode = nextMode;
+                
+                // 更新 UI 显示
+                FrameLayout view = remoteViews.get(streamKey);
+                if (view == null && userId.equals(GlobalConfig.getInstance().getUserId())) {
+                    // 本地预览，查找第一个视图
+                    if (mGridVideoContainer.getChildCount() > 0) {
+                        View firstChild = mGridVideoContainer.getChildAt(0);
+                        if (firstChild instanceof UserSeatView) {
+                            view = (FrameLayout) firstChild;
+                        }
+                    }
+                }
+                
+                if (view instanceof UserSeatView) {
+                    UserSeatView userSeatView = (UserSeatView) view;
+                    
+                    // 通过 canvas 设置镜像模式
+                    if (userId.equals(GlobalConfig.getInstance().getUserId()) && mLocalVideoCanvas != null) {
+                        // 本地预览
+                        mLocalVideoCanvas.mirrorMode = nextMode;
+                        mLocalVideoCanvas.renderMode = state.renderMode;
+                        mLocalVideoCanvas.rotationMode = state.rotationMode;
+                        mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, trackType);
+                    } else {
+                        // 远端画面
+                        AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+                        videoCanvas.mirrorMode = nextMode;
+                        videoCanvas.renderMode = state.renderMode;
+                        videoCanvas.rotationMode = state.rotationMode;
+                        
+                        ViewGroup container = userSeatView.getVideoContainer();
+                        if (container.getChildCount() > 0 && container.getChildAt(0) instanceof SurfaceView) {
+                            videoCanvas.view = (SurfaceView) container.getChildAt(0);
+                        }
+                        mAliRtcEngine.setRemoteViewConfig(videoCanvas, userId, trackType);
+                    }
+                    
+                    // 更新 UI 显示（使用统一的 applyState 刷新汇总文本和图标）
+                    userSeatView.applyState(state);
+                }
+                
+                String modeName = UserSeatHelper.getMirrorModeName(nextMode);
+                ToastHelper.showToast(this, "镜像: " + modeName, Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    /**
+     * 切换旋转角度
+     */
+    @Override
+    public void onRotationChange(String userId, AliRtcEngine.AliRtcVideoTrack trackType) {
+        handler.post(() -> {
+            if (mAliRtcEngine != null) {
+                String streamKey = getStreamKey(userId, trackType);
+                UserSeatState state = mSeatStateMap.get(streamKey);
+                if (state == null) return;
+                
+                FrameLayout view = remoteViews.get(streamKey);
+                
+                if (view == null && userId.equals(GlobalConfig.getInstance().getUserId())) {
+                    // 本地预览，查找第一个视图
+                    if (mGridVideoContainer.getChildCount() > 0) {
+                        View firstChild = mGridVideoContainer.getChildAt(0);
+                        if (firstChild instanceof UserSeatView) {
+                            view = (FrameLayout) firstChild;
+                        }
+                    }
+                }
+                
+                if (view instanceof UserSeatView) {
+                    UserSeatView userSeatView = (UserSeatView) view;
+                    
+                    // 获取下一个旋转模式（0° -> 90° -> 180° -> 270° -> 0°）
+                    AliRtcEngine.AliRtcRotationMode nextMode = UserSeatHelper.getNextRotationMode(state.rotationMode);
+                    state.rotationMode = nextMode;
+                    
+                    // 通过 canvas 设置旋转模式
+                    if (userId.equals(GlobalConfig.getInstance().getUserId()) && mLocalVideoCanvas != null) {
+                        // 本地预览
+                        mLocalVideoCanvas.rotationMode = nextMode;
+                        mLocalVideoCanvas.renderMode = state.renderMode;
+                        mLocalVideoCanvas.mirrorMode = state.mirrorMode;
+                        mAliRtcEngine.setLocalViewConfig(mLocalVideoCanvas, trackType);
+                    } else {
+                        // 远端画面
+                        AliRtcEngine.AliRtcVideoCanvas videoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
+                        videoCanvas.rotationMode = nextMode;
+                        videoCanvas.renderMode = state.renderMode;
+                        videoCanvas.mirrorMode = state.mirrorMode;
+                        
+                        ViewGroup container = userSeatView.getVideoContainer();
+                        if (container.getChildCount() > 0 && container.getChildAt(0) instanceof SurfaceView) {
+                            videoCanvas.view = (SurfaceView) container.getChildAt(0);
+                        }
+                        mAliRtcEngine.setRemoteViewConfig(videoCanvas, userId, trackType);
+                    }
+                    
+                    // 更新 UI 显示（使用统一的 applyState 刷新汇总文本和图标）
+                    int angle = UserSeatHelper.rotationModeToAngle(nextMode);
+                    userSeatView.applyState(state);
+                    
+                    ToastHelper.showToast(this, "旋转角度: " + angle + "°", Toast.LENGTH_SHORT);
+                }
+            }
+        });
     }
 }

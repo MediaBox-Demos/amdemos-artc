@@ -4,4 +4,6 @@
     <color name="red">#F53F3F</color>
     <color name="white">#FFFFFFFF</color>
     <color name="layout_base_blue">#3295FB</color>
+    <color name="text_gray">#666666</color>
+    <color name="pk_subscribe_color">#ff6b35</color>
 </resources>

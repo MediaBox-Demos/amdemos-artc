@@ -1,8 +1,8 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { ModuleRegistry } from '../modules/ModuleRegistry';
-import { LightStorage } from 'common/src/main/ets/components/LightStorage';
+import { ModuleRegistry } from '../model/ModuleRegistry';
+import { LightStorage } from '../common/components/LightStorage';
 
 const DOMAIN = 0x0000;
 
@@ -13,6 +13,7 @@ export default class EntryAbility extends UIAbility {
     LightStorage.getInstance(this.context);
     //模块注册
     ModuleRegistry.registerAllModules();
+
     try {
       this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
     } catch (err) {

@@ -39,6 +39,8 @@
 "Intelligent Denoise" = "智能降噪";
 "Local Record" = "本地录制";
 "H265" = "H265";
+"Publish Live Stream" = "旁路推流到CDN";
+"Live Link Mic" = "直播连麦";
 
 
 // 音频常用操作

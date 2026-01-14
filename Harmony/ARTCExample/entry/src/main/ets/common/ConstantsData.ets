@@ -1,0 +1,29 @@
+export class ConstantsData {
+  static readonly TokenGenerate = 'TokenGenerate';
+  static readonly VideoCall = 'VideoCall';
+  static readonly VoiceChat = 'VoiceChat';
+  static readonly AudioBasicUsage = 'AudioBasicUsage';
+  static readonly VideoBasicUsage = 'VideoBasicUsage';
+  static readonly CameraPage = 'CameraPage';
+  static readonly SEIPage = 'SEIPage';
+  static readonly DataChannelMessagePage = 'DataChannelMessagePage';
+  static readonly StreamMonitoringPage = 'StreamMonitoringPage';
+  static readonly VoiceChangePage = 'VoiceChangePage';
+  static readonly PlayAudioFilesPage = 'PlayAudioFilesPage';
+  static readonly ScreenSharePage = 'ScreenSharePage';
+  static readonly ProcessAudioRawDataPage = 'ProcessAudioRawDataPage';
+  static readonly ProcessVideoRawDataPage = 'ProcessVideoRawDataPage';
+  static readonly CustomAudioCapturePage = 'CustomAudioCapturePage';
+  static readonly CustomAudioRenderPage = 'CustomAudioRenderPage';
+  static readonly CustomVideoCapturePage = 'CustomVideoCapturePage';
+  static readonly CustomVideoRenderPage = 'CustomVideoRenderPage';
+  static readonly PictureInPicturePage = 'PictureInPicturePage';
+  static readonly RecordingPage = 'RecordingPage';
+  static readonly IntelligentDenoisePage = 'IntelligentDenoisePage';
+  static readonly PreJoinChannelTestPage = 'PreJoinChannelTestPage';
+  static readonly PublishLiveStreamPage = 'PublishLiveStreamPage';
+  static readonly LiveLinkMicPage = 'LiveLinkMicPage';
+  static readonly HEVCPage = 'HEVCPage';
+  static readonly OriginAudioDataWrap = 'OriginAudioDataWrap';
+  static readonly OriginVideoDataWrap = 'OriginVideoDataWrap';
+}

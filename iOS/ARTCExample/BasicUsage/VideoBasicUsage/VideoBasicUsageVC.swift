@@ -214,6 +214,7 @@ class VideoBasicUsageVC: UIViewController, UITextFieldDelegate {
     var rtcEngine: AliRtcEngine? = nil
     var joinToken: String? = nil
     var isPreviewOn: Bool = false
+    var isInChannel: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -336,12 +337,22 @@ class VideoBasicUsageVC: UIViewController, UITextFieldDelegate {
     let mirrorModeOptions = ["Both Mirroring Enable".localized, "Both Mirroring Disabled".localized, "Preview Mirroring Only".localized, "Encoding Mirroring Only".localized]
     let mirrorModePickerView = UIPickerView()
     
-    @IBOutlet weak var joinChannelButton: UIButton!
+   @IBOutlet weak var joinChannelButton: UIButton!
     @IBAction func onJoinChannelBtnClicked(_ sender: UIButton) {
+        // 如果已入会，则离会
+        if isInChannel {
+            self.leaveAndDestroyEngine()
+            return
+        }
+        
         guard let channelId = self.channelIdTextField.text, channelId.isEmpty == false else {
             UIAlertController.showAlertWithMainThread(msg: "Input the Channel ID please.", vc: self)
             return
         }
+        // 点击后立刻禁用按钮并提示"正在入会"
+        sender.isEnabled = false
+        sender.setTitle("Joining...".localized, for: .normal)
+        
         if rtcEngine == nil {
             self.initAndSetupRtcEngine()
             self.setLocalView()
@@ -411,15 +422,36 @@ class VideoBasicUsageVC: UIViewController, UITextFieldDelegate {
             let ret = self.rtcEngine?.joinChannel(joinToken, channelId: nil, userId: nil, name: nil) { [weak self] errCode, channelId, userId, elapsed in
                 let resultMsg = "\(msg) \n CallbackErrorCode: \(errCode)"
                 resultMsg.printLog()
-                if errCode != 0 {
-                    UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self!)
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if errCode == 0 {
+                        // 入会成功：按钮改为 Leave Channel，启用可点击挂断
+                        self.isInChannel = true
+                        self.joinChannelButton.setTitle("Leave Channel".localized, for: .normal)
+                        self.joinChannelButton.isEnabled = true
+                        self.joinChannelButton.backgroundColor = .systemGreen
+                    } else {
+                        // 入会失败：恢复按钮
+                        self.isInChannel = false
+                        self.joinChannelButton.setTitle("Join Channel".localized, for: .normal)
+                        self.joinChannelButton.isEnabled = true
+                        self.joinChannelButton.backgroundColor = nil
+                        UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self)
+                    }
                 }
             }
             
             let resultMsg = "\(msg) \n ReturnErrorCode: \(ret ?? 0)"
             resultMsg.printLog()
-            if ret != 0 {
-                UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self)
+            if let ret = ret, ret != 0 {
+                // 调用立即失败：恢复按钮
+                DispatchQueue.main.async {
+                    self.isInChannel = false
+                    self.joinChannelButton.setTitle("Join Channel".localized, for: .normal)
+                    self.joinChannelButton.isEnabled = true
+                    self.joinChannelButton.backgroundColor = nil
+                    UIAlertController.showAlertWithMainThread(msg: resultMsg, vc: self)
+                }
             }
             return
         }
@@ -452,7 +484,10 @@ class VideoBasicUsageVC: UIViewController, UITextFieldDelegate {
         self.rtcEngine?.leaveChannel()
         AliRtcEngine.destroy()
         self.rtcEngine = nil
+        self.isInChannel = false
         joinChannelButton.setTitle("Join Channel".localized, for: .normal)
+        joinChannelButton.isEnabled = true
+        joinChannelButton.backgroundColor = nil
     }
     
     // 创建一个视频通话渲染视图，并加入到contentScrollView中

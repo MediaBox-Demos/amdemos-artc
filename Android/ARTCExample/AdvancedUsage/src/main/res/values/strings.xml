@@ -53,12 +53,18 @@
     <string name="audio_dump">Audio Dump</string>
     <string name="audio_source">Audio Source</string>
     <string name="local_playout">Local Playout</string>
-    <string name="get_video_raw_data">Get Video Raw Data</string>
-    <string name="get_video_texture_data">Get Video Texture Data</string>
+    <string name="get_video_raw_data">注册原始视频数据回调</string>
+    <string name="get_video_texture_data">注册纹理数据回调</string>
+    <string name="video_observer_position">Position:</string>
+    <string name="video_position_local">Local</string>
+    <string name="video_position_remote">Remote</string>
+    <string name="video_position_preencode">Pre</string>
+    <string name="video_position_postencode">Post</string>
+    <string name="codec_mode_hint">Software/Hardware: buffer callbacks; Hardware Texture: texture callbacks</string>
     <string name="write_back_to_sdk">Write Back to SDK</string>
     <string name="channel_id_label">ChannelID:</string>
     <string name="custom_video_capture_video_source">Video Source</string>
-    <string name="video_source_yuv">YUV</string>
+    <string name="video_source_yuv">buffer</string>
     <string name="video_source_texture">Texture</string>
     <string name="test_microphone">Test Microphone</string>
     <string name="stop_test">Stop Test</string>
@@ -66,8 +72,50 @@
     <string name="test_camera">Test Camera</string>
     <string name="test_device">Test Device</string>
     <string name="test_network">Test Network</string>
-    <string name="audio_dump_wav">Audio Dump</string>
+    <string name="audio_dump_wav">Audio Dump before input to SDK</string>
     <string name="enable_h265">H265</string>
     <string name="dump_audio_file_name_prefix">Dump File Name prefix</string>
+
+    <!-- Publish Live Stream demo -->
+    <string name="publish_live_stream">Publish Live Stream</string>
+    <string name="publish_stream_url">Stream URL:</string>
+    <string name="publish_stream_url_hint">Input CDN push URL, e.g. rtmp://...</string>
+    <string name="start_publish">Start Publish</string>
+    <string name="update_publish">Update Params</string>
+    <string name="stop_publish">Stop Publish</string>
+
+    <!-- Live Link Mic demo -->
+    <string name="live_link_mic">Live Link Mic</string>
+    <string name="live_link_mic_desc">Anchor and guest join the same channel for real-time interaction. Anchor can enable CDN bypass streaming, and cross-channel subscription for PK scenarios.</string>
+    <string name="role_label">Role:</string>
+    <string name="role_anchor">Anchor</string>
+    <string name="role_guest">Guest</string>
+    <string name="cross_channel_subscribe_title">Cross-Channel Subscribe (PK Demo)</string>
+    <string name="peer_channel_label">Target Channel:</string>
+    <string name="peer_channel_hint">Input peer anchor channel ID</string>
+    <string name="peer_uid_label">Target User:</string>
+    <string name="peer_uid_hint">Input peer anchor UID</string>
+    <string name="start_pk_subscribe">Start PK Subscribe</string>
+    <string name="stop_pk_subscribe">Stop PK Subscribe</string>
+
+    <!-- Video Encoder/Decoder Configuration Strings -->
+    <string name="video_encoder_software_encode">Software Encoding</string>
+    <string name="video_encoder_hardware_encode">Hardware Encoding</string>
+    <string name="video_encoder_hardware_texture_encode">Hardware Texture Encoding</string>
+    <string name="video_decoder_software_decode">Software Decoding</string>
+    <string name="video_decoder_hardware_decode">Hardware Decoding</string>
+    <string name="video_decoder_hardware_texture_decode">Hardware Texture Decoding</string>
+
+    <string name="android_custom_audio_render_hint">This example demonstrates the custom audio playback function: obtaining raw audio data before playback and playing it through Android AudioTrack. Please have remote users join the channel to experience the effect.</string>
+
+    <!-- Custom Video Process demo -->
+    <string name="custom_video_process">Custom Video Process</string>
+    <string name="custom_video_process_desc">This example demonstrates custom video processing: obtaining raw video data (from local camera capture), processing it with a beauty library, and passing it back to SDK. Supports two implementations: Buffer (onLocalVideoSample) and Texture (onTextureUpdate).</string>
+    <string name="enable_buffer_process">Enable Buffer Processing</string>
+    <string name="buffer_process_hint">Process YUV/RGB buffer data via onLocalVideoSample callback</string>
+    <string name="enable_texture_process">Enable Texture Processing</string>
+    <string name="texture_process_hint">Process OpenGL texture data via onTextureUpdate callback</string>
+    <string name="enable_beauty">Enable Beauty (Reserved)</string>
+    <string name="beauty_hint">Beauty processing will be enabled after integrating beauty library</string>
 
 </resources>

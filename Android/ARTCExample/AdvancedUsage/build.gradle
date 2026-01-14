@@ -11,6 +11,16 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        
+        // 配置 CMake
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11"
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+                // 使用静态 C++ 运行时，避免与 Queen SDK 的 libc++_shared.so 冲突
+                arguments "-DANDROID_STL=c++_static"
+            }
+        }
     }
 
     buildTypes {
@@ -23,6 +33,34 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    
+    // 解决 libc++_shared.so 冲突问题
+    packagingOptions {
+        jniLibs {
+            // 优先使用第一个找到的 libc++_shared.so
+            pickFirsts += ['lib/arm64-v8a/libc++_shared.so', 'lib/armeabi-v7a/libc++_shared.so', 'lib/x86/libc++_shared.so', 'lib/x86_64/libc++_shared.so']
+        }
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt']
+        }
+    }
+    
+    // 配置 CMake 路径
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.18.1"
+        }
+    }
+    
+    // 指定已安装的 NDK 版本
+    ndkVersion "27.0.12077973"
+}
+
+// 全局排除所有 cpp_shared 依赖，避免与 Queen SDK 冲突
+configurations.all {
+    exclude group: 'com.android.ndk.platform', module: 'cpp-shared'
+    exclude module: 'cpp_shared'
 }
 
 dependencies {
@@ -32,8 +70,20 @@ dependencies {
     implementation libs.alivcsdk.artc
     // 智能降噪
     implementation 'com.alivc.live.component:intelligentdenoise:1.0.0'
+
+    // queen 美颜
+    // Queen-sdk版本（排除 libc++_shared.so 避免冲突）
+    implementation("com.aliyun.maliang.android:queen:6.8.1-official-pro") {
+        exclude group: 'com.android.ndk', module: 'cpp_shared'
+    }
+
+    // Queen-menu组件版本（非必需）
+    implementation "com.aliyun.maliang.android:queen_menu:6.8.1-official-pro-tiny"   // 菜单资源在线下载
+    implementation "com.aliyun.maliang.android:queen_menu:6.8.1-official-pro"        // 菜单资源打包在本地，包体会较大
+
     implementation project(path: ':KeyCenter')
     implementation libs.camera.video
+    
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

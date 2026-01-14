@@ -28,8 +28,8 @@ class TokenGenerateSetParamsVC: UIViewController, UITextFieldDelegate {
         self.timestampTextField.delegate = self
         self.nonceTextField.delegate = self
         
-        self.appIdTextField.text = ARTCTokenHelper.AppId
-        self.appKeyTextField.text = ARTCTokenHelper.AppKey
+        self.appIdTextField.text = GlobalConfig.shared.appId
+        self.appKeyTextField.text = GlobalConfig.shared.appKey
         self.userIdTextField.text = GlobalConfig.shared.userId
         self.timestampTextField.text = "\(Int(Date().timeIntervalSince1970 + 24 * 60 * 60))" // 1 day
     }
@@ -64,10 +64,20 @@ class TokenGenerateSetParamsVC: UIViewController, UITextFieldDelegate {
         authInfo.timestamp = timestamp
         authInfo.token = authToken
         
+        // 计算“过期时长 = 选择的 timestamp - 当前时间”
+        let now = Int64(Date().timeIntervalSince1970)
+        let expireDuration = max(timestamp - now, 0)
+        
         let vc = self.presentVC(storyboardName: "TokenGenerate", storyboardId: "MainVC") as? TokenGenerateMainVC
         vc?.channelId = channelId
         vc?.userId = userId
         vc?.joinAuthInfo = authInfo
+        
+        // 传递用于后续刷新 Token 的参数
+        vc?.appId = appId
+        vc?.appKey = appKey
+        vc?.nonce = nonce
+        vc?.expireDurationSeconds = expireDuration
     }
     
     @IBAction func startJoinWithToken(_ sender: Any) {
@@ -81,10 +91,20 @@ class TokenGenerateSetParamsVC: UIViewController, UITextFieldDelegate {
         let timestamp = Int64(self.timestampTextField.text ?? "") ?? Int64(Date().timeIntervalSince1970 + 24 * 60 * 60)
         let joinToken = helper.generateJoinToken(appId: appId, appKey: appKey, channelId: channelId, userId: userId, timestamp: timestamp, nonce: nonce)
         
+        // 计算“过期时长 = 选择的 timestamp - 当前时间”
+        let now = Int64(Date().timeIntervalSince1970)
+        let expireDuration = max(timestamp - now, 0)
+        
         let vc = self.presentVC(storyboardName: "TokenGenerate", storyboardId: "MainVC") as? TokenGenerateMainVC
         vc?.channelId = channelId
         vc?.userId = userId
         vc?.joinToken = joinToken
+        
+        // 传递用于后续刷新 Token 的参数
+        vc?.appId = appId
+        vc?.appKey = appKey
+        vc?.nonce = nonce
+        vc?.expireDurationSeconds = expireDuration
     }
     
     @objc func dismissKeyboard() {
@@ -145,6 +165,12 @@ class TokenGenerateMainVC: UIViewController {
 
     var joinToken: String? = nil
     var joinAuthInfo: AliRtcAuthInfo? = nil
+    
+    // 用于刷新 Token 的原始参数和过期时长（秒）
+    var appId: String = GlobalConfig.shared.appId
+    var appKey: String = GlobalConfig.shared.appKey
+    var nonce: String = ""
+    var expireDurationSeconds: Int64 = 24 * 60 * 60
     
     func setup() {
         
@@ -263,6 +289,58 @@ class TokenGenerateMainVC: UIViewController {
         self.rtcEngine = nil
     }
     
+    /// 刷新 Token（对应 Android 的 refreshToken）
+    func refreshToken() {
+        guard let engine = self.rtcEngine else { return }
+        
+        // 基于“当前时间 + 当初记录的过期时长”重新计算新的 timestamp
+        let now = Int64(Date().timeIntervalSince1970)
+        let newTimestamp = now + self.expireDurationSeconds
+        
+        if var authInfo = self.joinAuthInfo {
+            // 多参数入会：重新生成多参 Token
+            let helper = ARTCTokenHelper()
+            let newToken = helper.generateAuthInfoToken(appId: self.appId,
+                                                        appKey: self.appKey,
+                                                        channelId: self.channelId,
+                                                        userId: self.userId,
+                                                        timestamp: newTimestamp)
+            authInfo.timestamp = newTimestamp
+            authInfo.token = newToken
+            self.joinAuthInfo = authInfo
+            
+            let ret = engine.refreshAuthInfo(authInfo)
+            let msg = "refreshAuthInfo(AliRtcAuthInfo) ret: \(ret)"
+            msg.printLog()
+            
+            if ret != 0 {
+                UIAlertController.showAlertWithMainThread(msg: "Token 刷新失败，错误码: \(ret)", vc: self)
+            } else {
+                UIAlertController.showAlertWithMainThread(msg: "Token 刷新成功", vc: self)
+            }
+        } else if self.joinToken != nil {
+            // 单参数入会：重新生成单参 Token
+            let helper = ARTCTokenHelper()
+            let newToken = helper.generateJoinToken(appId: self.appId,
+                                                    appKey: self.appKey,
+                                                    channelId: self.channelId,
+                                                    userId: self.userId,
+                                                    timestamp: newTimestamp,
+                                                    nonce: self.nonce)
+            self.joinToken = newToken
+            
+            let ret = engine.refreshAuthInfo(withToken: newToken)
+            let msg = "refreshAuthInfoWithToken ret: \(ret)"
+            msg.printLog()
+            
+            if ret != 0 {
+                UIAlertController.showAlertWithMainThread(msg: "Token 刷新失败，错误码: \(ret)", vc: self)
+            } else {
+                UIAlertController.showAlertWithMainThread(msg: "Token 刷新成功", vc: self)
+            }
+        }
+    }
+    
     
     func createSeatView(uid: String) -> SeatView {
         let view = SeatView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -367,7 +445,36 @@ extension TokenGenerateMainVC: AliRtcEngineDelegate {
     func onAuthInfoWillExpire() {
         "onAuthInfoWillExpire".printLog()
         
-        /* TODO: 务必处理；Token即将过期，需要业务触发重新获取当前channel，user的鉴权信息，然后设置refreshAuthInfo即可 */
+        // Token 即将过期（提前 30s），弹窗提示并提供刷新按钮
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let alert = UIAlertController(title: "Token 即将过期",
+                                          message: "当前 Token 即将在 30 秒后过期，是否刷新 Token 继续通话？",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "刷新 Token", style: .default, handler: { _ in
+                self.refreshToken()
+            }))
+            alert.addAction(UIAlertAction(title: "稍后", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func onAuthInfoExpired() {
+        "onAuthInfoExpired".printLog()
+        
+        // Token 已过期，提示用户重新入会
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let alert = UIAlertController(title: "Token 已过期",
+                                          message: "当前 Token 已经过期，请重新加入会议。",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { _ in
+                // 挂断并关闭当前页面，返回到 SetParamsVC
+                self.leaveAnddestroyEngine()
+                self.navigationController?.popViewController(animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     func onBye(_ code: Int32) {

@@ -7,15 +7,24 @@
     android:layout_height="match_parent"
     tools:context="com.aliyun.artc.api.advancedusage.ProcessVideoRawData.ProcessVideoRawDataActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_channel_layout"
+    <!-- 整体滚动区域 -->
+    <ScrollView
+        android:id="@+id/scroll_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_channel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_channel_desc"
@@ -58,6 +67,63 @@
                 android:background="@drawable/edittext_border" />
         </LinearLayout>
 
+        <!-- 编码模式选择 -->
+        <LinearLayout
+            android:id="@+id/ll_encoder_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Encoder:"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/sp_encoder_codec_mode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="40dp" />
+        </LinearLayout>
+
+        <!-- 解码模式选择 -->
+        <LinearLayout
+            android:id="@+id/ll_decoder_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decoder:"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/sp_decoder_codec_mode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="40dp" />
+        </LinearLayout>
+
+        <!-- 编解码说明 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/codec_mode_hint"
+            android:textSize="10sp"
+            android:textColor="#888888"
+            android:layout_marginTop="4dp"/>
+
         <LinearLayout
             android:id="@+id/ll_switch_layout"
             android:layout_width="match_parent"
@@ -84,8 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:paddingVertical="12dp">
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,8 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:paddingVertical="12dp">
+            android:layout_marginTop="12dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,6 +186,96 @@
                 android:layout_height="wrap_content"
                 android:checked="true" />
 
+        </LinearLayout>
+
+        <!-- Position 控制：选择 SDK 回调位置（可多选） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/video_observer_position"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <!-- 第一行：Local 和 Remote -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
+
+                <CheckBox
+                    android:id="@+id/switch_stage_local"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/video_position_local"
+                    android:textSize="14sp"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:id="@+id/switch_stage_remote"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/video_position_remote"
+                    android:textSize="14sp"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <!-- 第二行：Pre-Encode 和 Post-Encode -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/switch_stage_preencode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/video_position_preencode"
+                    android:textSize="14sp"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:id="@+id/switch_stage_postencode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/video_position_postencode"
+                    android:textSize="14sp"
+                    android:checked="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 格式选择：控制返回数据的格式 -->
+        <LinearLayout
+            android:id="@+id/ll_video_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Format:"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/sp_video_format"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="40dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -144,39 +298,101 @@
                 android:background="@color/layout_base_blue" />
 
         </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
 
     <!-- 视频显示区域 -->
     <LinearLayout
         android:id="@+id/ll_video_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/ll_channel_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_weight="1"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:minHeight="400dp">
+
+        <!-- 视频原始数据回调信息展示（仿照音频 Demo） -->
+        <LinearLayout
+            android:id="@+id/ll_video_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:background="#33000000">
+
+            <TextView
+                android:id="@+id/tv_local_sample_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Local Sample: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_remote_sample_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remote Sample: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_preencode_sample_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PreEncode Sample: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_postencode_sample_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PostEncode Sample: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_texture_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Texture: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/video_layout_1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_height="200dp"
             android:orientation="horizontal">
 
             <FrameLayout
                 android:id="@+id/fl_local"
-                android:layout_width="108dp"
+                android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent" />
 
             <FrameLayout
                 android:id="@+id/fl_remote"
                 android:layout_marginLeft="5dp"
-                android:layout_width="108dp"
+                android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -184,23 +400,25 @@
         <LinearLayout
             android:id="@+id/video_layout_2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_height="200dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <FrameLayout
                 android:id="@+id/fl_remote2"
-                android:layout_width="108dp"
+                android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent" />
 
             <FrameLayout
                 android:id="@+id/fl_remote3"
                 android:layout_marginLeft="5dp"
-                android:layout_width="108dp"
+                android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

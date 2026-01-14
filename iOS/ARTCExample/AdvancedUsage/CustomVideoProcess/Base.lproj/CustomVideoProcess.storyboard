@@ -36,7 +36,6 @@
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3cP-dU-Mce">
                                                 <rect key="frame" x="296" y="0.0" width="51" height="31"/>
                                                 <connections>
-                                                    <action selector="onBeautifySwitchToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="JcQ-8H-Mhn"/>
                                                     <action selector="onTextureDataSwitchToggled:" destination="Y6W-OH-hqX" eventType="valueChanged" id="gdT-Nx-EiN"/>
                                                 </connections>
                                             </switch>

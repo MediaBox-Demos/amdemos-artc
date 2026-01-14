@@ -70,10 +70,76 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
+        <!-- 音频原始数据回调信息展示（仿照 iOS 顶部多行 Label） -->
+        <LinearLayout
+            android:id="@+id/ll_audio_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:background="#33000000">
+
+            <TextView
+                android:id="@+id/tv_capture_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Capture: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_process_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3A: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_publish_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Publish: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_playback_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Playback: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+
+            <TextView
+                android:id="@+id/tv_remote_user_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remote User: -"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:paddingVertical="2dp" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/video_layout_1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <FrameLayout

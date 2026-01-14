@@ -33,4 +33,5 @@
     <string name="custom_video_process">自定义视频处理</string>
     <string name="h265">H265</string>
     <string name="local_record">本地录制</string>
+    <string name="publish_live_stream">旁路CDN</string>
 </resources>

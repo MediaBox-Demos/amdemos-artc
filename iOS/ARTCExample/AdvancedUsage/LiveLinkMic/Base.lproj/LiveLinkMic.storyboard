@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Set ParamsVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntranceVC" id="Y6W-OH-hqX" customClass="LiveLinkMicSetParamsVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOA-oc-OXp">
+                                <rect key="frame" x="24" y="83" width="345" height="81.333333333333314"/>
+                                <string key="text">Live Link Mic: Hosts and guests join the same channel. Hosts can cross-channel subscribe for PK scenarios.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Id" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cz1-kF-yGK">
+                                <rect key="frame" x="24" y="188.33333333333334" width="345" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="seg-role-ctrl">
+                                <rect key="frame" x="24" y="246.33333333333334" width="345" height="32"/>
+                                <segments>
+                                    <segment title="Anchor"/>
+                                    <segment title="Guest"/>
+                                </segments>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Rj-ko-dhO">
+                                <rect key="frame" x="135.33333333333334" y="301.33333333333331" width="122.33333333333334" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Join Channel"/>
+                                <connections>
+                                    <action selector="onJoinChannelBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rar-gV-U0E"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cz1-kF-yGK" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="8CA-7b-sHc"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="cz1-kF-yGK" secondAttribute="trailing" constant="24" id="GKQ-u0-hap"/>
+                            <constraint firstItem="seg-role-ctrl" firstAttribute="top" secondItem="cz1-kF-yGK" secondAttribute="bottom" constant="24" id="PNY-Xc-LVM"/>
+                            <constraint firstItem="seg-role-ctrl" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="seg-lead-001"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="seg-role-ctrl" secondAttribute="trailing" constant="24" id="seg-trail-001"/>
+                            <constraint firstItem="XOA-oc-OXp" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="24" id="Tqu-wb-uMV"/>
+                            <constraint firstItem="XOA-oc-OXp" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="Zyn-oA-Uhc"/>
+                            <constraint firstItem="7Rj-ko-dhO" firstAttribute="top" secondItem="seg-role-ctrl" secondAttribute="bottom" constant="24" id="exu-L8-JGt"/>
+                            <constraint firstItem="7Rj-ko-dhO" firstAttribute="centerX" secondItem="cz1-kF-yGK" secondAttribute="centerX" id="hSW-k5-IMR"/>
+                            <constraint firstItem="cz1-kF-yGK" firstAttribute="top" secondItem="XOA-oc-OXp" secondAttribute="bottom" constant="24" id="wxt-0b-8n7"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="XOA-oc-OXp" secondAttribute="trailing" constant="24" id="yMD-pV-wgX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="cz1-kF-yGK" id="bnf-Fk-aXe"/>
+                        <outlet property="roleSegmentedControl" destination="seg-role-ctrl" id="seg-out-001"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="37" y="-34"/>
+        </scene>
+        <!--MainVC-->
+        <scene sceneID="7PH-TM-WfP">
+            <objects>
+                <viewController storyboardIdentifier="MainVC" id="OnW-12-Gf1" customClass="LiveLinkMicMainVC" customModule="ARTCExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="n24-kt-kn4">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <!-- PK Cross-Channel Subscribe Container (For Anchor Only) -->
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pk-container-view">
+                                <rect key="frame" x="0.0" y="83" width="393" height="180"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PK Cross-Channel Subscribe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pk-title-label">
+                                        <rect key="frame" x="12" y="12" width="369" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peer Channel ID" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="pk-peer-channel-tf">
+                                        <rect key="frame" x="12" y="44.333333333333314" width="369" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peer User ID" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="pk-peer-uid-tf">
+                                        <rect key="frame" x="12" y="90.333333333333314" width="369" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pk-subscribe-btn">
+                                        <rect key="frame" x="96.666666666666686" y="136.33333333333334" width="200" height="34.333333333333343"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="pk-btn-width"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Start PK Subscribe"/>
+                                        <connections>
+                                            <action selector="onPkSubscribeTapped:" destination="OnW-12-Gf1" eventType="touchUpInside" id="pk-action-001"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstItem="pk-title-label" firstAttribute="top" secondItem="pk-container-view" secondAttribute="top" constant="12" id="pk-title-top"/>
+                                    <constraint firstItem="pk-title-label" firstAttribute="leading" secondItem="pk-container-view" secondAttribute="leading" constant="12" id="pk-title-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="pk-title-label" secondAttribute="trailing" constant="12" id="pk-title-trail"/>
+                                    
+                                    <constraint firstItem="pk-peer-channel-tf" firstAttribute="top" secondItem="pk-title-label" secondAttribute="bottom" constant="12" id="pk-ch-top"/>
+                                    <constraint firstItem="pk-peer-channel-tf" firstAttribute="leading" secondItem="pk-container-view" secondAttribute="leading" constant="12" id="pk-ch-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="pk-peer-channel-tf" secondAttribute="trailing" constant="12" id="pk-ch-trail"/>
+                                    
+                                    <constraint firstItem="pk-peer-uid-tf" firstAttribute="top" secondItem="pk-peer-channel-tf" secondAttribute="bottom" constant="12" id="pk-uid-top"/>
+                                    <constraint firstItem="pk-peer-uid-tf" firstAttribute="leading" secondItem="pk-container-view" secondAttribute="leading" constant="12" id="pk-uid-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="pk-peer-uid-tf" secondAttribute="trailing" constant="12" id="pk-uid-trail"/>
+                                    
+                                    <constraint firstItem="pk-subscribe-btn" firstAttribute="top" secondItem="pk-peer-uid-tf" secondAttribute="bottom" constant="12" id="pk-btn-top"/>
+                                    <constraint firstItem="pk-subscribe-btn" firstAttribute="centerX" secondItem="pk-container-view" secondAttribute="centerX" id="pk-btn-center"/>
+                                    <constraint firstAttribute="bottom" secondItem="pk-subscribe-btn" secondAttribute="bottom" constant="12" id="pk-btn-bottom"/>
+                                    
+                                    <constraint firstAttribute="height" constant="180" id="pk-container-height"/>
+                                </constraints>
+                            </view>
+                            
+                            <!-- CDN Publish Live Stream Container (For Anchor Only) -->
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="publish-container-view">
+                                <rect key="frame" x="0.0" y="275" width="393" height="140"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CDN Publish Live Stream" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="publish-title-label">
+                                        <rect key="frame" x="12" y="12" width="369" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Stream URL (e.g. rtmp://...)" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="publish-stream-url-tf">
+                                        <rect key="frame" x="12" y="44.333333333333314" width="369" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="publish-btn-stack">
+                                        <rect key="frame" x="12" y="90.333333333333314" width="369" height="34.333333333333343"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="publish-start-btn">
+                                                <rect key="frame" x="0.0" y="0.0" width="178.66666666666666" height="34.333333333333336"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Start Publish"/>
+                                                <connections>
+                                                    <action selector="onStartPublishTapped:" destination="OnW-12-Gf1" eventType="touchUpInside" id="publish-start-action"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="publish-stop-btn">
+                                                <rect key="frame" x="190.66666666666663" y="0.0" width="178.33333333333337" height="34.333333333333336"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Stop Publish"/>
+                                                <connections>
+                                                    <action selector="onStopPublishTapped:" destination="OnW-12-Gf1" eventType="touchUpInside" id="publish-stop-action"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstItem="publish-title-label" firstAttribute="top" secondItem="publish-container-view" secondAttribute="top" constant="12" id="publish-title-top"/>
+                                    <constraint firstItem="publish-title-label" firstAttribute="leading" secondItem="publish-container-view" secondAttribute="leading" constant="12" id="publish-title-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="publish-title-label" secondAttribute="trailing" constant="12" id="publish-title-trail"/>
+                                    
+                                    <constraint firstItem="publish-stream-url-tf" firstAttribute="top" secondItem="publish-title-label" secondAttribute="bottom" constant="12" id="publish-url-top"/>
+                                    <constraint firstItem="publish-stream-url-tf" firstAttribute="leading" secondItem="publish-container-view" secondAttribute="leading" constant="12" id="publish-url-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="publish-stream-url-tf" secondAttribute="trailing" constant="12" id="publish-url-trail"/>
+                                    
+                                    <constraint firstItem="publish-btn-stack" firstAttribute="top" secondItem="publish-stream-url-tf" secondAttribute="bottom" constant="12" id="publish-stack-top"/>
+                                    <constraint firstItem="publish-btn-stack" firstAttribute="leading" secondItem="publish-container-view" secondAttribute="leading" constant="12" id="publish-stack-lead"/>
+                                    <constraint firstAttribute="trailing" secondItem="publish-btn-stack" secondAttribute="trailing" constant="12" id="publish-stack-trail"/>
+                                    <constraint firstAttribute="bottom" secondItem="publish-btn-stack" secondAttribute="bottom" constant="12" id="publish-stack-bottom"/>
+                                    
+                                    <constraint firstAttribute="height" constant="140" id="publish-container-height"/>
+                                </constraints>
+                            </view>
+                            
+                            <!-- Video ScrollView -->
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G3x-56-0LX">
+                                <rect key="frame" x="0.0" y="275" width="393" height="543"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="JfK-lZ-wVP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pk-container-view" firstAttribute="top" secondItem="JfK-lZ-wVP" secondAttribute="top" constant="24" id="pk-top"/>
+                            <constraint firstItem="pk-container-view" firstAttribute="leading" secondItem="JfK-lZ-wVP" secondAttribute="leading" id="pk-lead"/>
+                            <constraint firstItem="pk-container-view" firstAttribute="trailing" secondItem="JfK-lZ-wVP" secondAttribute="trailing" id="pk-trail"/>
+                            
+                            <constraint firstItem="publish-container-view" firstAttribute="top" secondItem="pk-container-view" secondAttribute="bottom" constant="12" id="publish-top"/>
+                            <constraint firstItem="publish-container-view" firstAttribute="leading" secondItem="JfK-lZ-wVP" secondAttribute="leading" id="publish-lead"/>
+                            <constraint firstItem="publish-container-view" firstAttribute="trailing" secondItem="JfK-lZ-wVP" secondAttribute="trailing" id="publish-trail"/>
+                            
+                            <constraint firstItem="G3x-56-0LX" firstAttribute="top" secondItem="publish-container-view" secondAttribute="bottom" constant="12" id="scroll-top"/>
+                            <constraint firstItem="G3x-56-0LX" firstAttribute="leading" secondItem="JfK-lZ-wVP" secondAttribute="leading" id="TQP-fB-XbD"/>
+                            <constraint firstItem="G3x-56-0LX" firstAttribute="trailing" secondItem="JfK-lZ-wVP" secondAttribute="trailing" id="XiJ-Hf-zHx"/>
+                            <constraint firstItem="JfK-lZ-wVP" firstAttribute="bottom" secondItem="G3x-56-0LX" secondAttribute="bottom" id="scroll-bottom"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentScrollView" destination="G3x-56-0LX" id="JQK-Up-N19"/>
+                        <outlet property="pkContainerView" destination="pk-container-view" id="pk-container-out"/>
+                        <outlet property="peerChannelIdTextField" destination="pk-peer-channel-tf" id="pk-ch-out"/>
+                        <outlet property="peerUidTextField" destination="pk-peer-uid-tf" id="pk-uid-out"/>
+                        <outlet property="pkSubscribeButton" destination="pk-subscribe-btn" id="pk-btn-out"/>
+                        <outlet property="publishContainerView" destination="publish-container-view" id="publish-container-out"/>
+                        <outlet property="streamUrlTextField" destination="publish-stream-url-tf" id="publish-url-out"/>
+                        <outlet property="startPublishButton" destination="publish-start-btn" id="publish-start-out"/>
+                        <outlet property="stopPublishButton" destination="publish-stop-btn" id="publish-stop-out"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hXp-bJ-rlD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="704.58015267175574" y="-35.211267605633807"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

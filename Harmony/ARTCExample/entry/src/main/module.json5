@@ -20,6 +20,11 @@
         "startWindowIcon": "$media:startIcon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
+        "backgroundModes": [
+          "audioPlayback",
+          "audioRecording",
+          "dataTransfer"
+        ],
         "skills": [
           {
             "entities": [
@@ -28,20 +33,6 @@
             "actions": [
               "ohos.want.action.home"
             ]
-          }
-        ]
-      }
-    ],
-    "extensionAbilities": [
-      {
-        "name": "EntryBackupAbility",
-        "srcEntry": "./ets/entrybackupability/EntryBackupAbility.ets",
-        "type": "backup",
-        "exported": false,
-        "metadata": [
-          {
-            "name": "ohos.extension.backup",
-            "resource": "$profile:backup_config"
           }
         ]
       }
@@ -64,6 +55,14 @@
           "abilities": [
             "EntryAbility"
           ],
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "reason": "$string:keep_background",
+        "usedScene": {
+          "abilities": [],
           "when": "always"
         }
       }

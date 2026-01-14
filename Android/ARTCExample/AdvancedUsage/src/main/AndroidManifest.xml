@@ -37,6 +37,11 @@
             android:label="@string/custom_video_render"
             android:exported="true"/>
 
+        <activity
+            android:name=".CustomVideoProcess.CustomVideoProcessActivity"
+            android:label="@string/custom_video_process"
+            android:exported="true"/>
+
         <activity android:name=".PreJoinChannelTest.PreJoinChannelTestActivity"
             android:label="@string/pre_join_channel_test"
             android:exported="true"/>
@@ -60,6 +65,16 @@
         <activity android:name=".LocalRecord.RecordingActivity"
             android:label="@string/local_record"
             android:exported="false" />
+
+        <activity
+            android:name=".PublishLiveStream.PublishLiveStreamActivity"
+            android:label="@string/publish_live_stream"
+            android:exported="true" />
+
+        <activity
+            android:name=".LiveLinkMic.LiveLinkMicActivity"
+            android:label="@string/live_link_mic"
+            android:exported="true" />
 
     </application>
 </manifest>

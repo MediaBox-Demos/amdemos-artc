@@ -90,46 +90,62 @@ class CustomVideoRenderSeatView: UIView {
             return
         }
         
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        let pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        // 使用自定义渲染时隐藏 canvasView
+        if canvasView.isHidden == false {
+            canvasView.isHidden = true
+        }
         
-        var timingInfo = CMSampleTimingInfo(
-            duration: CMTime(value: 1, timescale: 20),
-            presentationTimeStamp: CMClockGetTime(CMClockGetHostTimeClock()),
-            decodeTimeStamp: CMTime.invalid
-        )
+        // 获取 pixelBuffer 的格式信息
+        let pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer)
         
         // 创建视频格式描述
         var formatDescription: CMFormatDescription?
-        let status = CMVideoFormatDescriptionCreate(
+        let status = CMVideoFormatDescriptionCreateForImageBuffer(
             allocator: kCFAllocatorDefault,
-            codecType: pixelFormat,
-            width: Int32(width),
-            height: Int32(height),
-            extensions: nil,
+            imageBuffer: pixelBuffer,
             formatDescriptionOut: &formatDescription
         )
         
         guard status == noErr, let videoFormatDescription = formatDescription else {
-            print("Failed to create video format description")
+            print("Failed to create video format description, status: \(status), format: \(pixelFormat)")
             return
         }
         
+        // 创建 timing 信息
+        var timingInfo = CMSampleTimingInfo(
+            duration: CMTime.invalid,
+            presentationTimeStamp: CMClockGetTime(CMClockGetHostTimeClock()),
+            decodeTimeStamp: CMTime.invalid
+        )
+        
+        // 创建 sample buffer
         var sampleBuffer: CMSampleBuffer?
-        let status2 = CMSampleBufferCreateForImageBuffer(
+        let status2 = CMSampleBufferCreateReadyWithImageBuffer(
             allocator: kCFAllocatorDefault,
             imageBuffer: pixelBuffer,
-            dataReady: true,
-            makeDataReadyCallback: nil,
-            refcon: nil,
             formatDescription: videoFormatDescription,
             sampleTiming: &timingInfo,
             sampleBufferOut: &sampleBuffer
         )
         
         if status2 == noErr, let sampleBuffer = sampleBuffer {
-            sampleBufferDisplayLayer?.enqueue(sampleBuffer)
+            if let displayLayer = sampleBufferDisplayLayer {
+                // 确保 layer 可见
+                displayLayer.isHidden = false
+                displayLayer.opacity = 1.0
+                
+                // 设置正确的视频方向
+                var attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, createIfNecessary: true)
+                if let attachments = attachments as? [[CFString: Any]] {
+                    var dict = attachments[0]
+                    dict[kCMSampleAttachmentKey_DisplayImmediately] = kCFBooleanTrue
+                }
+                
+                // 显示新的帧
+                displayLayer.enqueue(sampleBuffer)
+            }
+        } else {
+            print("Failed to create sample buffer, status: \(status2)")
         }
     }
     

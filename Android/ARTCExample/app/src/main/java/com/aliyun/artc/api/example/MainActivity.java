@@ -35,12 +35,15 @@ import com.aliyun.artc.api.advancedusage.IntelligentDenoise.IntelligentDenoiseAc
 import com.aliyun.artc.api.advancedusage.LocalRecord.RecordingActivity;
 import com.aliyun.artc.api.advancedusage.PictureInPicture.PictureInPictureAcitivity;
 import com.aliyun.artc.api.advancedusage.PreJoinChannelTest.PreJoinChannelTestActivity;
+import com.aliyun.artc.api.advancedusage.PublishLiveStream.PublishLiveStreamActivity;
+import com.aliyun.artc.api.advancedusage.LiveLinkMic.LiveLinkMicActivity;
 import com.aliyun.artc.api.basicusage.PlayAudioFiles.PlayAudioFilesActivity;
 import com.aliyun.artc.api.basicusage.ScreenShare.ScreenShareActivity;
 import com.aliyun.artc.api.basicusage.CameraCommonControl.CameraActivity;
 import com.aliyun.artc.api.advancedusage.CustomAudioCaptureAndRender.CustomAudioCaptureActivity;
 import com.aliyun.artc.api.basicusage.StreamMonitoring.StreamMonitoringActivity;
 import com.aliyun.artc.api.advancedusage.ProcessVideoRawData.ProcessVideoRawDataActivity;
+import com.aliyun.artc.api.advancedusage.CustomVideoProcess.CustomVideoProcessActivity;
 import com.aliyun.artc.api.basicusage.VideoBasicUsage.VideoBasicUsageActivity;
 import com.aliyun.artc.api.basicusage.VoiceChange.VoiceChangeActivity;
 import com.aliyun.artc.api.example.adapter.APIExampleListAdapter;
@@ -93,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
         mApiExampleList = findViewById(R.id.api_example_list);
         mApiExampleListAdapter.setOnItemClickListener((view, position) -> {
             if (checkOrRequestPermission(REQUEST_PERMISSION_CODE)) {
+                // 检查 AppId 和 AppKey 是否已配置
+                if (!GlobalConfig.getInstance().isAppConfigured()) {
+                    showAppConfigRequiredDialog();
+                    return;
+                }
+
                 ApiModuleInfo moduleInfo = (ApiModuleInfo) view.getTag();
                 if(moduleInfo.getModule().equals(getString(R.string.token_verify))) {
                     TokenGenerateActivity.startActionActivity(MainActivity.this);
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.advancedusage.R.string.custom_video_render))) {
                     CustomVideoRenderActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.custom_video_process))) {
-
+                    CustomVideoProcessActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.pre_join_channel_test))) {
                     PreJoinChannelTestActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.picture_in_picture))) {
@@ -142,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
                     HEVCActivity.startActionActivity(MainActivity.this);
                 } else if(moduleInfo.getModule().equals(getString(R.string.local_record))) {
                     RecordingActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(R.string.publish_live_stream))) {
+                    PublishLiveStreamActivity.startActionActivity(MainActivity.this);
+                } else if(moduleInfo.getModule().equals(getString(com.aliyun.artc.api.advancedusage.R.string.live_link_mic))) {
+                    LiveLinkMicActivity.startActionActivity(MainActivity.this);
                 }
             } else {
                 Toast.makeText(this, "请允许相关权限", Toast.LENGTH_SHORT).show();
@@ -178,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.intelligent_denoise)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.h265)));
         mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.local_record)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(R.string.publish_live_stream)));
+        mApiExampleListAdapter.addModuleInfo(new ApiModuleInfo().moduleName(getString(com.aliyun.artc.api.advancedusage.R.string.live_link_mic)));
     }
 
     public boolean checkOrRequestPermission(int code) {
@@ -212,8 +227,11 @@ public class MainActivity extends AppCompatActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_api_example_setting, null, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        ((TextView)view.findViewById(R.id.app_id_input)).setText(ARTCTokenHelper.AppId);
-        ((TextView)view.findViewById(R.id.app_key_input)).setText(ARTCTokenHelper.AppKey);
+        EditText appIdEditText = view.findViewById(R.id.app_id_input);
+        EditText appKeyEditText = view.findViewById(R.id.app_key_input);
+
+        appIdEditText.setText(GlobalConfig.getInstance().getAppId());
+        appKeyEditText.setText(GlobalConfig.getInstance().getAppKey());
         ((EditText)view.findViewById(R.id.user_id_input)).setText(GlobalConfig.getInstance().getUserId());
         ((TextView)view.findViewById(R.id.sdk_version_input)).setText(AliRtcEngine.getSdkVersion());
 
@@ -239,6 +257,16 @@ public class MainActivity extends AppCompatActivity {
                         String userId = ((EditText)view.findViewById(R.id.user_id_input)).getText().toString();
                         if(!TextUtils.isEmpty(userId)) {
                             GlobalConfig.getInstance().setUserId(userId);
+                        }
+
+                        String appId = appIdEditText.getText().toString().trim();
+                        if (!TextUtils.isEmpty(appId)) {
+                            GlobalConfig.getInstance().setAppId(appId);
+                        }
+
+                        String appKey = appKeyEditText.getText().toString().trim();
+                        if (!TextUtils.isEmpty(appKey)) {
+                            GlobalConfig.getInstance().setAppKey(appKey);
                         }
 
                         if(cnTextView.isSelected() && !seaTextView.isSelected()) {
@@ -270,6 +298,20 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .create();
         dialogPlus.show();
+    }
+
+    /**
+     * 弹窗提示用户配置 AppId 和 AppKey
+     */
+    private void showAppConfigRequiredDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("请点击右上角设置，填写 AppId 和 AppKey 参数")
+                .setPositiveButton("去设置", (dialog, which) -> {
+                    showSettingDialog();
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 
 }

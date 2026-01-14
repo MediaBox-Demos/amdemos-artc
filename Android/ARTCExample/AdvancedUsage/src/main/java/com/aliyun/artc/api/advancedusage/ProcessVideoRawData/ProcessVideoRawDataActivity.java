@@ -21,6 +21,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +41,8 @@ import com.aliyun.artc.api.keycenter.ARTCTokenHelper;
 import com.aliyun.artc.api.keycenter.GlobalConfig;
 import com.aliyun.artc.api.keycenter.utils.ToastHelper;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,6 +57,30 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
     private SwitchCompat mVideoSampleRawDataSwitch;
     private SwitchCompat mWriteBackToSDKSwitch;
     private SwitchCompat mEnableTextureDataSwitch;
+
+    // 视频原始数据回调信息展示（仿照音频 Demo）
+    private TextView mLocalSampleInfoTv;
+    private TextView mRemoteSampleInfoTv;
+    private TextView mPreEncodeSampleInfoTv;
+    private TextView mPostEncodeSampleInfoTv;
+    private TextView mTextureInfoTv;
+
+    // 编码/解码模式配置
+    private Spinner mEncoderModeSpinner;
+    private Spinner mDecoderModeSpinner;
+    private int mEncoderCodecModeIndex = 2; // 默认硬件纹理
+    private int mDecoderCodecModeIndex = 1; // 默认硬件解码
+
+    // 各阶段是否启用回调处理
+    private boolean enableLocalSample = true;
+    private boolean enableRemoteSample = true;
+    private boolean enablePreEncodeSample = true;
+    private boolean enablePostEncodeSample = false;
+
+    // 首选视频数据格式，默认 I420
+    private AliRtcEngine.AliRtcVideoFormat mPreferredFormat =
+            AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatI420;
+
     private boolean hasJoined = false;
     private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
 
@@ -80,6 +110,13 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         fl_remote_2 = findViewById(R.id.fl_remote2);
         fl_remote_3 = findViewById(R.id.fl_remote3);
 
+        // 视频原始数据信息展示 TextView
+        mLocalSampleInfoTv = findViewById(R.id.tv_local_sample_info);
+        mRemoteSampleInfoTv = findViewById(R.id.tv_remote_sample_info);
+        mPreEncodeSampleInfoTv = findViewById(R.id.tv_preencode_sample_info);
+        mPostEncodeSampleInfoTv = findViewById(R.id.tv_postencode_sample_info);
+        mTextureInfoTv = findViewById(R.id.tv_texture_info);
+
         mChannelEditText = findViewById(R.id.channel_id_input);
         mChannelEditText.setText(GlobalConfig.getInstance().gerRandomChannelId());
         mJoinChannelTextView = findViewById(R.id.join_room_btn);
@@ -95,44 +132,175 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
             }
         });
         
-        // 视频原始数据回调开关
+        // 视频原始数据回调开关：直接调用 SDK 的 register/unRegister API
         mVideoSampleRawDataSwitch = findViewById(R.id.video_capture_switch);
-        mVideoSampleRawDataSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    initAndSetupRtcEngine();
-                }
-                if (isChecked) {
-                    // 注册视频原始数据回调
-                    mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
-                } else {
-                    mAliRtcEngine.unRegisterVideoSampleObserver();
-                }
+        mVideoSampleRawDataSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mAliRtcEngine == null) {
+                initAndSetupRtcEngine();
+            }
+            if (isChecked) {
+                // 【关键 API】注册原始视频数据回调
+                mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
+            } else {
+                mAliRtcEngine.unRegisterVideoSampleObserver();
             }
         });
 
         mWriteBackToSDKSwitch = findViewById(R.id.raw_data_write_back_switch);
-        mWriteBackToSDKSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isWriteBackToSDK = isChecked;
+        mWriteBackToSDKSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isWriteBackToSDK = isChecked;
+        });
+
+        // 纹理数据回调开关：直接调用 SDK 的 register/unRegister API
+        mEnableTextureDataSwitch = findViewById(R.id.video_capture_texture_switch);
+        mEnableTextureDataSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mAliRtcEngine == null) {
+                initAndSetupRtcEngine();
+            }
+            if (isChecked) {
+                // 【关键 API】注册纹理数据回调
+                mAliRtcEngine.registerLocalVideoTextureObserver(mRtcTextureObserver);
+            } else {
+                mAliRtcEngine.unRegisterLocalVideoTextureObserver();
             }
         });
 
-        // 纹理数据回调开关
-        mEnableTextureDataSwitch = findViewById(R.id.video_capture_texture_switch);
-        mEnableTextureDataSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // 【演示功能】Position 控制开关：控制 SDK 是否回调各个 Position 的数据
+        // 每次开关变化时，会重新注册 VideoSampleObserver，让 onGetObservedFramePosition() 生效
+        CheckBox mStageLocalSwitch = findViewById(R.id.switch_stage_local);
+        CheckBox mStageRemoteSwitch = findViewById(R.id.switch_stage_remote);
+        CheckBox mStagePreEncodeSwitch = findViewById(R.id.switch_stage_preencode);
+        CheckBox mStagePostEncodeSwitch = findViewById(R.id.switch_stage_postencode);
+
+        CompoundButton.OnCheckedChangeListener stageChangeListener = (buttonView, isChecked) -> {
+            // 更新对应阶段的开关状态
+            int viewId = buttonView.getId();
+            if (viewId == R.id.switch_stage_local) {
+                enableLocalSample = isChecked;
+            } else if (viewId == R.id.switch_stage_remote) {
+                enableRemoteSample = isChecked;
+            } else if (viewId == R.id.switch_stage_preencode) {
+                enablePreEncodeSample = isChecked;
+            } else if (viewId == R.id.switch_stage_postencode) {
+                enablePostEncodeSample = isChecked;
+            }
+
+            // 重新注册回调，让新的 position 配置生效
+            if (mVideoSampleRawDataSwitch.isChecked()) {
+                reRegisterVideoSampleObserver();
+            }
+        };
+
+        mStageLocalSwitch.setOnCheckedChangeListener(stageChangeListener);
+        mStageRemoteSwitch.setOnCheckedChangeListener(stageChangeListener);
+        mStagePreEncodeSwitch.setOnCheckedChangeListener(stageChangeListener);
+        mStagePostEncodeSwitch.setOnCheckedChangeListener(stageChangeListener);
+
+        // 格式选择：控制返回数据的格式
+        Spinner formatSpinner = findViewById(R.id.sp_video_format);
+
+        // 可选格式列表：只挑几种典型的，避免太长
+        final List<AliRtcEngine.AliRtcVideoFormat> formatList = Arrays.asList(
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatI420,
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatNV21,
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatNV12,
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatBGRA,
+                AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatRGBA
+        );
+
+        final List<String> formatLabels = Arrays.asList(
+                "I420",
+                "NV21",
+                "NV12",
+                "BGRA",
+                "RGBA"
+        );
+
+        // 适配器
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                formatLabels
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        formatSpinner.setAdapter(adapter);
+
+        // 默认选中 I420
+        formatSpinner.setSelection(0);
+        mPreferredFormat = formatList.get(0);
+
+        formatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mAliRtcEngine == null) {
-                    initAndSetupRtcEngine();
-                }
-                if(isChecked){
-                    mAliRtcEngine.registerLocalVideoTextureObserver(mRtcTextureObserver);
-                } else {
-                    mAliRtcEngine.unRegisterLocalVideoTextureObserver();
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mPreferredFormat = formatList.get(position);
+                String hint = "PreferredFormat: " + formatLabels.get(position);
+                Log.d(TAG, hint);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 保持上一次选择
+            }
+        });
+
+        // 编码/解码模式 Spinner 配置
+        setupCodecModeSpinners();
+    }
+
+    /**
+     * 设置编码/解码模式 Spinner
+     * 说明：
+     * - 软件/硬件编码：主要返回 buffer 数据，通过 AliRtcVideoObserver 回调
+     * - 硬件纹理编码：主要返回纹理数据，通过 AliRtcTextureObserver 回调
+     */
+    private void setupCodecModeSpinners() {
+        // 编码模式 Spinner
+        mEncoderModeSpinner = findViewById(R.id.sp_encoder_codec_mode);
+        List<String> encoderOptions = Arrays.asList(
+                getString(R.string.video_encoder_software_encode),
+                getString(R.string.video_encoder_hardware_encode),
+                getString(R.string.video_encoder_hardware_texture_encode)
+        );
+        ArrayAdapter<String> encoderAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, encoderOptions);
+        encoderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mEncoderModeSpinner.setAdapter(encoderAdapter);
+        mEncoderModeSpinner.setSelection(2); // 默认硬件纹理编码
+
+        mEncoderModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mEncoderCodecModeIndex = position;
+                Log.d(TAG, "Encoder mode changed to: " + encoderOptions.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        // 解码模式 Spinner
+        mDecoderModeSpinner = findViewById(R.id.sp_decoder_codec_mode);
+        List<String> decoderOptions = Arrays.asList(
+                getString(R.string.video_decoder_software_decode),
+                getString(R.string.video_decoder_hardware_decode),
+                getString(R.string.video_decoder_hardware_texture_decode)
+        );
+        ArrayAdapter<String> decoderAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, decoderOptions);
+        decoderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDecoderModeSpinner.setAdapter(decoderAdapter);
+        mDecoderModeSpinner.setSelection(1); // 默认硬件解码
+
+        mDecoderModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mDecoderCodecModeIndex = position;
+                Log.d(TAG, "Decoder mode changed to: " + decoderOptions.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
@@ -178,6 +346,31 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 在主线程更新视频原始数据信息 TextView
+     */
+    private void updateVideoInfo(TextView textView, String message) {
+        if (textView == null) {
+            return;
+        }
+        handler.post(() -> textView.setText(message));
+    }
+
+    /**
+     * 【演示功能】重新注册视频原始数据回调
+     * 用于阶段开关变化时，让 onGetObservedFramePosition() 的新配置生效
+     */
+    private void reRegisterVideoSampleObserver() {
+        if (mAliRtcEngine == null) {
+            return;
+        }
+        // 先取消注册
+        mAliRtcEngine.unRegisterVideoSampleObserver();
+        // 重新注册，SDK 会重新调用 onGetObservedFramePosition() 获取新的 position 配置
+        mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
+        Log.d(TAG, "reRegisterVideoSampleObserver: updated position mask");
+    }
+
     private void startRTCCall() {
         if(hasJoined) {
             return;
@@ -186,11 +379,19 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         joinChannel();
     }
 
+    /**
+     * 创建并初始化 AliRtcEngine，并注册视频原始数据回调监听器。
+     * 【核心 API】获取原始视频数据的主流程入口：
+     *   1. registerVideoSampleObserver(observer) - 注册视频裸数据观察者
+     *   2. registerLocalVideoTextureObserver(observer) - 注册纹理数据观察者
+     *   3. 在 observer 回调中获取 AliRtcVideoSample 数据
+     *   4. 根据业务处理视频数据，返回 true/false 决定是否写回 SDK
+     */
     private void initAndSetupRtcEngine() {
         //创建并初始化引擎 获取纹理相关回调需要开启纹理采集、纹理编码
         if(mAliRtcEngine == null) {
-            String extras = "{\"user_specified_camera_texture_capture\":\"TRUE\",\"user_specified_texture_encode\":\"TRUE\" }";
-            mAliRtcEngine = AliRtcEngine.getInstance(this, extras);
+//            String extras = "{\"user_specified_camera_texture_capture\":\"TRUE\",\"user_specified_texture_encode\":\"TRUE\" }";
+            mAliRtcEngine = AliRtcEngine.getInstance(this, null);
         }
 
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
@@ -213,7 +414,45 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         aliRtcVideoEncoderConfiguration.bitrate = 1200;
         aliRtcVideoEncoderConfiguration.keyFrameInterval = 2000;
         aliRtcVideoEncoderConfiguration.orientationMode = AliRtcVideoEncoderOrientationModeAdaptive;
+        
+        // 根据配置设置编码方式
+        switch (mEncoderCodecModeIndex) {
+            case 0:
+                aliRtcVideoEncoderConfiguration.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeSoftware;
+                break;
+            case 1:
+                aliRtcVideoEncoderConfiguration.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardware;
+                break;
+            case 2:
+            default:
+                aliRtcVideoEncoderConfiguration.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardwareTexture;
+                break;
+        }
         mAliRtcEngine.setVideoEncoderConfiguration(aliRtcVideoEncoderConfiguration);
+
+        // 设置视频解码参数
+        AliRtcEngine.AliRtcVideoDecoderConfiguration decoderConfig =
+                new AliRtcEngine.AliRtcVideoDecoderConfiguration();
+        
+        switch (mDecoderCodecModeIndex) {
+            case 0:
+                decoderConfig.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeSoftware;
+                break;
+            case 1:
+                decoderConfig.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardware;
+                break;
+            case 2:
+            default:
+                decoderConfig.codecType =
+                        AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardwareTexture;
+                break;
+        }
+        mAliRtcEngine.setVideoDecoderConfiguration(decoderConfig);
 
         //SDK默认会publish音频，publishLocalAudioStream可以不调用
         mAliRtcEngine.publishLocalAudioStream(true);
@@ -227,11 +466,11 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         mAliRtcEngine.setDefaultSubscribeAllRemoteVideoStreams(true);
         mAliRtcEngine.subscribeAllRemoteVideoStreams(true);
 
-        if(mVideoSampleRawDataSwitch.isChecked()) {
+        // 根据开关状态注册回调
+        if (mVideoSampleRawDataSwitch.isChecked()) {
             mAliRtcEngine.registerVideoSampleObserver(mRtcVideoSampleObserver);
         }
-
-        if(mEnableTextureDataSwitch.isChecked()) {
+        if (mEnableTextureDataSwitch.isChecked()) {
             mAliRtcEngine.registerLocalVideoTextureObserver(mRtcTextureObserver);
         }
     }
@@ -381,15 +620,21 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
 
     };
 
+    /**
+     * 【关键回调】纹理数据观察者：SDK 通过该回调返回 OpenGL 纹理 ID
+     */
     private final AliRtcEngine.AliRtcTextureObserver mRtcTextureObserver = new AliRtcEngine.AliRtcTextureObserver() {
         @Override
         public void onTextureCreate(long context) {
             Log.d(TAG, "onTextureCreate");
+            updateVideoInfo(mTextureInfoTv, "Texture: onTextureCreate");
         }
 
         @Override
         public int onTextureUpdate(int textureId, int width, int height, AliRtcEngine.AliRtcVideoSample videoSample) {
-            Log.d(TAG, "onTextureUpdate");
+            String message = "Texture: " + width + "x" + height + ", texId=" + textureId;
+            Log.d(TAG, message);
+            updateVideoInfo(mTextureInfoTv, message);
             return textureId;
         }
 
@@ -397,11 +642,15 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
         public void onTextureDestroy() {
             // 直接destroy销毁引擎会释放相关资源但是不会触发此回调，如有需求请在destroy前调用unRegisterLocalVideoTextureObserver
             Log.d(TAG, "onTextureDestroy");
+            updateVideoInfo(mTextureInfoTv, "Texture: onTextureDestroy");
         }
     };
 
-
-
+    /**
+     * 【关键回调】视频数据回调监听器：SDK 通过该回调返回各类视频源的原始数据
+     * videoSample 中包含：width/height（宽高）、format（格式）、data（视频数据）等
+     * 返回值：true - 写回 SDK（默认）；false - 不写回 SDK
+     */
     //视频数据回调监听器，回调函数处理逻辑在此处实现
     private AliRtcEngine.AliRtcVideoObserver mRtcVideoSampleObserver = new AliRtcEngine.AliRtcVideoObserver() {
 
@@ -416,12 +665,12 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
              * - true: 需要写回SDK（默认写回，需要操作AliRtcVideoSample.data时必须要写回）
              * - false: 不需要写回SDK(需要直接操作AliRtcVideoSample.dataFrameY、AliRtcVideoSample.dataFrameU、AliRtcVideoSample.dataFrameV时使用)
              */
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onLocalVideoSample", Toast.LENGTH_SHORT);
-                }
-            });
+            String message = "LocalSample: " + videoSample.width + "x" + videoSample.height
+                    + ", format=" + videoSample.format
+                    + ", source=" + sourceType
+                    + ", writeBack=" + isWriteBackToSDK;
+            Log.d(TAG, message);
+            updateVideoInfo(mLocalSampleInfoTv, message);
             return isWriteBackToSDK;
         }
 
@@ -437,8 +686,13 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
              * - true: 需要写回SDK（默认写回，需要操作AliRtcVideoSample.data时必须要写回）
              * - false: 不需要写回SDK(需要直接操作AliRtcVideoSample.dataFrameY、AliRtcVideoSample.dataFrameU、AliRtcVideoSample.dataFrameV时使用)
              */
-            ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onRemoteVideoSample", Toast.LENGTH_SHORT);
-
+            String message = "RemoteSample: uid=" + callId
+                    + ", " + videoSample.width + "x" + videoSample.height
+                    + ", format=" + videoSample.format
+                    + ", source=" + sourceType
+                    + ", writeBack=" + isWriteBackToSDK;
+            Log.d(TAG, message);
+            updateVideoInfo(mRemoteSampleInfoTv, message);
             return isWriteBackToSDK;
         }
 
@@ -452,9 +706,82 @@ public class ProcessVideoRawDataActivity extends AppCompatActivity {
              * - true: 需要写回SDK（默认写回，需要操作AliRtcVideoSample.data时必须要写回）
              * - false: 不需要写回SDK(需要直接操作AliRtcVideoSample.dataFrameY、AliRtcVideoSample.dataFrameU、AliRtcVideoSample.dataFrameV时使用)
              */
-            ToastHelper.showToast(ProcessVideoRawDataActivity.this, "onPreEncodeVideoSample", Toast.LENGTH_SHORT);
-
+            String message = "PreEncodeSample: " + videoRawData.width + "x" + videoRawData.height
+                    + ", format=" + videoRawData.format
+                    + ", source=" + sourceType
+                    + ", writeBack=" + isWriteBackToSDK;
+            Log.d(TAG, message);
+            updateVideoInfo(mPreEncodeSampleInfoTv, message);
             return isWriteBackToSDK;
+        }
+
+        /**
+         * @brief 订阅的本地编码后视频数据回调（新增阶段）
+         * @param sourceType 视频流类型
+         * @param videoEncodedData 编码后视频数据
+         * @return
+         * - true: 需要写回SDK
+         * - false: 不需要写回SDK
+         */
+        // 注意：这个回调需要 SDK 支持，如果 SDK 中没有此接口，请注释掉
+        @Override
+        public boolean onPostEncodeVideoSample(AliRtcEngine.AliRtcVideoSourceType sourceType,
+                                               AliRtcEngine.AliRtcVideoEncodedData videoEncodedData) {
+            // 根据 SDK 实际定义获取字段
+            String message = "PostEncodeSample: source=" + sourceType
+                    + ", writeBack=" + isWriteBackToSDK;
+            Log.d(TAG, message);
+            updateVideoInfo(mPostEncodeSampleInfoTv, message);
+            return isWriteBackToSDK;
+        }
+
+        /**
+         * @brief 控制返回的视频数据格式
+         * @return 首选的视频格式
+         */
+        @Override
+        public AliRtcEngine.AliRtcVideoFormat onGetVideoFormatPreference() {
+            // Demo：返回当前用户通过 UI 选择的格式
+            return mPreferredFormat;
+        }
+
+        /**
+         * @brief 【演示核心功能】控制 SDK 回调哪些阶段的视频数据
+         * @return 期望接收的视频数据阶段（位掩码）
+         * 
+         * 通过位或（|）组合多个阶段：
+         * - AliRtcPositionPostCapture (1)  → onLocalVideoSample
+         * - AliRtcPositionPreRender (2)    → onRemoteVideoSample
+         * - AliRtcPositionPreEncoder (4)   → onPreEncodeVideoSample
+         * - AliRtcPositionPostEncoder (8)  → onPostEncodeVideoSample
+         */
+        @Override
+        public int onGetObservedFramePosition(){
+            int position = 0;
+
+            if (enableLocalSample) {
+                position |= AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPostCapture.getValue();
+            }
+
+            if (enableRemoteSample) {
+                position |= AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPreRender.getValue();
+            }
+
+            if (enablePreEncodeSample) {
+                position |= AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPreEncoder.getValue();
+            }
+
+            if (enablePostEncodeSample) {
+                position |= AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPostEncoder.getValue();
+            }
+
+            Log.d(TAG, "onGetObservedFramePosition: position=" + position
+                    + " (Local=" + enableLocalSample
+                    + ", Remote=" + enableRemoteSample
+                    + ", PreEncode=" + enablePreEncodeSample
+                    + ", PostEncode=" + enablePostEncodeSample + ")");
+
+            return position;
         }
 
     };

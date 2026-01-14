@@ -1,0 +1,51 @@
+
+/* Class = "UIButton"; configuration.title = "Join Channel"; ObjectID = "7Rj-ko-dhO"; */
+"7Rj-ko-dhO.configuration.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "7Rj-ko-dhO"; */
+"7Rj-ko-dhO.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Live Link Mic: Hosts and guests join the same channel. Hosts can cross-channel subscribe for PK scenarios."; ObjectID = "XOA-oc-OXp"; */
+"XOA-oc-OXp.text" = "直播连麦：主播和连麦观众加入同一频道进行实时互动。主播可跨频道订阅模拟PK场景。";
+
+/* Class = "UITextField"; placeholder = "Channel Id"; ObjectID = "cz1-kF-yGK"; */
+"cz1-kF-yGK.placeholder" = "频道ID";
+
+/* Class = "UITextField"; placeholder = "Peer Channel ID"; ObjectID = "pk-peer-channel-tf"; */
+"pk-peer-channel-tf.placeholder" = "目标频道ID";
+
+/* Class = "UITextField"; placeholder = "Peer User ID"; ObjectID = "pk-peer-uid-tf"; */
+"pk-peer-uid-tf.placeholder" = "目标用户ID";
+
+/* Class = "UIButton"; configuration.title = "Start PK Subscribe"; ObjectID = "pk-subscribe-btn"; */
+"pk-subscribe-btn.configuration.title" = "开始PK订阅";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "pk-subscribe-btn"; */
+"pk-subscribe-btn.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "PK Cross-Channel Subscribe"; ObjectID = "pk-title-label"; */
+"pk-title-label.text" = "PK跨频道订阅";
+
+/* Class = "UIButton"; configuration.title = "Start Publish"; ObjectID = "publish-start-btn"; */
+"publish-start-btn.configuration.title" = "开始推流";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "publish-start-btn"; */
+"publish-start-btn.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Stop Publish"; ObjectID = "publish-stop-btn"; */
+"publish-stop-btn.configuration.title" = "停止推流";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "publish-stop-btn"; */
+"publish-stop-btn.normalTitle" = "Button";
+
+/* Class = "UITextField"; placeholder = "Stream URL (e.g. rtmp://...)"; ObjectID = "publish-stream-url-tf"; */
+"publish-stream-url-tf.placeholder" = "推流地址 (例如 rtmp://...)";
+
+/* Class = "UILabel"; text = "CDN Publish Live Stream"; ObjectID = "publish-title-label"; */
+"publish-title-label.text" = "CDN旁路转推";
+
+/* Class = "UISegmentedControl"; seg-role-ctrl.segmentTitles[0] = "Anchor"; ObjectID = "seg-role-ctrl"; */
+"seg-role-ctrl.segmentTitles[0]" = "主播";
+
+/* Class = "UISegmentedControl"; seg-role-ctrl.segmentTitles[1] = "Guest"; ObjectID = "seg-role-ctrl"; */
+"seg-role-ctrl.segmentTitles[1]" = "连麦观众";

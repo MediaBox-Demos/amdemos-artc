@@ -19,6 +19,40 @@ public final class ARTCTokenHelper {
      */
     public static String AppKey = "xxx";
 
+    // 最近一次生成 Token 的中间过程（用于 Demo 展示）
+    private static String sLastContent = "";
+    private static String sLastSha256Token = "";
+    private static String sLastJsonString = "";
+    private static String sLastBase64Token = "";
+
+    /**
+     * 获取最近一次生成的拼接内容
+     */
+    public static String getLastContent() {
+        return sLastContent;
+    }
+
+    /**
+     * 获取最近一次生成的 SHA256 Token
+     */
+    public static String getLastSha256Token() {
+        return sLastSha256Token;
+    }
+
+    /**
+     * 获取最近一次生成的 JSON 字符串（仅单参入会有效）
+     */
+    public static String getLastJsonString() {
+        return sLastJsonString;
+    }
+
+    /**
+     * 获取最近一次生成的 Base64 Token（仅单参入会有效）
+     */
+    public static String getLastBase64Token() {
+        return sLastBase64Token;
+    }
+
     /**
      * 根据channelId，userId, timestamp, nonce 生成单参数入会 的token
      * Generate a single-parameter meeting token based on channelId, userId, and nonce
@@ -31,16 +65,25 @@ public final class ARTCTokenHelper {
                 .append(channelId)
                 .append(userId)
                 .append(timestamp);
-        String token =  getSHA256(stringBuilder.toString());
+        String content = stringBuilder.toString();
+        String sha256 = getSHA256(content);
         try{
             JSONObject tokenJson = new JSONObject();
-            tokenJson.put("appid", AppId);
+            tokenJson.put("appid", appId);
             tokenJson.put("channelid", channelId);
             tokenJson.put("userid", userId);
             tokenJson.put("nonce", nonce);
             tokenJson.put("timestamp", timestamp);
-            tokenJson.put("token", token);
-            String base64Token = Base64.encodeToString(tokenJson.toString().getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+            tokenJson.put("token", sha256);
+            String jsonStr = tokenJson.toString();
+            String base64Token = Base64.encodeToString(jsonStr.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+
+            // 记录中间过程（单参入会）
+            sLastContent = content;
+            sLastSha256Token = sha256;
+            sLastJsonString = jsonStr;
+            sLastBase64Token = base64Token;
+
             return base64Token;
         }catch (Exception e) {
             e.printStackTrace();
@@ -67,8 +110,16 @@ public final class ARTCTokenHelper {
                 .append(channelId)
                 .append(userId)
                 .append(timestamp);
-        String token =  getSHA256(stringBuilder.toString());
-        return token;
+        String content = stringBuilder.toString();
+        String sha256 = getSHA256(content);
+
+        // 记录中间过程（多参入会）：没有 JSON / Base64
+        sLastContent = content;
+        sLastSha256Token = sha256;
+        sLastJsonString = "";
+        sLastBase64Token = "";
+
+        return sha256;
     }
 
     /**

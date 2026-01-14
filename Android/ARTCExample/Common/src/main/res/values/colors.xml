@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UserSeatView 相关颜色 -->
+    <color name="user_seat_placeholder_bg">#424242</color>
+    <color name="user_seat_status_bar_bg">#CC000000</color>
+    <color name="user_seat_control_bar_bg">#CC000000</color>
+    <color name="user_seat_speaking_border">#4CAF50</color>
+    
+    <!-- 本地/远端视觉区分 -->
+    <color name="user_seat_local_border">#2196F3</color>
+    <color name="user_seat_remote_border">#000000</color>
+    <color name="user_seat_local_label_bg">#802196F3</color>
+    <color name="user_seat_remote_label_bg">#80000000</color>
+    
+    <!-- 状态图标颜色 -->
+    <color name="user_seat_icon_normal">#FFFFFF</color>
+    <color name="user_seat_icon_disabled">#999999</color>
+    <color name="user_seat_icon_muted">#FF5252</color>
+</resources>

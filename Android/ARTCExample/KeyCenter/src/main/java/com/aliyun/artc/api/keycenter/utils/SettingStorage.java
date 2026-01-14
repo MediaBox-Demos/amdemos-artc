@@ -10,6 +10,8 @@ public class SettingStorage {
     private static final String FILE_NAME = "API_EXAMPLE_SETTING_STORAGE";
     public static final String KEY_USER_ID = "KEY_USER_ID";
     public static final String KEY_SDK_ENV_ID = "KEY_SDK_ENV_ID";
+    public static final String KEY_APP_ID = "KEY_APP_ID";
+    public static final String KEY_APP_KEY = "KEY_APP_KEY";
 
     private static class LAZY_HOLDER {
         private static SettingStorage sInstance = new SettingStorage();

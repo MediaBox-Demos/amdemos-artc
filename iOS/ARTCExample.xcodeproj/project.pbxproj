@@ -23,7 +23,7 @@
 		154DCD432E5EE1D9000CFC59 /* PreJoinChannelTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154DCD422E5EE1D9000CFC59 /* PreJoinChannelTestVC.swift */; };
 		154DCD482E5EFB4C000CFC59 /* PreJoinChannelTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 154DCD472E5EFB4C000CFC59 /* PreJoinChannelTest.storyboard */; };
 		154DCD4E2E5EFDE2000CFC59 /* CustomVideoRenderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154DCD4D2E5EFDE2000CFC59 /* CustomVideoRenderVC.swift */; };
-		154DCD532E5F0033000CFC59 /* CustomVideoCpatureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154DCD522E5F0033000CFC59 /* CustomVideoCpatureVC.swift */; };
+		154DCD532E5F0033000CFC59 /* CustomVideoCaptureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154DCD522E5F0033000CFC59 /* CustomVideoCaptureVC.swift */; };
 		154F4F9D2E277B90001761F1 /* DataChannelMessage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 154F4F9C2E277B90001761F1 /* DataChannelMessage.storyboard */; };
 		154F4FA52E277DAA001761F1 /* ProcessAudioRawDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154F4FA42E277DAA001761F1 /* ProcessAudioRawDataVC.swift */; };
 		154F4FAA2E292528001761F1 /* ProcessAudioRawData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 154F4FA92E292528001761F1 /* ProcessAudioRawData.storyboard */; };
@@ -45,6 +45,8 @@
 		156FC31F2ED4FAF60027B8E7 /* CustomVideoProcessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156FC31E2ED4FAF60027B8E7 /* CustomVideoProcessVC.swift */; };
 		156FC3242ED500A70027B8E7 /* CustomVideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 156FC3232ED500A70027B8E7 /* CustomVideoProcess.storyboard */; };
 		158672022E5D458400C86B4E /* PlayAudioFilesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158672012E5D458400C86B4E /* PlayAudioFilesVC.swift */; };
+		1591E0E62F10BAB30053528F /* LiveLinkMicVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1591E0E52F10BAB30053528F /* LiveLinkMicVC.swift */; };
+		1591E0EB2F10CAE80053528F /* LiveLinkMic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1591E0EA2F10CAE80053528F /* LiveLinkMic.storyboard */; };
 		159DC7902E78C9680033101C /* VoiceChangeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DC78F2E78C9680033101C /* VoiceChangeVC.swift */; };
 		159DC7952E7994FC0033101C /* IntelligentDenoiseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DC7942E7994FC0033101C /* IntelligentDenoiseVC.swift */; };
 		159DC79A2E799A2E0033101C /* IntelligentDenoise.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */; };
@@ -52,6 +54,8 @@
 		15AD1CCD2E84C876008094D8 /* VideoRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AD1CCC2E84C876008094D8 /* VideoRenderView.swift */; };
 		15AD1CCF2E84C8BE008094D8 /* UserSeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AD1CCE2E84C8BE008094D8 /* UserSeatView.swift */; };
 		15AD1CD12E84C8FA008094D8 /* PIPSwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AD1CD02E84C8FA008094D8 /* PIPSwitchManager.swift */; };
+		15B091922EFD12E40076FFD2 /* PublishLiveStreamVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B091912EFD12E40076FFD2 /* PublishLiveStreamVC.swift */; };
+		15B091952EFD12FC0076FFD2 /* PublishLiveStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15B091942EFD12FC0076FFD2 /* PublishLiveStream.storyboard */; };
 		15BC319F2EB459050040349C /* Recording.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15BC319E2EB459050040349C /* Recording.storyboard */; };
 		15BD0E2A2EB352B30056371E /* RecordingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BD0E292EB352B30056371E /* RecordingVC.swift */; };
 		15D53DDC2E430A93004957FF /* music.wav in Resources */ = {isa = PBXBuildFile; fileRef = 15D53DDB2E430A93004957FF /* music.wav */; };
@@ -152,7 +156,7 @@
 		154DCD462E5EFB4C000CFC59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PreJoinChannelTest.storyboard; sourceTree = "<group>"; };
 		154DCD4A2E5EFB4F000CFC59 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PreJoinChannelTest.strings"; sourceTree = "<group>"; };
 		154DCD4D2E5EFDE2000CFC59 /* CustomVideoRenderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoRenderVC.swift; sourceTree = "<group>"; };
-		154DCD522E5F0033000CFC59 /* CustomVideoCpatureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoCpatureVC.swift; sourceTree = "<group>"; };
+		154DCD522E5F0033000CFC59 /* CustomVideoCaptureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoCaptureVC.swift; sourceTree = "<group>"; };
 		154F4F9B2E277B90001761F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/DataChannelMessage.storyboard; sourceTree = "<group>"; };
 		154F4F9F2E277B92001761F1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/DataChannelMessage.strings"; sourceTree = "<group>"; };
 		154F4FA42E277DAA001761F1 /* ProcessAudioRawDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessAudioRawDataVC.swift; sourceTree = "<group>"; };
@@ -183,6 +187,9 @@
 		156FC3222ED500A70027B8E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoProcess.storyboard; sourceTree = "<group>"; };
 		156FC3262ED500A90027B8E7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoProcess.strings"; sourceTree = "<group>"; };
 		158672012E5D458400C86B4E /* PlayAudioFilesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAudioFilesVC.swift; sourceTree = "<group>"; };
+		1591E0E52F10BAB30053528F /* LiveLinkMicVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLinkMicVC.swift; sourceTree = "<group>"; };
+		1591E0E92F10CAE80053528F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveLinkMic.storyboard; sourceTree = "<group>"; };
+		1591E0ED2F10CAED0053528F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveLinkMic.strings"; sourceTree = "<group>"; };
 		159DC78F2E78C9680033101C /* VoiceChangeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChangeVC.swift; sourceTree = "<group>"; };
 		159DC7942E7994FC0033101C /* IntelligentDenoiseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntelligentDenoiseVC.swift; sourceTree = "<group>"; };
 		159DC7982E799A2E0033101C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/IntelligentDenoise.storyboard; sourceTree = "<group>"; };
@@ -192,6 +199,8 @@
 		15AD1CCC2E84C876008094D8 /* VideoRenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRenderView.swift; sourceTree = "<group>"; };
 		15AD1CCE2E84C8BE008094D8 /* UserSeatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSeatView.swift; sourceTree = "<group>"; };
 		15AD1CD02E84C8FA008094D8 /* PIPSwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIPSwitchManager.swift; sourceTree = "<group>"; };
+		15B091912EFD12E40076FFD2 /* PublishLiveStreamVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishLiveStreamVC.swift; sourceTree = "<group>"; };
+		15B091942EFD12FC0076FFD2 /* PublishLiveStream.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PublishLiveStream.storyboard; sourceTree = "<group>"; };
 		15BC319D2EB459050040349C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Recording.storyboard; sourceTree = "<group>"; };
 		15BC31A22EB459190040349C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Recording.strings"; sourceTree = "<group>"; };
 		15BD0E292EB352B30056371E /* RecordingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingVC.swift; sourceTree = "<group>"; };
@@ -350,7 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				156D22692E65BA6000E83252 /* helper */,
-				154DCD522E5F0033000CFC59 /* CustomVideoCpatureVC.swift */,
+				154DCD522E5F0033000CFC59 /* CustomVideoCaptureVC.swift */,
 				156D226D2E66457100E83252 /* CustomVideoCapture.storyboard */,
 			);
 			path = CustomVideoCapture;
@@ -359,6 +368,8 @@
 		154F4FA12E277D6B001761F1 /* AdvancedUsage */ = {
 			isa = PBXGroup;
 			children = (
+				1591E0E42F10BA980053528F /* LiveLinkMic */,
+				15B091902EFD126C0076FFD2 /* PublishLiveStream */,
 				156FC31D2ED4FAD70027B8E7 /* CustomVideoProcess */,
 				156FC3122ED4F6CB0027B8E7 /* H265 */,
 				15BD0E282EB352970056371E /* LocalRecording */,
@@ -475,6 +486,15 @@
 			path = PlayAudioFiles;
 			sourceTree = "<group>";
 		};
+		1591E0E42F10BA980053528F /* LiveLinkMic */ = {
+			isa = PBXGroup;
+			children = (
+				1591E0E52F10BAB30053528F /* LiveLinkMicVC.swift */,
+				1591E0EA2F10CAE80053528F /* LiveLinkMic.storyboard */,
+			);
+			path = LiveLinkMic;
+			sourceTree = "<group>";
+		};
 		159DC78E2E78C94B0033101C /* VoiceChange */ = {
 			isa = PBXGroup;
 			children = (
@@ -491,6 +511,15 @@
 				159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */,
 			);
 			path = IntelligentDenoise;
+			sourceTree = "<group>";
+		};
+		15B091902EFD126C0076FFD2 /* PublishLiveStream */ = {
+			isa = PBXGroup;
+			children = (
+				15B091912EFD12E40076FFD2 /* PublishLiveStreamVC.swift */,
+				15B091942EFD12FC0076FFD2 /* PublishLiveStream.storyboard */,
+			);
+			path = PublishLiveStream;
 			sourceTree = "<group>";
 		};
 		15BD0E282EB352970056371E /* LocalRecording */ = {
@@ -711,6 +740,7 @@
 				8D72DD7A2BF45C5B00B88102 /* Embed Frameworks */,
 				B911BC9AA5894A8E3E2FA5ED /* [CP] Embed Pods Frameworks */,
 				153301BF2E3208B500B40C6B /* Embed Foundation Extensions */,
+				8723D5E5AD1280C1983B3B3D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -777,6 +807,7 @@
 				154DCD482E5EFB4C000CFC59 /* PreJoinChannelTest.storyboard in Resources */,
 				159DC79F2E799AAC0033101C /* VoiceChange.storyboard in Resources */,
 				418D33F82B4EA19B003A5959 /* LaunchScreen.storyboard in Resources */,
+				1591E0EB2F10CAE80053528F /* LiveLinkMic.storyboard in Resources */,
 				154F4F9D2E277B90001761F1 /* DataChannelMessage.storyboard in Resources */,
 				156D22732E66463E00E83252 /* PlayAudioFiles.storyboard in Resources */,
 				156B05DF2E683399007040F3 /* PictureInPicture.storyboard in Resources */,
@@ -793,6 +824,7 @@
 				154DCD3F2E5DE6AC000CFC59 /* applause.wav in Resources */,
 				156B05E42E683432007040F3 /* CustomVideoRender.storyboard in Resources */,
 				159DC79A2E799A2E0033101C /* IntelligentDenoise.storyboard in Resources */,
+				15B091952EFD12FC0076FFD2 /* PublishLiveStream.storyboard in Resources */,
 				418D33F52B4EA19B003A5959 /* Assets.xcassets in Resources */,
 				150327272E1D1E5F00B8CEC6 /* CameraCommonControl.storyboard in Resources */,
 				154DCD3D2E5DE6A4000CFC59 /* thunder.wav in Resources */,
@@ -832,6 +864,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8723D5E5AD1280C1983B3B3D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARTCExample/Pods-ARTCExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARTCExample/Pods-ARTCExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARTCExample/Pods-ARTCExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B911BC9AA5894A8E3E2FA5ED /* [CP] Embed Pods Frameworks */ = {
@@ -892,13 +941,14 @@
 				155F08682E2645ED008B8661 /* DataChannelMessageVC.swift in Sources */,
 				410B2BA42DE3F56D00E274D1 /* ARTCTokenHelper.swift in Sources */,
 				156D226B2E65BA8500E83252 /* CameraCaptureHelper.swift in Sources */,
+				1591E0E62F10BAB30053528F /* LiveLinkMicVC.swift in Sources */,
 				154F4FA52E277DAA001761F1 /* ProcessAudioRawDataVC.swift in Sources */,
 				418D33F02B4EA199003A5959 /* MainViewController.swift in Sources */,
 				410B2BA82DE40D3B00E274D1 /* Extension.swift in Sources */,
 				156FC31F2ED4FAF60027B8E7 /* CustomVideoProcessVC.swift in Sources */,
 				15AD1CD12E84C8FA008094D8 /* PIPSwitchManager.swift in Sources */,
 				156B05CD2E675197007040F3 /* CustomVideoRenderSeatView.swift in Sources */,
-				154DCD532E5F0033000CFC59 /* CustomVideoCpatureVC.swift in Sources */,
+				154DCD532E5F0033000CFC59 /* CustomVideoCaptureVC.swift in Sources */,
 				410B2BA62DE3F98200E274D1 /* GlobalConfig.swift in Sources */,
 				154DCD432E5EE1D9000CFC59 /* PreJoinChannelTestVC.swift in Sources */,
 				15F3D0A52E37B0BF005186DB /* StreamMonitoringVC.swift in Sources */,
@@ -909,6 +959,7 @@
 				1528711C2DF9638900CC87C7 /* AudioBasicUsageVC.swift in Sources */,
 				154DCD4E2E5EFDE2000CFC59 /* CustomVideoRenderVC.swift in Sources */,
 				156B05EA2E687000007040F3 /* WavRecorder.swift in Sources */,
+				15B091922EFD12E40076FFD2 /* PublishLiveStreamVC.swift in Sources */,
 				159DC7902E78C9680033101C /* VoiceChangeVC.swift in Sources */,
 				15AD1CCF2E84C8BE008094D8 /* UserSeatView.swift in Sources */,
 				156FC3172ED4F6F80027B8E7 /* H265VC.swift in Sources */,
@@ -1066,6 +1117,15 @@
 				156FC3262ED500A90027B8E7 /* zh-Hans */,
 			);
 			name = CustomVideoProcess.storyboard;
+			sourceTree = "<group>";
+		};
+		1591E0EA2F10CAE80053528F /* LiveLinkMic.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1591E0E92F10CAE80053528F /* Base */,
+				1591E0ED2F10CAED0053528F /* zh-Hans */,
+			);
+			name = LiveLinkMic.storyboard;
 			sourceTree = "<group>";
 		};
 		159DC7992E799A2E0033101C /* IntelligentDenoise.storyboard */ = {

@@ -58,6 +58,7 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     implementation('com.orhanobut:dialogplus:1.11@aar')
+    implementation project(path: ':Common')
     implementation project(path: ':QuickStart')
     implementation project(path: ':KeyCenter')
     implementation project(path: ':BasicUsage')

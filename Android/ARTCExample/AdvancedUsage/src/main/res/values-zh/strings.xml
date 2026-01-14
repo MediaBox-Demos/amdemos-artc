@@ -59,7 +59,7 @@
 
     <string name="channel_id_label">频道ID:</string>
     <string name="custom_video_capture_video_source">Video Source</string>
-    <string name="video_source_yuv">YUV</string>
+    <string name="video_source_yuv">buffer</string>
     <string name="video_source_texture">纹理</string>
     <string name="test_microphone">麦克风测试</string>
     <string name="stop_test">停止测试</string>
@@ -68,6 +68,48 @@
     <string name="test_device">设备测试</string>
     <string name="test_network">网络测试</string>
     <string name="enable_h265">H265</string>
-    <string name="audio_dump_wav">音频Dump</string>
+    <string name="audio_dump_wav">传入SDK前音频Dump</string>
     <string name="dump_audio_file_name_prefix">Dump音频文件名前缀</string>
+
+    <!-- 旁路转推 -->
+    <string name="publish_live_stream">旁路转推</string>
+    <string name="publish_stream_url">推流地址:</string>
+    <string name="publish_stream_url_hint">输入CDN推流地址，例如 rtmp://...</string>
+    <string name="start_publish">开始旁路</string>
+    <string name="update_publish">更新参数</string>
+    <string name="stop_publish">停止旁路</string>
+
+    <!-- 直播连麦 -->
+    <string name="live_link_mic">直播连麦</string>
+    <string name="live_link_mic_desc">主播和连麦观众加入同一频道进行实时互动。主播可开启CDN旁路转推，并支持跨频道订阅模拟PK场景。</string>
+    <string name="role_label">角色:</string>
+    <string name="role_anchor">主播</string>
+    <string name="role_guest">连麦观众</string>
+    <string name="cross_channel_subscribe_title">跨频道订阅 (PK演示)</string>
+    <string name="peer_channel_label">目标频道:</string>
+    <string name="peer_channel_hint">输入对方主播频道ID</string>
+    <string name="peer_uid_label">目标用户:</string>
+    <string name="peer_uid_hint">输入对方主播UID</string>
+    <string name="start_pk_subscribe">开始PK订阅</string>
+    <string name="stop_pk_subscribe">停止PK订阅</string>
+
+    <string name="video_encoder_software_encode">软件编码</string>
+    <string name="video_encoder_hardware_encode">硬件编码</string>
+    <string name="video_encoder_hardware_texture_encode">硬件纹理编码</string>
+    <string name="video_decoder_software_decode">软件解码</string>
+    <string name="video_decoder_hardware_decode">硬件解码</string>
+    <string name="video_decoder_hardware_texture_decode">硬件纹理解码</string>
+
+    <string name="android_custom_audio_render_hint">当前示例演示自定义音频播放功能：获取播放前的原始音频数据，通过 Android AudioTrack 播放，请让远端用户加入频道后体验效果</string>
+
+    <!-- 自定义视频处理 -->
+    <string name="custom_video_process">自定义视频处理</string>
+    <string name="custom_video_process_desc">本示例演示自定义视频处理功能：获取原始视频数据（本地相机采集），通过美颜库处理后传回SDK。支持两种实现：Buffer（onLocalVideoSample）和 Texture（onTextureUpdate）。</string>
+    <string name="enable_buffer_process">启用Buffer处理</string>
+    <string name="buffer_process_hint">通过onLocalVideoSample回调处理YUV/RGB buffer数据</string>
+    <string name="enable_texture_process">启用纹理处理</string>
+    <string name="texture_process_hint">通过onTextureUpdate回调处理OpenGL纹理数据</string>
+    <string name="enable_beauty">启用美颜</string>
+    <string name="beauty_hint">集成美颜库后可启用美颜处理</string>
+
 </resources>

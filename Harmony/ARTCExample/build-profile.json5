@@ -1,7 +1,19 @@
 {
   "app": {
     "signingConfigs": [
-      
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "",
+          "storePassword": "",
+          "keyAlias": "",
+          "keyPassword": "",
+          "signAlg": "SHA256withECDSA",
+          "profile": "",
+          "certpath": ""
+        }
+      }
     ],
     "products": [
       {
@@ -31,42 +43,6 @@
     {
       "name": "entry",
       "srcPath": "./entry",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "QuickStart",
-      "srcPath": "./QuickStart",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Common",
-      "srcPath": "./Common",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "KeyCenter",
-      "srcPath": "./KeyCenter",
       "targets": [
         {
           "name": "default",

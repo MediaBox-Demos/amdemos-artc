@@ -3,6 +3,7 @@ package com.aliyun.artc.api.advancedusage.CustomVideoCaptureAndRender;
 import static android.view.View.VISIBLE;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoEncoderOrientationMode.AliRtcVideoEncoderOrientationModeAdaptive;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatI420;
+import static com.alivc.rtc.AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatTexture2D;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoFormat.AliRtcVideoFormatTextureOES;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackCamera;
 import static com.alivc.rtc.AliRtcEngine.AliRtcVideoTrack.AliRtcVideoTrackNo;
@@ -17,6 +18,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,15 @@ import javax.microedition.khronos.opengles.GL;
 
 public class CustomVideoRenderActivity extends AppCompatActivity {
     private static final String TAG = CustomVideoRenderActivity.class.getSimpleName();
+    
+    static {
+        // 加载纹理渲染 native 库（用于像素复制）
+        System.loadLibrary("artc_texture_render");
+    }
+    
+    // Native 方法声明：从 SDK 的纹理中读取像素数据
+    private static native byte[] nativeReadPixelsFromTexture(long eglContextHandle, int textureId, int width, int height, int format);
+    
     private Handler handler;
     private EditText mChannelEditText;
     private TextView mJoinChannelTextView;
@@ -78,9 +89,10 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
     private VideoRenderer localRenderer = null;
     // 本地纹理渲染器
     private TextureRenderer localTextureRenderer = null;
-    // 本地纹理渲染视图
+    // 本地纹理渲染视图（纹理模式下也使用 GLSurfaceView）
     private GLSurfaceView localGLSurfaceView = null;
-    private SurfaceView mLocalSurfaceView = null;
+    // 保留 SDK 的 EGLContext 仅用于日志
+    private long mTextureContext = 0;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -136,6 +148,7 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
             } else if (checkedId == R.id.microphoneButton) {
                 mCurrentVideoSource = VIDEO_SOURCE_TEXTURE;
             }
+            initAndSetupRtcEngine();
         });
     }
 
@@ -187,18 +200,12 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
 
     // 在onCreate中调用的引擎初始化方法
     private void initAndSetupRtcEngine() {
-        //创建并初始化引擎
+        // 【关键步骤1】创建并初始化引擎，根据模式决定是否关闭 SDK 内部渲染
         if(mAliRtcEngine == null) {
-            String extras = null;
+            String extras;
             if(isCustomVideoRender) {
-                // 根据选择的视频源类型设置不同的参数
-                if (mCurrentVideoSource == VIDEO_SOURCE_YUV) {
-                    // 如果只需要回调buffer格式数据
-                    extras = "{\"user_specified_use_external_video_render\":\"TRUE\"}";
-                } else if (mCurrentVideoSource == VIDEO_SOURCE_TEXTURE) {
-                    // 如果需要回调纹理格式数据，需要开启纹理采集，建议同时开启纹理编码
-                    extras = "{\"user_specified_use_external_video_render\":\"TRUE\",\"user_specified_camera_texture_capture\":\"TRUE\",\"user_specified_texture_encode\":\"TRUE\" }";
-                }
+                // 关闭 SDK 内部渲染，启用自定义视频渲染（YUV 和纹理模式均适用）
+                extras = "{\"user_specified_use_external_video_render\":\"TRUE\"}";
             } else {
                 extras = "{\"user_specified_use_external_video_render\":\"FALSE\"}";
             }
@@ -207,9 +214,9 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
         mAliRtcEngine.setRtcEngineEventListener(mRtcEngineEventListener);
         mAliRtcEngine.setRtcEngineNotify(mRtcEngineNotify);
 
-        // buffer格式数据回调
+        // 【关键步骤2】注册 buffer 格式视频数据回调（YUV）
         mAliRtcEngine.registerVideoSampleObserver(mAliRtcVideoSampleObserver);
-        // 纹理数据回调
+        // 【关键步骤3】注册本地纹理视频数据回调（Texture/OES）
         mAliRtcEngine.registerLocalVideoTextureObserver(mAliRtcTextureObserver);
 
         // 设置频道模式为互动模式,RTC下都使用AliRTCSdkInteractiveLive
@@ -227,8 +234,14 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
         aliRtcVideoEncoderConfiguration.bitrate = 1200;
         aliRtcVideoEncoderConfiguration.keyFrameInterval = 2000;
         aliRtcVideoEncoderConfiguration.orientationMode = AliRtcVideoEncoderOrientationModeAdaptive;
+        if(mCurrentVideoSource == VIDEO_SOURCE_TEXTURE) {
+            aliRtcVideoEncoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardwareTexture;
+        } else {
+            aliRtcVideoEncoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardware;
+        }
         mAliRtcEngine.setVideoEncoderConfiguration(aliRtcVideoEncoderConfiguration);
 
+        // 设置视频解码参数
         AliRtcEngine.AliRtcVideoDecoderConfiguration aliRtcVideoDecoderConfiguration = new AliRtcEngine.AliRtcVideoDecoderConfiguration();
         aliRtcVideoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeHardware;
         mAliRtcEngine.setVideoDecoderConfiguration(aliRtcVideoDecoderConfiguration);
@@ -256,7 +269,7 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
                 fl_local.removeAllViews();
             }
 
-            // 根据选择的视频源类型决定使用哪种渲染方式
+            // 【关键步骤7】根据选择的视频源类型决定使用哪种渲染方式
             if (isCustomVideoRender) {
                 if (mCurrentVideoSource == VIDEO_SOURCE_YUV) {
                     // YUV格式使用自定义渲染器
@@ -267,14 +280,14 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
                     localGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
                     fl_local.addView(localGLSurfaceView, layoutParams);
                 } else if (mCurrentVideoSource == VIDEO_SOURCE_TEXTURE) {
-                    // 纹理格式使用SDK默认渲染
+                    // 纹理格式使用 GLSurfaceView + TextureRenderer 进行渲染
                     localGLSurfaceView = new GLSurfaceView(this);
                     localGLSurfaceView.setEGLContextClientVersion(2);
                     localTextureRenderer = new TextureRenderer();
                     localGLSurfaceView.setRenderer(localTextureRenderer);
                     localGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
                     fl_local.addView(localGLSurfaceView, layoutParams);
-
+                    Log.d(TAG, "Texture mode: using GLSurfaceView with TextureRenderer");
                 }
             } else {
                 // 非自定义渲染使用SDK默认渲染
@@ -428,9 +441,13 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
         }
 
         @Override
+        public int onGetObservedFramePosition(){
+            return AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPostCapture.getValue() | AliRtcEngine.AliRtcVideoObserPosition.AliRtcPositionPreRender.getValue();
+        }
+
+        @Override
         public boolean onLocalVideoSample(AliRtcEngine.AliRtcVideoSourceType sourceType, AliRtcEngine.AliRtcVideoSample videoSample){
-            Log.i(TAG, "onLocalVideoSample");
-            // 处理本地采集的视频数据(YUV格式)
+            // 【关键步骤4】本地采集 YUV 帧回调，交给自定义渲染器 VideoRenderer
             if(videoSample.format == AliRtcVideoFormatI420) {
                 if (isCustomVideoRender && mCurrentVideoSource == VIDEO_SOURCE_YUV && localRenderer != null) {
                     localRenderer.drawYUV(videoSample);
@@ -442,7 +459,7 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
         @Override
         public boolean onRemoteVideoSample(String callId, AliRtcEngine.AliRtcVideoSourceType sourceType, AliRtcEngine.AliRtcVideoSample videoSample){
             if(videoSample.format == AliRtcVideoFormatI420) {
-                // 处理远端视频数据
+                // 【关键步骤5】远端 YUV 帧回调，交给对应 UID 的 VideoRenderer
                 VideoRenderer remoteRenderer = remoteRenderers.get(callId);
                 if (remoteRenderer == null) {
                     remoteRenderer = new VideoRenderer();
@@ -460,35 +477,63 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
     // 纹理数据回调
     private final AliRtcEngine.AliRtcTextureObserver mAliRtcTextureObserver = new AliRtcEngine.AliRtcTextureObserver() {
 
-        private long context_ = 0 ;
         private int  log_ref = 0 ;
         @Override
         public void onTextureCreate(long context) {
-            context_ = context ;
-            Log.d(TAG, "texture context: "+context_+" create!") ;
+            mTextureContext = context;
+            Log.d(TAG, "【关键步骤-纹理1】onTextureCreate, texture context: " + mTextureContext);
+            // 使用 GLSurfaceView 方案，不需要初始化 native 渲染器
         }
 
         @Override
         public int onTextureUpdate(int textureId, int width, int height, AliRtcEngine.AliRtcVideoSample videoSample) {
-            if ( log_ref % 30 == 0 ) {
-                Log.d(TAG, "texture update w: "+width +" h: "+height+" text_id: "+textureId+" rotate:"+videoSample.rotate ) ;
+            if (log_ref % 30 == 0) {
+                Log.d(TAG, "onTextureUpdate, texId=" + textureId
+                        + ", size=" + width + "x" + height
+                        + ", rotate=" + videoSample.rotate
+                        + ", format=" + videoSample.format
+                        + ", context=" + mTextureContext);
             }
 
-            if (isCustomVideoRender && mCurrentVideoSource == VIDEO_SOURCE_TEXTURE && localTextureRenderer != null) {
-                Log.d(TAG, "Updating 2D texture with ID: " + textureId + ", size: " + width + "x" + height + ", context: " + context_ + ", format: " + videoSample.format);
-                localTextureRenderer.updateTexture(textureId, width, height);
-                if(localGLSurfaceView != null) {
-                    localGLSurfaceView.requestRender();
+            if (isCustomVideoRender && mCurrentVideoSource == VIDEO_SOURCE_TEXTURE && localTextureRenderer != null && mTextureContext != 0) {
+                // 【关键步骤-纹理2】从 SDK 的纹理中读取像素数据
+                try {
+                    byte[] pixelData = nativeReadPixelsFromTexture(
+                            mTextureContext,
+                            textureId,
+                            width,
+                            height,
+                            videoSample.format.ordinal()
+                    );
+                    
+                    if (pixelData != null && pixelData.length > 0) {
+                        // 将像素数据传递给 TextureRenderer
+                        localTextureRenderer.updatePixelData(pixelData, width, height);
+                        // 请求 GLSurfaceView 重绘
+                        if (localGLSurfaceView != null) {
+                            localGLSurfaceView.requestRender();
+                        }
+                    } else {
+                        if (log_ref % 30 == 0) {
+                            Log.w(TAG, "Failed to read pixels from texture");
+                        }
+                    }
+                } catch (Exception e) {
+                    if (log_ref % 30 == 0) {
+                        Log.e(TAG, "Error reading pixels: " + e.getMessage());
+                    }
                 }
             }
 
-            ++log_ref ;
+            ++log_ref;
+            // 返回原始纹理 ID，交给 SDK 后续处理（编码等）
             return textureId;
         }
         @Override
         public void onTextureDestroy() {
-
-            Log.d(TAG, "texture context: "+context_+" destory!") ;
+            Log.d(TAG, "【关键步骤-纹理3】onTextureDestroy, texture context: " + mTextureContext);
+            mTextureContext = 0;
+            // 使用 GLSurfaceView 方案，不需要释放 native 渲染器
         }
     };
 
@@ -523,5 +568,6 @@ public class CustomVideoRenderActivity extends AppCompatActivity {
         localRenderer = null;
         localTextureRenderer = null;
         localGLSurfaceView = null;
+        mTextureContext = 0;
     }
 }

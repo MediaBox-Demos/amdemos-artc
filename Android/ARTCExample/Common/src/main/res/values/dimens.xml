@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UserSeatView 相关尺寸 -->
+    <dimen name="user_seat_height">180dp</dimen>
+    <dimen name="user_seat_margin">8dp</dimen>
+    <dimen name="user_seat_border_width_normal">1dp</dimen>
+    <dimen name="user_seat_border_width_local">2dp</dimen>
+    <dimen name="user_seat_border_width_speaking">2dp</dimen>
+    
+    <dimen name="user_seat_status_bar_height">32dp</dimen>
+    <dimen name="user_seat_status_bar_padding">8dp</dimen>
+    <dimen name="user_seat_icon_size">20dp</dimen>
+    <dimen name="user_seat_icon_margin">4dp</dimen>
+    
+    <dimen name="user_seat_control_bar_height">40dp</dimen>
+    <dimen name="user_seat_control_button_size">32dp</dimen>
+    <dimen name="user_seat_control_button_margin">8dp</dimen>
+    
+    <dimen name="user_seat_label_text_size">12sp</dimen>
+    <dimen name="user_seat_placeholder_icon_size">48dp</dimen>
+</resources>

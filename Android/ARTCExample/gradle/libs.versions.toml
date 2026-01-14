@@ -1,7 +1,7 @@
 [versions]
 agp = "8.6.0"
 # ARTC版本
-alivcsdk_artc = "7.8.1"
+alivcsdk_artc = "7.10.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -10,7 +10,6 @@ material = "1.12.0"
 activity = "1.9.0"
 constraintlayout = "2.2.1"
 cameraVideo = "1.4.2"
-
 [libraries]
 alivcsdk_artc = { module = "com.aliyun.aio:AliVCSDK_ARTC", version.ref = "alivcsdk_artc" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_seat_local_label">Local</string>
+    <string name="user_seat_remote_label">Remote</string>
+    <string name="user_seat_camera">Camera</string>
+    <string name="user_seat_screen">Screen</string>
+    <string name="user_seat_no_video">No Video</string>
+    
+    <string name="user_seat_render_mode">Render Mode</string>
+    <string name="user_seat_mirror">Mirror</string>
+    <string name="user_seat_rotate">Rotate</string>
+    <string name="user_seat_mute">Mute</string>
+</resources>

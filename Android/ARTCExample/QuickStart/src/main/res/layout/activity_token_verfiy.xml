@@ -7,313 +7,381 @@
     android:layout_height="match_parent"
     tools:context=".TokenGenerate.TokenGenerateActivity">
 
-    <FrameLayout
-        android:id="@+id/preview_layer"
-        android:layout_width="144dp"
-        android:layout_height="216dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        />
-
-
     <ScrollView
         android:id="@+id/entrance_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/preview_layer"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
             <LinearLayout
                 android:id="@+id/ll_app_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
+                android:paddingEnd="16dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:text="AppId:"
-                    />
+                    android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/app_id_input"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=""
-                    />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_app_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_app_id"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
+                android:paddingEnd="16dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:text="AppKey:"
-                    />
+                    android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/app_key_input"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=""
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_user_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_app_key"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="UserId:"
-                    />
-                <EditText
-                    android:id="@+id/user_id_input"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:hint="Enter UserId..."
-                    />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_channel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_user_id"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
+                android:paddingEnd="16dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:text="ChannelId:"
-                    />
+                    android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/ll_channel_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=""
-                    />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_timestamp"
+                android:id="@+id/ll_user_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_channel"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
+                android:paddingEnd="16dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="TimeStamp:"
-                    />
+                    android:text="UserId:"
+                    android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/ll_timestamp_input"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/user_id_input"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="Enter UserId..."
                     android:text=""
-                    />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_nonce"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_channel"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="visible">
+                android:paddingEnd="16dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:text="Nonce:"
-                    />
+                    android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/ll_nonce_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/parameters_could_null"
+                    android:text=""
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_timestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="TimeStamp:"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/ll_timestamp_value"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=""
-                    android:hint="@string/parameters_could_null"
-                    />
+                    android:textSize="13sp"
+                    android:textColor="#333333" />
+
+                <Spinner
+                    android:id="@+id/ll_expire_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="120dp" />
             </LinearLayout>
+
+
+
+            <!-- 推荐使用单参入会 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="推荐使用单参入会"
+                android:textColor="#FF9800"
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:id="@+id/llay_bottom_bar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_nonce"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/multi_param_join_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/multiple_parameters_join"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="#9E9E9E"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:background="@color/layout_base_blue"
-                    />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    />
-
+                    android:text="@string/multiple_parameters_join" />
 
                 <TextView
                     android:id="@+id/sigle_param_join_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/signle_parameters_join"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
-                    android:padding="10dp"
-                    android:gravity="center"
+                    android:layout_weight="1"
                     android:background="@color/layout_base_blue"
-                    />
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/signle_parameters_join" />
+            </LinearLayout>
+
+            <!-- Token生成过程展示 -->
+            <LinearLayout
+                android:id="@+id/ll_content_raw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Content:"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/ll_content_raw_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:background="#F5F5F5"
+                    android:padding="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_sha256"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/ll_sha256_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SHA256:"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/ll_sha256_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:background="#F5F5F5"
+                    android:padding="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_json"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="JSON:"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/ll_json_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:background="#F5F5F5"
+                    android:padding="8dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_token"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/llay_bottom_bar"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 android:visibility="gone">
+
                 <TextView
+                    android:id="@+id/ll_token_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="Token:"
-                    />
+                    android:text="Base64 (Token):"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
                 <TextView
                     android:id="@+id/ll_token_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textIsSelectable="true"
                     android:text=""
-                    />
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:background="#F5F5F5"
+                    android:padding="8dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_join_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_token"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 android:visibility="gone">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="Join Result:"
-                    />
+                    android:text="Result:"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/ll_join_result_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textIsSelectable="true"
                     android:text=""
-                    android:textColor="@color/red"
-                    />
+                    android:textIsSelectable="true" />
             </LinearLayout>
+
+            <!-- 视频预览层 -->
+            <FrameLayout
+                android:id="@+id/preview_layer"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
         </LinearLayout>
 
     </ScrollView>

@@ -96,18 +96,39 @@ class VideoRenderView: UIView {
         let w = CVPixelBufferGetWidth(pb)
         let h = CVPixelBufferGetHeight(pb)
         let pf = CVPixelBufferGetPixelFormatType(pb)
+        
         var desc: CMFormatDescription?
-        let status = CMVideoFormatDescriptionCreate(
+        // 使用 CMVideoFormatDescriptionCreateForImageBuffer 以兼容新旧SDK的像素格式
+        let status = CMVideoFormatDescriptionCreateForImageBuffer(
             allocator: kCFAllocatorDefault,
-            codecType: pf,
-            width: Int32(w),
-            height: Int32(h),
-            extensions: nil,
+            imageBuffer: pb,
             formatDescriptionOut: &desc
         )
-        if status != noErr { print("Failed to create format description: \(status)") }
+        
+        if status != noErr {
+            print("⚠️ Failed to create format description for image buffer: \(status)")
+            // 降级尝试：使用旧方法（兼容某些特殊场景）
+            let fallbackStatus = CMVideoFormatDescriptionCreate(
+                allocator: kCFAllocatorDefault,
+                codecType: pf,
+                width: Int32(w),
+                height: Int32(h),
+                extensions: nil,
+                formatDescriptionOut: &desc
+            )
+            if fallbackStatus != noErr {
+                print("❌ Fallback format description creation also failed: \(fallbackStatus)")
+                return nil
+            }
+            print("✅ Fallback to legacy CMVideoFormatDescriptionCreate succeeded")
+        }
+        
+        // 缓存描述及尺寸/像素格式信息
         cachedFormatDesc = desc
-        lastWidth = w; lastHeight = h; lastPixelFormat = pf
+        lastWidth = w
+        lastHeight = h
+        lastPixelFormat = pf
+        
         return desc
     }
 }
