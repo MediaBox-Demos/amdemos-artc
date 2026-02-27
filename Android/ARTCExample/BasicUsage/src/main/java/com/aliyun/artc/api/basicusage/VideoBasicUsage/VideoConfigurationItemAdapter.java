@@ -1,6 +1,8 @@
 package com.aliyun.artc.api.basicusage.VideoBasicUsage;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,11 +69,33 @@ public class VideoConfigurationItemAdapter extends RecyclerView.Adapter<VideoCon
         switch (item.type) {
             case VideoConfigurationItem.TYPE_SWITCH:
                 holder.switchControl.setVisibility(View.VISIBLE);
+                holder.switchControl.setOnCheckedChangeListener(null);
                 holder.switchControl.setChecked(item.switchValue);
+                holder.switchControl.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    item.switchValue = isChecked;
+                });
                 break;
             case VideoConfigurationItem.TYPE_EDIT_TEXT:
                 holder.editText.setVisibility(View.VISIBLE);
+                TextWatcher oldWatcher = (TextWatcher) holder.editText.getTag();
+                if (oldWatcher != null) {
+                    holder.editText.removeTextChangedListener(oldWatcher);
+                }
                 holder.editText.setText(item.editTextValue);
+                TextWatcher watcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        item.editTextValue = s.toString();
+                    }
+                };
+                holder.editText.addTextChangedListener(watcher);
+                holder.editText.setTag(watcher);
                 break;
             case VideoConfigurationItem.TYPE_SPINNER:
                 holder.spinner.setVisibility(View.VISIBLE);
@@ -86,7 +110,10 @@ public class VideoConfigurationItemAdapter extends RecyclerView.Adapter<VideoCon
                 holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        item.spinnerIndex = position; // 更新到对应的配置项
+                        item.spinnerIndex = position;
+                        if (item.spinnerOptions != null && position >= 0 && position < item.spinnerOptions.size()) {
+                            item.spinnerValue = item.spinnerOptions.get(position);
+                        }
                     }
 
                     @Override

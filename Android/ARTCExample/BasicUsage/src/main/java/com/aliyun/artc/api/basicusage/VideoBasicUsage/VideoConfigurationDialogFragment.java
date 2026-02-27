@@ -163,16 +163,19 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
     private void getVideoEncoderConfiguration() {
         videoEncoderConfiguration = new AliRtcEngine.AliRtcVideoEncoderConfiguration();
 
-        // 1. 分辨率宽高
+        // 1. 分辨率宽高（索引 8 和 9）
         int width = 0, height = 0;
         try {
-            width = Integer.parseInt(configItems.get(7).editTextValue);
-            height = Integer.parseInt(configItems.get(8).editTextValue);
-        } catch (NumberFormatException ignored) {}
+            VideoConfigurationItem widthItem = configItems.get(8);
+            width = Integer.parseInt(widthItem.editTextValue);
+            height = Integer.parseInt(configItems.get(9).editTextValue);
+        } catch (NumberFormatException e) {
+            android.util.Log.e("VideoConfig", "Parse resolution failed: " + e.getMessage());
+        }
         videoEncoderConfiguration.dimensions = new AliRtcEngine.AliRtcVideoDimensions(width, height);
 
-        // 2. 帧率
-        VideoConfigurationItem frameRateItem = configItems.get(9);
+        // 2. 帧率（索引 10）
+        VideoConfigurationItem frameRateItem = configItems.get(10);
         if (frameRateItem.type == VideoConfigurationItem.TYPE_EDIT_TEXT) {
             try {
                 int frameRate = Integer.parseInt(frameRateItem.editTextValue);
@@ -186,16 +189,16 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
             } catch (NumberFormatException ignored) {}
         }
 
-        // 3. 码率
-        VideoConfigurationItem bitrateItem = configItems.get(10);
+        // 3. 码率（索引 11）
+        VideoConfigurationItem bitrateItem = configItems.get(11);
         if (bitrateItem.type == VideoConfigurationItem.TYPE_EDIT_TEXT) {
             try {
                 videoEncoderConfiguration.bitrate = Integer.parseInt(bitrateItem.editTextValue);
             } catch (NumberFormatException ignored) {}
         }
 
-        // 4. GOP
-        VideoConfigurationItem gopItem = configItems.get(11);
+        // 4. GOP（索引 12）
+        VideoConfigurationItem gopItem = configItems.get(12);
         if (gopItem.type == VideoConfigurationItem.TYPE_EDIT_TEXT) {
             try {
                 int gopSize = Integer.parseInt(gopItem.editTextValue);
@@ -205,14 +208,14 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
             } catch (NumberFormatException ignored) {}
         }
 
-        // 5. 强制严格关键帧间隔
-        VideoConfigurationItem strictKeyframeItem = configItems.get(12);
+        // 5. 强制严格关键帧间隔（索引 13）
+        VideoConfigurationItem strictKeyframeItem = configItems.get(13);
         if (strictKeyframeItem.type == VideoConfigurationItem.TYPE_SWITCH) {
             videoEncoderConfiguration.forceStrictKeyFrameInterval = strictKeyframeItem.switchValue;
         }
 
-        // 6. 视频输出方向
-        VideoConfigurationItem orientationItem = configItems.get(13);
+        // 6. 视频输出方向（索引 14）
+        VideoConfigurationItem orientationItem = configItems.get(14);
         if (orientationItem.type == VideoConfigurationItem.TYPE_SPINNER) {
             int index = orientationItem.spinnerIndex;
             AliRtcEngine.AliRtcVideoEncoderOrientationMode mode;
@@ -230,8 +233,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
             videoEncoderConfiguration.orientationMode = mode;
         }
 
-        // 7. 旋转模式
-        VideoConfigurationItem rotationItem = configItems.get(14);
+        // 7. 旋转模式（索引 15）
+        VideoConfigurationItem rotationItem = configItems.get(15);
         if (rotationItem.type == VideoConfigurationItem.TYPE_SPINNER) {
             int index = rotationItem.spinnerIndex;
             AliRtcEngine.AliRtcRotationMode rotationMode;
@@ -252,8 +255,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
             videoEncoderConfiguration.rotationMode = rotationMode;
         }
 
-        // 8. 编码类型（H264 / H265）
-        VideoConfigurationItem codecTypeItem = configItems.get(15);
+        // 8. 编码类型（H264 / H265，索引 16）
+        VideoConfigurationItem codecTypeItem = configItems.get(16);
         if (codecTypeItem.type == VideoConfigurationItem.TYPE_SPINNER) {
             int index = codecTypeItem.spinnerIndex;
             videoEncoderConfiguration.encodeCodecType = index == 0 ?
@@ -261,8 +264,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
                     AliRtcEngine.AliRtcVideoEncodeCodecType.AliRtcVideoEncodeCodecTypeHevc;
         }
 
-        // 9. 编码方式（软编 / 硬编）
-        VideoConfigurationItem codecModeItem = configItems.get(16);
+        // 9. 编码方式（软编 / 硬编，索引 17）
+        VideoConfigurationItem codecModeItem = configItems.get(17);
         if (codecModeItem.type == VideoConfigurationItem.TYPE_SPINNER) {
             int index = codecModeItem.spinnerIndex;
             switch (index) {
@@ -279,10 +282,20 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
                     videoEncoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeDefault;
             }
         }
+        
+        android.util.Log.i("VideoConfig", "Video Encoder Configuration: " +
+                "Resolution=" + width + "x" + height +
+                ", FrameRate=" + videoEncoderConfiguration.frameRate +
+                ", Bitrate=" + videoEncoderConfiguration.bitrate +
+                ", GOP=" + videoEncoderConfiguration.keyFrameInterval +
+                ", OrientationMode=" + videoEncoderConfiguration.orientationMode +
+                ", RotationMode=" + videoEncoderConfiguration.rotationMode +
+                ", CodecType=" + videoEncoderConfiguration.codecType +
+                ", EncodeCodecType=" + videoEncoderConfiguration.encodeCodecType);
     }
 
     private void getVideoDecoderConfiguration() {
-        VideoConfigurationItem codecModeItem = configItems.get(17);
+        VideoConfigurationItem codecModeItem = configItems.get(19);
         if (codecModeItem.type == VideoConfigurationItem.TYPE_SPINNER) {
             int index = codecModeItem.spinnerIndex;
             switch (index) {
@@ -299,6 +312,8 @@ public class VideoConfigurationDialogFragment extends DialogFragment {
                     videoDecoderConfiguration.codecType = AliRtcEngine.AliRtcVideoCodecType.AliRtcVideoCodecTypeDefault;
             }
         }
+        
+        android.util.Log.i("VideoConfig", "Video Decoder Configuration: CodecType=" + videoDecoderConfiguration.codecType);
     }
 
 

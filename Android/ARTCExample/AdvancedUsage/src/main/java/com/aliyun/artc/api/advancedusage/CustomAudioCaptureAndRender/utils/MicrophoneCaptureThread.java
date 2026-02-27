@@ -102,39 +102,32 @@ public class MicrophoneCaptureThread extends Thread {
         isCapturing.set(true);
 
         while (isCapturing.get()) {
-            try {
-                int bytesRead = 0;
-                if (audioRecord != null) {
-                    bytesRead = audioRecord.read(buffer, 0, buffer.length);
-                }
+            int bytesRead = 0;
+            if (audioRecord != null) {
+                bytesRead = audioRecord.read(buffer, 0, buffer.length);
+            }
 
-                if(mEnableDumpAudio && wavRecorder != null) {
-                    if(bytesRead > 0) {
-                        // 写入 WAV 文件
-                        try {
-                            wavRecorder.writeAudioData(buffer, bytesRead);
-                        } catch (IOException e) {
-                            Log.e(TAG, "写入 WAV 文件失败", e);
-                        }
+            if(mEnableDumpAudio && wavRecorder != null) {
+                if(bytesRead > 0) {
+                    // 写入 WAV 文件
+                    try {
+                        wavRecorder.writeAudioData(buffer, bytesRead);
+                    } catch (IOException e) {
+                        Log.e(TAG, "写入 WAV 文件失败", e);
                     }
                 }
+            }
 
-                // 通过回调传递音频数据
-                if (mAudioCaptureCallback != null && bytesRead > 0) {
-                    // 回调传递原始buffer数据和实际读取的字节数
-                    mAudioCaptureCallback.onAudioFrameCaptured(
-                            buffer,
-                            bytesRead,
-                            mSampleRate,
-                            mChannels,
-                            mBitsPerSample
-                    );
-                }
-
-                Thread.sleep(BUFFER_DURATION_MS);
-            } catch (InterruptedException e) {
-                Log.w(TAG, "Microphone capture thread interrupted", e);
-                break;
+            // 通过回调传递音频数据
+            if (mAudioCaptureCallback != null && bytesRead > 0) {
+                // 回调传递原始buffer数据和实际读取的字节数
+                mAudioCaptureCallback.onAudioFrameCaptured(
+                        buffer,
+                        bytesRead,
+                        mSampleRate,
+                        mChannels,
+                        mBitsPerSample
+                );
             }
         }
 
